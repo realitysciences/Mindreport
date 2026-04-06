@@ -14,17 +14,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main className="flex-1">{children}</main>
         <footer
-          className="px-8 py-4 flex items-center justify-between text-xs"
+          className="px-8 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs"
           style={{ borderTop: '0.5px solid #2e2e2e', color: '#888', fontFamily: 'var(--font-mono)' }}
         >
           <span>Mind Report · psychological cartography · <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#c8c4bc]" style={{ color: '#888' }}>ReLoHu</a></span>
-          <a
-            href="https://relohu.com"
-            className="transition-colors hover:text-[#c8c4bc]"
-            style={{ color: '#888' }}
-          >
-            relohu.com →
-          </a>
+          <div className="flex items-center gap-6">
+            <span style={{ color: '#555' }}>© {new Date().getFullYear()} mindreport.ai</span>
+            <a
+              href="https://relohu.com"
+              className="transition-colors hover:text-[#c8c4bc]"
+              style={{ color: '#888' }}
+            >
+              relohu.com →
+            </a>
+          </div>
         </footer>
       </body>
     </html>
