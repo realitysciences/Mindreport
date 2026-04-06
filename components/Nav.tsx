@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Events', href: '/events' },
   { label: 'Relationships', href: '/relationships' },
   { label: 'Works', href: '/works' },
+  { label: 'Archetypes', href: '/archetypes' },
 ]
 
 export default function Nav() {

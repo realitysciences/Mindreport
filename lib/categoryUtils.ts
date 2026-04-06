@@ -5,6 +5,7 @@ export const categoryColors: Record<Category, string> = {
   events: '#BA7517',
   relationships: '#D4537E',
   works: '#378ADD',
+  archetypes: '#C4956A',
 }
 
 export const categoryLabels: Record<Category, string> = {
@@ -12,6 +13,7 @@ export const categoryLabels: Record<Category, string> = {
   events: 'Events',
   relationships: 'Relationships',
   works: 'Works',
+  archetypes: 'Archetypes',
 }
 
 export function getCategoryColor(cat: Category): string {

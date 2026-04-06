@@ -4,7 +4,7 @@ import { getMapsByCategory } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { Category } from '@/lib/types'
 
-const validCategories: Category[] = ['people', 'events', 'relationships', 'works']
+const validCategories: Category[] = ['people', 'events', 'relationships', 'works', 'archetypes']
 
 export function generateStaticParams() {
   return validCategories.map((category) => ({ category }))

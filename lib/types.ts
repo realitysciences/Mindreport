@@ -1,4 +1,4 @@
-export type Category = 'people' | 'events' | 'relationships' | 'works'
+export type Category = 'people' | 'events' | 'relationships' | 'works' | 'archetypes'
 
 export interface TerrainMap {
   coreOrientation: string
