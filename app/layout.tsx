@@ -9,25 +9,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col" style={{ background: '#161616', color: '#c8c4bc' }}>
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem('mr-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})()`
+        }} />
+      </head>
+      <body className="min-h-full flex flex-col" style={{ background: 'var(--bg)', color: 'var(--text-body)' }}>
         <Nav />
         <main className="flex-1">{children}</main>
         <footer
           className="px-8 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs"
-          style={{ borderTop: '0.5px solid #2e2e2e', color: '#888', fontFamily: 'var(--font-mono)' }}
+          style={{ borderTop: '0.5px solid var(--border)', color: 'var(--text-mid)', fontFamily: 'var(--font-mono)' }}
         >
-          <span>Mind Report · psychological cartography · <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#c8c4bc]" style={{ color: '#888' }}>ReLoHu</a></span>
+          <span>Mind Report · psychological cartography · <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="transition-colors" style={{ color: 'var(--text-mid)' }}>ReLoHu</a></span>
           <div className="flex items-center gap-6">
-            <a href="/legal" className="transition-colors hover:text-[#c8c4bc]" style={{ color: '#555' }}>Legal</a>
-            <span style={{ color: '#555' }}>© {new Date().getFullYear()} mindreport.ai</span>
-            <a
-              href="https://relohu.com"
-              className="transition-colors hover:text-[#c8c4bc]"
-              style={{ color: '#888' }}
-            >
-              relohu.com →
-            </a>
+            <a href="/legal" className="transition-colors" style={{ color: 'var(--text-faint)' }}>Legal</a>
+            <span style={{ color: 'var(--text-faint)' }}>© {new Date().getFullYear()} mindreport.ai</span>
+            <a href="https://relohu.com" className="transition-colors" style={{ color: 'var(--text-mid)' }}>relohu.com →</a>
           </div>
         </footer>
       </body>

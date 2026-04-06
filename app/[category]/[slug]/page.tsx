@@ -31,10 +31,10 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         {/* Disclaimer strip */}
         <div
           className="flex items-center justify-between gap-4 px-4 py-2 rounded mb-8 text-[0.6rem] uppercase tracking-widest"
-          style={{ background: '#111', border: '0.5px solid #2a2a2a', fontFamily: 'var(--font-mono)', color: '#555' }}
+          style={{ background: 'var(--surface)', border: '0.5px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           <span>Interpretive opinion based on public record. Not a clinical assessment.</span>
-          <a href="/legal" style={{ color: '#555', whiteSpace: 'nowrap' }} className="hover:text-[#888] transition-colors">
+          <a href="/legal" style={{ color: 'var(--text-faint)', whiteSpace: 'nowrap' }} className="hover:text-[#888] transition-colors">
             Legal →
           </a>
         </div>
@@ -45,18 +45,18 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           <Link
             href={`/${map.category}`}
             className="text-xs uppercase tracking-widest transition-colors hover:text-[#c8c4bc]"
-            style={{ fontFamily: 'var(--font-mono)', color: '#888' }}
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}
           >
             {label}
           </Link>
-          <span style={{ color: '#444' }}>·</span>
-          <span className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: '#666' }}>
+          <span style={{ color: 'var(--text-ghost)' }}>·</span>
+          <span className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}>
             {map.fileNumber}
           </span>
           {postedLabel && (
             <>
-              <span style={{ color: '#444' }}>·</span>
-              <span className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: '#666' }}>
+              <span style={{ color: 'var(--text-ghost)' }}>·</span>
+              <span className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}>
                 {postedLabel}
               </span>
             </>
@@ -64,14 +64,14 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         </div>
 
         {/* Title */}
-        <h1 className="font-bold leading-tight tracking-tight mb-5" style={{ color: '#f0ece4', fontSize: '42px' }}>
+        <h1 className="font-bold leading-tight tracking-tight mb-5" style={{ color: 'var(--text-hi)', fontSize: '42px' }}>
           {map.title}
         </h1>
 
         {/* Deck */}
         <p
           className="mb-10 text-base leading-relaxed"
-          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#b0aca4' }}
+          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)' }}
         >
           {map.deck}
         </p>
@@ -84,10 +84,10 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
             className="flex items-center justify-between px-5 py-3"
             style={{ background: color, borderBottom: `1px solid ${color}` }}
           >
-            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#0a0a0a', fontFamily: 'var(--font-mono)' }}>
+            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--text-hi)', fontFamily: 'var(--font-mono)' }}>
               At a Glance
             </span>
-            <span className="text-xs" style={{ color: '#0a0a0a', fontFamily: 'var(--font-mono)', opacity: 0.6 }}>
+            <span className="text-xs" style={{ color: 'var(--text-hi)', fontFamily: 'var(--font-mono)', opacity: 0.6 }}>
               {map.subject}
             </span>
           </div>
@@ -102,15 +102,15 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
             </div>
             <p
               className="text-lg font-semibold leading-snug"
-              style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#f0ece4' }}
+              style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-hi)' }}
             >
               {map.terrainMap.coreOrientation}
             </p>
           </div>
 
           {/* Two-column: Wound + Pattern */}
-          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ borderBottom: `0.5px solid #1e1e1e` }}>
-            <div className="px-5 py-4" style={{ borderRight: '0.5px solid #1e1e1e' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ borderBottom: `0.5px solid var(--border-sub)` }}>
+            <div className="px-5 py-4" style={{ borderRight: '0.5px solid var(--border-sub)' }}>
               <div
                 className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
                 style={{ fontFamily: 'var(--font-mono)', color }}
@@ -118,7 +118,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                 <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
                 Primary Wound
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: '#c8c4bc' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
                 {map.terrainMap.primaryWound}
               </p>
             </div>
@@ -130,14 +130,14 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                 <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
                 Dominant Pattern
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: '#c8c4bc' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
                 {map.terrainMap.dominantPattern}
               </p>
             </div>
           </div>
 
           {/* Relational style */}
-          <div className="px-5 py-4" style={{ borderBottom: `0.5px solid #1e1e1e` }}>
+          <div className="px-5 py-4" style={{ borderBottom: `0.5px solid var(--border-sub)` }}>
             <div
               className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
               style={{ fontFamily: 'var(--font-mono)', color }}
@@ -145,30 +145,30 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
               <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
               Relational Style
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: '#c8c4bc' }}>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
               {map.terrainMap.relationalStyle}
             </p>
           </div>
 
           {/* Secondary pattern */}
-          <div className="px-5 py-4" style={{ borderBottom: `0.5px solid #1e1e1e` }}>
+          <div className="px-5 py-4" style={{ borderBottom: `0.5px solid var(--border-sub)` }}>
             <div
               className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
-              style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
             >
               <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#555' }} />
               Secondary Pattern
             </div>
-            <p className="text-sm leading-relaxed" style={{ color: '#888' }}>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
               {map.terrainMap.secondaryPattern}
             </p>
           </div>
 
           {/* Terrain markers */}
-          <div className="px-5 py-4" style={{ background: '#0e0e0e' }}>
+          <div className="px-5 py-4" style={{ background: 'var(--surface-deep)' }}>
             <div
               className="text-[0.55rem] uppercase tracking-widest mb-3"
-              style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
             >
               Terrain Markers
             </div>
@@ -196,10 +196,10 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
         {/* Related maps */}
         {related.length > 0 && (
-          <div className="mt-16 pt-10" style={{ borderTop: '0.5px solid #2e2e2e' }}>
+          <div className="mt-16 pt-10" style={{ borderTop: '0.5px solid var(--border)' }}>
             <h2
               className="text-xs uppercase tracking-widest mb-6"
-              style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
             >
               Related maps
             </h2>
@@ -212,15 +212,15 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                     key={rel.slug}
                     href={`/${rel.category}/${rel.slug}`}
                     className="flex flex-col gap-2 p-4 rounded transition-colors"
-                    style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
+                    style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: rc }} />
-                      <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: '#888' }}>
+                      <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}>
                         {rl}
                       </span>
                     </div>
-                    <span className="text-sm font-medium leading-snug" style={{ color: '#e8e4dc' }}>
+                    <span className="text-sm font-medium leading-snug" style={{ color: 'var(--text-strong)' }}>
                       {rel.title}
                     </span>
                   </Link>
@@ -233,18 +233,18 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         {/* CTA strip */}
         <div
           className="mt-12 p-8 rounded flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
-          style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
+          style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
         >
           <div className="flex flex-col gap-2 max-w-md">
-            <span className="text-sm font-semibold" style={{ color: '#e8e4dc' }}>You have a map too.</span>
-            <span className="text-xs leading-relaxed" style={{ color: '#888', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+            <span className="text-sm font-semibold" style={{ color: 'var(--text-strong)' }}>You have a map too.</span>
+            <span className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
               Every pattern on this page exists because someone's interior became legible. ReLoHu sessions produce the same quality of reading, applied to you, with full information rather than reconstructed signal.
             </span>
           </div>
           <a
             href="https://www.relohu.com"
             className="text-xs uppercase tracking-widest px-5 py-3 rounded transition-colors whitespace-nowrap"
-            style={{ border: '0.5px solid #bbb', color: '#bbb', fontFamily: 'var(--font-mono)' }}
+            style={{ border: '0.5px solid #bbb', color: 'var(--text-nav)', fontFamily: 'var(--font-mono)' }}
           >
             Get your own map →
           </a>

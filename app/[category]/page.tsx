@@ -26,21 +26,21 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
         <span className="inline-block w-2 h-2 rounded-full" style={{ background: color }} />
         <h1
           className="text-xs uppercase tracking-widest"
-          style={{ fontFamily: 'var(--font-mono)', color: '#f0ece4' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-hi)' }}
         >
           {label}
         </h1>
-        <span style={{ color: '#444' }}>·</span>
+        <span style={{ color: 'var(--text-ghost)' }}>·</span>
         <span
           className="text-xs"
-          style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
         >
           {maps.length} {maps.length === 1 ? 'map' : 'maps'}
         </span>
       </div>
 
       {maps.length === 0 ? (
-        <p style={{ color: '#666', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
+        <p style={{ color: 'var(--text-lo)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
           No maps in this category yet.
         </p>
       ) : (
@@ -50,24 +50,24 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
               key={map.slug}
               href={`/${map.category}/${map.slug}`}
               className="flex flex-col justify-between p-6 rounded transition-colors"
-              style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
+              style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span
                     className="text-[0.6rem] uppercase tracking-widest"
-                    style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
                   >
                     {map.fileNumber}
                   </span>
                 </div>
                 <h2
                   className="text-sm font-semibold mb-2 leading-snug"
-                  style={{ color: '#f0ece4' }}
+                  style={{ color: 'var(--text-hi)' }}
                 >
                   {map.title}
                 </h2>
-                <p className="text-xs leading-relaxed mb-3" style={{ color: '#888' }}>
+                <p className="text-xs leading-relaxed mb-3" style={{ color: 'var(--text-mid)' }}>
                   {map.deck}
                 </p>
               </div>
