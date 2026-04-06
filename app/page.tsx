@@ -104,6 +104,29 @@ export default function HomePage() {
 
   return (
     <div>
+      {/* Orientation */}
+      <section
+        className="px-8 py-6 flex items-center justify-between gap-8"
+        style={{ borderBottom: '0.5px solid #1e1e1e' }}
+      >
+        <p
+          className="text-sm leading-relaxed max-w-2xl"
+          style={{ fontFamily: 'var(--font-serif)', color: '#888', fontStyle: 'italic' }}
+        >
+          Mind Report publishes psychological maps of public figures, cultural events, and creative works.
+          Each map reads its subject as terrain: identifying the wound beneath the pattern, the architecture beneath the behavior.
+        </p>
+        <a
+          href="https://www.relohu.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[0.65rem] uppercase tracking-widest whitespace-nowrap flex-shrink-0"
+          style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+        >
+          By ReLoHu →
+        </a>
+      </section>
+
       {/* Hero */}
       <section
         className="px-8 py-10 grid gap-10 items-start"

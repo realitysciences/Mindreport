@@ -193,7 +193,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
               Get your own psychological map
             </span>
             <span className="text-xs leading-relaxed" style={{ color: '#888' }}>
-              ReLoHu sessions produce terrain maps like this one — a structured reading of your psychological landscape.
+              ReLoHu sessions produce terrain maps like this one: a structured reading of your psychological landscape.
             </span>
           </div>
           <a
