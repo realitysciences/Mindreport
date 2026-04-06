@@ -199,17 +199,17 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           className="mt-12 p-8 rounded flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
           style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
         >
-          <div className="flex flex-col gap-1 max-w-sm">
-            <span className="text-sm font-medium" style={{ color: '#e8e4dc' }}>
-              Get your own psychological map
+          <div className="flex flex-col gap-2 max-w-md">
+            <span className="text-sm font-semibold" style={{ color: '#e8e4dc' }}>
+              You have a map too.
             </span>
-            <span className="text-xs leading-relaxed" style={{ color: '#888' }}>
-              ReLoHu sessions produce terrain maps like this one: a structured reading of your psychological landscape.
+            <span className="text-xs leading-relaxed" style={{ color: '#888', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+              Every pattern on this page exists because someone's interior became legible. ReLoHu sessions produce the same quality of reading, applied to you, with full information rather than reconstructed signal.
             </span>
           </div>
           <a
-            href="https://relohu.com"
-            className="text-xs uppercase tracking-widest px-5 py-3 rounded transition-colors"
+            href="https://www.relohu.com"
+            className="text-xs uppercase tracking-widest px-5 py-3 rounded transition-colors whitespace-nowrap"
             style={{
               border: '0.5px solid #bbb',
               color: '#bbb',
