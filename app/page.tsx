@@ -120,8 +120,8 @@ export default function HomePage() {
 
       {/* Hero */}
       <section
-        className="px-8 py-10 grid gap-10 items-start"
-        style={{ borderBottom: '0.5px solid #2e2e2e', gridTemplateColumns: '1fr 320px' }}
+        className="px-8 py-10 grid gap-10 items-start grid-cols-1 md:grid-cols-[1fr_320px]"
+        style={{ borderBottom: '0.5px solid #2e2e2e' }}
       >
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-2">
@@ -181,7 +181,7 @@ export default function HomePage() {
         >
           Recent maps
         </h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {recent.map((m) => (
             <MapCard key={m.slug} map={m} />
           ))}

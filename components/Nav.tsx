@@ -39,19 +39,21 @@ export default function Nav() {
         </a>
       </div>
       <div className="flex items-center gap-6">
-        {navLinks.map(({ label, href }) => {
-          const active = pathname === href || pathname.startsWith(href + '/')
-          return (
-            <Link
-              key={href}
-              href={href}
-              className="text-xs uppercase tracking-widest transition-colors"
-              style={{ color: active ? '#f0ece4' : '#bbb', fontFamily: 'var(--font-mono)' }}
-            >
-              {label}
-            </Link>
-          )
-        })}
+        <div className="hidden md:flex items-center gap-6">
+          {navLinks.map(({ label, href }) => {
+            const active = pathname === href || pathname.startsWith(href + '/')
+            return (
+              <Link
+                key={href}
+                href={href}
+                className="text-xs uppercase tracking-widest transition-colors"
+                style={{ color: active ? '#f0ece4' : '#bbb', fontFamily: 'var(--font-mono)' }}
+              >
+                {label}
+              </Link>
+            )
+          })}
+        </div>
         <Link
           href="/search"
           className="text-xs uppercase tracking-widest transition-colors px-3 py-1 rounded"

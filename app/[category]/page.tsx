@@ -44,7 +44,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
           No maps in this category yet.
         </p>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {maps.map((map) => (
             <Link
               key={map.slug}
