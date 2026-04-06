@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getAllMaps, getMapBySlug } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { MarkdownBody } from '@/lib/markdown'
+import { TerrainDiagram } from '@/components/TerrainDiagram'
 
 export function generateStaticParams() {
   return getAllMaps().map((m) => ({ category: m.category, slug: m.slug }))
@@ -153,6 +154,11 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
           <MarkdownBody content={map.body} categoryColor={color} />
           <div style={{ clear: 'both' }} />
+        </div>
+
+        {/* Terrain diagram */}
+        <div className="mt-14 mb-10">
+          <TerrainDiagram terrain={map.terrainMap} color={color} subject={map.subject} />
         </div>
 
         {/* Related maps */}
