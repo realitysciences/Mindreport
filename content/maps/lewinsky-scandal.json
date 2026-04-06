@@ -11,8 +11,19 @@
     "dominantPattern": "Public shaming as political and social regulation",
     "relationalStyle": "Asymmetric exposure - one party protected by institution, one party unprotected",
     "secondaryPattern": "The woman as the story - Clinton as the perpetual subject, Lewinsky as the object",
-    "markers": ["power gradient", "public shaming", "asymmetric exposure", "institutional protection", "narrative control"]
+    "markers": [
+      "power gradient",
+      "public shaming",
+      "asymmetric exposure",
+      "institutional protection",
+      "narrative control"
+    ]
   },
   "body": "## The Gradient\n\nHe was 49. She was 22. He was the President of the United States. She was an intern. Every other variable in the analysis operates on top of this one.\n\nThe terrain question is not whether what happened was consensual in the technical sense. It is whether consent functions the same way at every point along a power gradient. **The map suggests it does not, and that the consequences of that asymmetry fell almost entirely on the party with less power.**\n\n## What Happened to Each Party\n\nBill Clinton completed his second term. He left office with a 65% approval rating. He has since built a post-presidency career as a statesman, speaker, and global philanthropist.\n\nMonica Lewinsky spent the years immediately after the scandal largely unable to work, unable to live privately, unable to construct an identity outside the one the scandal had assigned her. The dress. The beret. The intern. She has, in subsequent decades, done significant public work on shame and public humiliation - work that emerged directly from her experience of being the designated vessel for a scandal in which she had the least institutional protection.\n\n> \"The scandal was named after her. The consequences were borne by her. The institutional protection was available to him. This asymmetry is the terrain. Everything else is noise.\"\n\n## The Public Shaming Architecture\n\nThe 1990s were the apex of a particular kind of public shaming: the twenty-four-hour news cycle with a single target, no social media for the target to respond through, and a cultural consensus that the woman in a scandal of this type was primarily to blame.\n\nLewinsky has described being the first person to be publicly destroyed by the internet. The description is accurate. The mechanism that would later operate at scale on millions of people operated on her first, and in maximally intense form.\n\n## The Narrative Control Problem\n\nFor twenty years, the story was told without her as its author. She was object, not subject. Her subsequent public work - the TED talk, the documentary, the producer credit on Impeachment: American Crime Story - represents a sustained attempt to reclaim authorship of her own story.\n\n**The attempt to reclaim narrative is itself a terrain map of what it costs to have your story told without you.**\n\n---\n\n*Built from publicly available material only: Monica Lewinsky's TED talk (2015), published interviews (2014-present), and the public record of the impeachment proceedings. This is a cartographic exercise, not a clinical assessment or diagnosis.*",
-  "relatedMaps": ["donald-trump", "oj-simpson-trial", "swift-braun"]
+  "relatedMaps": [
+    "donald-trump",
+    "oj-simpson-trial",
+    "swift-braun"
+  ],
+  "publishedDate": "2025-08-19"
 }

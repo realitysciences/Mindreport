@@ -11,8 +11,19 @@
     "dominantPattern": "Magical thinking rationalized as sophisticated analysis",
     "relationalStyle": "Incentive structures that reward the wrong signals",
     "secondaryPattern": "The people with the least power absorb the losses of the people with the most",
-    "markers": ["collective narcissism", "motivated blindness", "incentive capture", "asymmetric consequence", "this time is different"]
+    "markers": [
+      "collective narcissism",
+      "motivated blindness",
+      "incentive capture",
+      "asymmetric consequence",
+      "this time is different"
+    ]
   },
   "body": "## The Motivated Blindness\n\nThe instruments that caused the crisis - mortgage-backed securities, collateralized debt obligations, credit default swaps - were genuinely complex. But the core of what went wrong was not complexity. It was the desire not to see.\n\nRating agencies rated toxic instruments AAA because their business model required pleasing the banks paying for the ratings. Traders bought instruments they did not understand because the commissions were extraordinary. Regulators did not ask because the ideology of the period held that markets regulated themselves.\n\n**Everyone had a reason to keep going. The reasons were financial. The rationalizations were intellectual.**\n\n## This Time Is Different\n\nKenneth Rogoff and Carmen Reinhart documented across 800 years of financial history that every major financial crisis is preceded by the conviction that this time, for specific articulated reasons, the normal rules do not apply.\n\nThe same conviction operated in 2005, 2006, 2007. Housing prices had never fallen nationally. Securitization had distributed risk. Financial innovation had made the system more resilient. **Each of these beliefs was held by intelligent people and each of them was wrong.**\n\n> \"The crisis was not a failure of intelligence. It was a failure of the will to apply intelligence to conclusions that would have required stopping. The system punished stopping and rewarded continuing. The people inside the system responded to the incentives.\"\n\n## Who Bore the Consequences\n\nThe architects of the crisis were largely made whole by the institutions that stepped in to prevent systemic collapse. The homeowners who had taken mortgages they could not afford - often with inadequate disclosure, sometimes with active misrepresentation - lost their houses.\n\nThis asymmetry is not incidental. It is the wound the event maps. The systems designed to prevent catastrophe were operated by people whose losses would be socialized and whose gains would remain private. **That structure is not a bug in the system. In 2008, it was the system.**\n\n## The Lesson Not Learned\n\nThe specific instruments of 2008 are now heavily regulated. The underlying architecture - privatized gain, socialized loss, incentive structures that reward short-term performance over long-term soundness - remains.\n\nThis is what financial crises have in common across 800 years: the mechanism changes, the structure persists.\n\n---\n\n*Built from publicly available material only: Michael Lewis's The Big Short (2010), Carmen Reinhart and Kenneth Rogoff's This Time Is Different (2009), the Financial Crisis Inquiry Commission Report (2011), and related documentary record. This is a cartographic exercise, not a clinical assessment or diagnosis.*",
-  "relatedMaps": ["ftx-collapse", "jonestown", "sam-altman"]
+  "relatedMaps": [
+    "ftx-collapse",
+    "jonestown",
+    "sam-altman"
+  ],
+  "publishedDate": "2025-09-02"
 }
