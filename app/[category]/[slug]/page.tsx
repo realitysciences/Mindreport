@@ -81,8 +81,8 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         <div className="relative">
           {/* Terrain map card — floats right */}
           <div
-            className="float-right ml-8 mb-6 p-5 rounded text-xs flex flex-col gap-3"
-            style={{ width: '240px', background: '#111', border: '0.5px solid #2e2e2e' }}
+            className="md:float-right md:ml-8 mb-6 p-5 rounded text-xs flex flex-col gap-3 w-full md:w-60"
+            style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
           >
             <div
               className="text-[0.6rem] uppercase tracking-widest mb-1"
@@ -153,7 +153,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
             >
               Related maps
             </h2>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {related.map((rel) => {
                 const rc = getCategoryColor(rel.category)
                 const rl = categoryLabels[rel.category]
@@ -185,7 +185,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
         {/* CTA strip */}
         <div
-          className="mt-12 p-8 rounded flex items-center justify-between"
+          className="mt-12 p-8 rounded flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
           style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
         >
           <div className="flex flex-col gap-1 max-w-sm">
