@@ -14,57 +14,6 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-function TerrainCard({ map, color }: { map: MapArticle; color: string }) {
-  return (
-    <div
-      className="rounded p-5 text-xs flex flex-col gap-3"
-      style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
-    >
-      {[
-        { label: 'CORE ORIENTATION', value: map.terrainMap.coreOrientation },
-        { label: 'PRIMARY WOUND', value: map.terrainMap.primaryWound },
-        { label: 'DOMINANT PATTERN', value: map.terrainMap.dominantPattern },
-        { label: 'RELATIONAL STYLE', value: map.terrainMap.relationalStyle },
-      ].map(({ label, value }) => (
-        <div key={label} className="flex flex-col gap-0.5">
-          <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{ background: color }}
-            />
-            <span style={{ fontFamily: 'var(--font-mono)', color: '#999', fontSize: '0.65rem', letterSpacing: '0.08em' }}>
-              {label}
-            </span>
-          </div>
-          <span style={{ color: '#bbb', paddingLeft: '1rem' }}>{value}</span>
-        </div>
-      ))}
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-1.5">
-          <span
-            className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
-            style={{ background: color }}
-          />
-          <span style={{ fontFamily: 'var(--font-mono)', color: '#999', fontSize: '0.65rem', letterSpacing: '0.08em' }}>
-            TERRAIN MARKERS
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-1 pl-4">
-          {map.terrainMap.markers.map((m) => (
-            <span
-              key={m}
-              className="px-2 py-0.5 rounded-full text-[0.6rem] tracking-wide"
-              style={{ background: '#1a1a1a', border: '0.5px solid #333', color: '#999', fontFamily: 'var(--font-mono)' }}
-            >
-              {m}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function MapCard({ map }: { map: MapArticle }) {
   const color = getCategoryColor(map.category)
   const label = categoryLabels[map.category]
@@ -72,25 +21,19 @@ function MapCard({ map }: { map: MapArticle }) {
     <Link
       href={`/${map.category}/${map.slug}`}
       className="flex flex-col justify-between p-6 rounded transition-colors group"
-      style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
+      style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
       <div>
         <div className="flex items-center gap-1.5 mb-3">
           <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
-          <span
-            className="text-[0.65rem] uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-mono)', color: '#888' }}
-          >
+          <span className="text-[0.65rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}>
             {label}
           </span>
         </div>
-        <h3
-          className="text-sm font-semibold mb-2 leading-snug"
-          style={{ color: '#f0ece4' }}
-        >
+        <h3 className="text-sm font-semibold mb-2 leading-snug" style={{ color: 'var(--text-hi)' }}>
           {map.title}
         </h3>
-        <p className="text-xs leading-relaxed" style={{ color: '#888' }}>
+        <p className="text-xs leading-relaxed" style={{ color: 'var(--text-lo)' }}>
           {map.deck}
         </p>
       </div>
@@ -113,36 +56,36 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
     <Link
       href={`/${map.category}/${map.slug}`}
       className="flex flex-col justify-between p-8 rounded h-full transition-colors"
-      style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
+      style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
-            <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: '#888' }}>
+            <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}>
               {label}
             </span>
           </div>
-          <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: '#555' }}>
+          <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
             {map.fileNumber}
           </span>
         </div>
         <h2
           className="font-bold leading-tight tracking-tight"
-          style={{ color: '#f0ece4', fontSize: primary ? '2.5rem' : '1.75rem' }}
+          style={{ color: 'var(--text-hi)', fontSize: primary ? '2.5rem' : '1.75rem' }}
         >
           {map.title}
         </h2>
         <p
           className="leading-relaxed"
-          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#b0aca4', fontSize: primary ? '1rem' : '0.875rem' }}
+          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: primary ? '1rem' : '0.875rem' }}
         >
           {map.deck}
         </p>
       </div>
       <div
         className="text-[0.6rem] uppercase tracking-widest mt-6 pt-4"
-        style={{ borderTop: `0.5px solid #222`, fontFamily: 'var(--font-mono)', color }}
+        style={{ borderTop: '0.5px solid var(--border-sub)', fontFamily: 'var(--font-mono)', color }}
       >
         Read map →
       </div>
@@ -159,20 +102,17 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero statement */}
-      <section
-        className="px-8 pt-14 pb-10"
-        style={{ borderBottom: '0.5px solid #2e2e2e' }}
-      >
+      <section className="px-8 pt-14 pb-10" style={{ borderBottom: '0.5px solid var(--border)' }}>
         <h1
           className="font-bold leading-tight tracking-tight mb-5"
-          style={{ color: '#f0ece4', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', maxWidth: '780px' }}
+          style={{ color: 'var(--text-hi)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', maxWidth: '780px' }}
         >
           Psychological maps of public figures,<br className="hidden sm:block" /> cultural events, and creative works.
         </h1>
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5" style={{ maxWidth: '780px' }}>
           <p
             className="text-sm leading-relaxed"
-            style={{ fontFamily: 'var(--font-serif)', color: '#888', fontStyle: 'italic', maxWidth: '520px' }}
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-mid)', fontStyle: 'italic', maxWidth: '520px' }}
           >
             Each map reads its subject as terrain: identifying the wound beneath the pattern,
             the architecture beneath the behavior.
@@ -182,7 +122,7 @@ export default function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-[0.65rem] uppercase tracking-widest whitespace-nowrap px-4 py-2 rounded flex-shrink-0 transition-colors"
-            style={{ fontFamily: 'var(--font-mono)', color: '#666', border: '0.5px solid #2e2e2e' }}
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)', border: '0.5px solid var(--border)' }}
           >
             Get your own map →
           </a>
@@ -192,7 +132,7 @@ export default function HomePage() {
       {/* Hero — two featured maps */}
       <section
         className="px-8 py-8 grid gap-4 items-stretch grid-cols-1 md:grid-cols-[3fr_2fr]"
-        style={{ borderBottom: '0.5px solid #2e2e2e' }}
+        style={{ borderBottom: '0.5px solid var(--border)' }}
       >
         <FeaturedCard map={featured1} primary />
         <FeaturedCard map={featured2} />
@@ -202,7 +142,7 @@ export default function HomePage() {
       <section className="px-8 py-12">
         <h2
           className="text-xs uppercase tracking-widest mb-8"
-          style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
         >
           Recent maps
         </h2>

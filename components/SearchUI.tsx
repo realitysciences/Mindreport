@@ -52,8 +52,8 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
           placeholder="Search maps, subjects, terrain markers…"
           className="w-full bg-transparent outline-none text-2xl"
           style={{
-            color: '#f0ece4',
-            borderBottom: '0.5px solid #2e2e2e',
+            color: 'var(--text-hi)',
+            borderBottom: '0.5px solid var(--border)',
             paddingBottom: '0.75rem',
             fontFamily: 'var(--font-serif)',
             caretColor: '#7F77DD',
@@ -63,7 +63,7 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
           <button
             onClick={() => { setQuery(''); router.replace('/search', { scroll: false }) }}
             className="absolute right-0 top-1 text-xs uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
           >
             clear
           </button>
@@ -74,7 +74,7 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
       {query.trim() && (
         <div
           className="text-xs uppercase tracking-widest mb-6"
-          style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
         >
           {results.length === 0
             ? 'No maps found'
@@ -84,7 +84,7 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
 
       {/* Results */}
       {results.length > 0 && (
-        <div className="flex flex-col" style={{ gap: '0.5px', background: '#2e2e2e' }}>
+        <div className="flex flex-col" style={{ gap: '0.5px', background: 'var(--border)' }}>
           {results.map((map) => {
             const color = getCategoryColor(map.category)
             const label = categoryLabels[map.category]
@@ -93,7 +93,7 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
                 key={map.slug}
                 href={`/${map.category}/${map.slug}`}
                 className="flex items-start justify-between gap-6 px-5 py-4 transition-colors"
-                style={{ background: '#111' }}
+                style={{ background: 'var(--surface)' }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = '#161616')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = '#111')}
               >
@@ -106,20 +106,20 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
                     <div className="flex items-baseline gap-3 mb-1">
                       <span
                         className="text-sm font-semibold"
-                        style={{ color: '#f0ece4' }}
+                        style={{ color: 'var(--text-hi)' }}
                       >
                         {map.title}
                       </span>
                       <span
                         className="text-[0.6rem] uppercase tracking-widest flex-shrink-0"
-                        style={{ fontFamily: 'var(--font-mono)', color: '#666' }}
+                        style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
                       >
                         {map.fileNumber}
                       </span>
                     </div>
                     <p
                       className="text-xs leading-relaxed truncate"
-                      style={{ color: '#888', maxWidth: '520px' }}
+                      style={{ color: 'var(--text-mid)', maxWidth: '520px' }}
                     >
                       {map.deck}
                     </p>
@@ -141,7 +141,7 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
       {!query.trim() && (
         <div
           className="text-xs leading-relaxed"
-          style={{ fontFamily: 'var(--font-mono)', color: '#444' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-ghost)' }}
         >
           {maps.length} maps indexed
         </div>

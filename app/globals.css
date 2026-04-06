@@ -20,8 +20,51 @@
   --font-mono: ui-monospace, "SF Mono", "Fira Code", monospace;
 }
 
+/* ── Theme tokens ─────────────────────────────────────────────────────────── */
+
+:root {
+  --bg:              #161616;
+  --surface:         #111111;
+  --surface-deep:    #0e0e0e;
+  --surface-deepest: #0a0a0a;
+  --surface-raised:  #1a1a1a;
+  --border:          #2e2e2e;
+  --border-sub:      #1e1e1e;
+  --border-ghost:    #222222;
+  --text-hi:         #f0ece4;
+  --text-strong:     #e8e4dc;
+  --text-body:       #c8c4bc;
+  --text-deck:       #b0aca4;
+  --text-nav:        #bbbbbb;
+  --text-mid:        #999999;
+  --text-lo:         #666666;
+  --text-faint:      #555555;
+  --text-ghost:      #444444;
+}
+
+[data-theme="light"] {
+  --bg:              #f5f2ed;
+  --surface:         #ffffff;
+  --surface-deep:    #f0ece4;
+  --surface-deepest: #e8e4dc;
+  --surface-raised:  #faf8f5;
+  --border:          #d4d0c8;
+  --border-sub:      #e0dcd4;
+  --border-ghost:    #dedad2;
+  --text-hi:         #1a1714;
+  --text-strong:     #262320;
+  --text-body:       #3d3a34;
+  --text-deck:       #5a5650;
+  --text-nav:        #444444;
+  --text-mid:        #6a6660;
+  --text-lo:         #8a8680;
+  --text-faint:      #999590;
+  --text-ghost:      #aeaaa4;
+}
+
 body {
-  background: #161616;
-  color: #c8c4bc;
+  background: var(--bg);
+  color: var(--text-body);
   font-family: var(--font-sans);
+  transition: background 0.2s ease, color 0.2s ease;
 }

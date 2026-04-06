@@ -2,7 +2,7 @@ import React from 'react'
 
 function formatInline(text: string): string {
   return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#f0ece4;font-weight:600">$1</strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text-hi);font-weight:600">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
 }
 
@@ -15,7 +15,6 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
       {blocks.map((block, i) => {
         const trimmed = block.trim()
 
-        // ── Section headers ──────────────────────────────────────────────────
         if (trimmed.startsWith('## ')) {
           sectionCount++
           const num = String(sectionCount).padStart(2, '0')
@@ -24,9 +23,8 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
             <div
               key={i}
               className="mt-14 mb-6 flex items-stretch rounded overflow-hidden"
-              style={{ border: '0.5px solid #2a2a2a' }}
+              style={{ border: '0.5px solid var(--border)' }}
             >
-              {/* Colored number tab */}
               <div
                 className="flex items-center justify-center px-4 flex-shrink-0"
                 style={{ background: categoryColor, minWidth: '52px' }}
@@ -38,14 +36,13 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
                   {num}
                 </span>
               </div>
-              {/* Title area */}
               <div
                 className="px-5 py-4 flex items-center flex-1"
                 style={{ background: `${categoryColor}12` }}
               >
                 <h2
                   className="font-bold leading-snug"
-                  style={{ color: '#f0ece4', fontSize: '1.1rem', letterSpacing: '-0.01em' }}
+                  style={{ color: 'var(--text-hi)', fontSize: '1.1rem', letterSpacing: '-0.01em' }}
                 >
                   {text}
                 </h2>
@@ -54,7 +51,6 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
           )
         }
 
-        // ── Blockquotes → big callout boxes ──────────────────────────────────
         if (trimmed.startsWith('> ')) {
           const text = trimmed.slice(2)
           return (
@@ -77,7 +73,7 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
                     fontStyle: 'italic',
                     fontSize: '1.15rem',
                     lineHeight: '1.8',
-                    color: '#e8e4dc',
+                    color: 'var(--text-hi)',
                   }}
                   dangerouslySetInnerHTML={{ __html: formatInline(text) }}
                 />
@@ -86,7 +82,6 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
           )
         }
 
-        // ── Body paragraphs ───────────────────────────────────────────────────
         return (
           <p
             key={i}
@@ -95,7 +90,7 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
               fontFamily: 'var(--font-serif)',
               fontSize: '1rem',
               lineHeight: '1.95',
-              color: '#c8c4bc',
+              color: 'var(--text-body)',
             }}
             dangerouslySetInnerHTML={{ __html: formatInline(trimmed) }}
           />
