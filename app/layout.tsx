@@ -19,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <span>Mind Report · psychological cartography · <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[#c8c4bc]" style={{ color: '#888' }}>ReLoHu</a></span>
           <div className="flex items-center gap-6">
+            <a href="/legal" className="transition-colors hover:text-[#c8c4bc]" style={{ color: '#555' }}>Legal</a>
             <span style={{ color: '#555' }}>© {new Date().getFullYear()} mindreport.ai</span>
             <a
               href="https://relohu.com"
