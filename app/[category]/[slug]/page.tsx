@@ -24,6 +24,17 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
     <div className="px-6 py-12">
       <div className="mx-auto" style={{ maxWidth: '780px' }}>
 
+        {/* Disclaimer strip */}
+        <div
+          className="flex items-center justify-between gap-4 px-4 py-2 rounded mb-8 text-[0.6rem] uppercase tracking-widest"
+          style={{ background: '#111', border: '0.5px solid #2a2a2a', fontFamily: 'var(--font-mono)', color: '#555' }}
+        >
+          <span>Interpretive opinion based on public record. Not a clinical assessment.</span>
+          <a href="/legal" style={{ color: '#555', whiteSpace: 'nowrap' }} className="hover:text-[#888] transition-colors">
+            Legal →
+          </a>
+        </div>
+
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-8">
           <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
