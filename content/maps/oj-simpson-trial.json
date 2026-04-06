@@ -1,0 +1,18 @@
+{
+  "title": "The O.J. Simpson Trial",
+  "slug": "oj-simpson-trial",
+  "category": "events",
+  "fileNumber": "E-004",
+  "subject": "People v. O.J. Simpson (1995)",
+  "deck": "The trial did not divide America. It revealed a division that was already there. A nation watched the same evidence and reached opposite conclusions - and the disagreement was never really about O.J. Simpson.",
+  "terrainMap": {
+    "coreOrientation": "Collective projection - the trial as national Rorschach",
+    "primaryWound": "Unprocessed racial wound made visible by a single spectacular event",
+    "dominantPattern": "Motivated reasoning at cultural scale",
+    "relationalStyle": "The jury and the nation as mirrors of each other",
+    "secondaryPattern": "Celebrity as distortion field - Simpson's fame as structural variable",
+    "markers": ["collective projection", "racial wound", "motivated reasoning", "celebrity distortion", "evidence asymmetry"]
+  },
+  "body": "## The Rorschach\n\nThe verdict was announced at 10 a.m. on October 3, 1995. Television cameras captured the reaction in real time: Black Americans cheering, white Americans stunned into silence. The split was not about the evidence. Both groups had access to the same evidence.\n\n**The split was about what each group needed the verdict to mean.**\n\n## What Each Side Was Actually Watching\n\nFor many white Americans, the trial was about a man they believed had murdered two people escaping accountability through a brilliant legal team. For many Black Americans, the trial was about whether the criminal justice system - which had consistently failed to provide accountability in the other direction - could be made to work for a Black defendant when he had sufficient resources.\n\nBoth readings were, in their own terms, coherent. Neither was primarily about O.J. Simpson.\n\n> \"The trial was a vessel into which each side poured a different accumulated history. The disagreement about the verdict was not a disagreement about the evidence. It was a disagreement about which history was the operative context.\"\n\n## The Celebrity Variable\n\nSimpson's fame was not incidental to the outcome. It determined the resources available for his defense, the media infrastructure around the trial, and the particular way white audiences experienced the accusation - as a betrayal of someone they felt they knew.\n\nThe celebrity variable is worth isolating: the trial produced the outcome it did partly because this specific defendant could construct a specific defense. The wound the trial exposed is partially about what justice looks like when resources are not equally distributed.\n\n## What the Trial Was a Map Of\n\nThe trial produced no new information about American racial division. It produced a moment in which the division could not be avoided. The cameras documented not just a verdict but **the simultaneous existence of two Americas interpreting the same event through entirely different accumulated experience**.\n\nThat is what the trial's lasting significance is. Not O.J. Simpson's guilt or innocence. The image of those two rooms watching the same television.\n\n---\n\n*Built from publicly available material only: trial transcripts, Jeffrey Toobin's The Run of His Life (1996), and the ESPN 30 for 30 documentary O.J.: Made in America (2016). This is a cartographic exercise, not a clinical assessment or diagnosis.*",
+  "relatedMaps": ["ftx-collapse", "jonestown", "donald-trump"]
+}
