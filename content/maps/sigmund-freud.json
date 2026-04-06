@@ -1,0 +1,18 @@
+{
+  "title": "Sigmund Freud",
+  "slug": "sigmund-freud",
+  "category": "people",
+  "fileNumber": "P-023",
+  "subject": "Sigmund Freud",
+  "deck": "The founder of psychoanalysis as terrain subject: the mother's favorite who needed recognition at scale, the father's son who watched submission and vowed surpassal, and the theory that universalized one man's specific wound as the human condition.",
+  "terrainMap": {
+    "coreOrientation": "Recognition at scale",
+    "primaryWound": "Conditional specialness / paternal submission / Jewish exclusion in Vienna",
+    "dominantPattern": "Wound universalized as human condition through theory",
+    "relationalStyle": "Authority-seeking through theoretical framework",
+    "secondaryPattern": "Self-analysis bearing marks of the wound it examined",
+    "markers": ["mother's golden Sigi", "paternal submission", "Jewish wound in Vienna", "Oedipus projection", "self-analysis cost"]
+  },
+  "body": "## Amalia's Golden Sigi\n\nFreud's mother believed he was destined for greatness, based partly on a fortune teller's prophecy at his birth. She favored him visibly among her children. This created both the confidence that drove a lifetime of ambitious work and a specific precariousness: **the recognition was promised but never truly earned, delivered before it could be deserved**.\n\nThe hunger for recognition that runs through his career — the need for disciples, the fury at defection, the requirement that his theoretical framework be accepted without fundamental revision — is this wound operating at scale.\n\n## Jakob's Submission\n\nFreud's father was a wool merchant who, when challenged by an antisemite who knocked his hat into the mud, picked up the hat and walked away. Freud found this irreconcilable with his image of what a father should be. The contradiction between maternal promise of greatness and paternal demonstration of submission drove him toward building something that could not be dismissed.\n\n> \"He needed to create something authoritative in a world that denied him authority. The theory had to be large enough, systematic enough, and inarguable enough to force recognition that the social environment withheld.\"\n\n## The Jewish Wound in Vienna\n\nSystematic professional exclusion despite evident merit pushed Freud outside mainstream medicine and into positions that allowed the development of an uncomfortable theory. **The marginalization that wounded him also freed him** from the conservatism that institutional belonging requires.\n\n## The Oedipus Complex\n\nFreud discovered the Oedipus complex during his self-analysis following his father's death in 1896. He universalized it — made it the foundation of human psychological development. The terrain observation is that **one man's specific interior configuration became the proposed structure of all human psychology**.\n\nThe theory bears the marks of the wound that produced it.\n\n---\n\n*Built from publicly available material only: The Interpretation of Dreams (1900), published correspondence, and biographies including Peter Gay's Freud: A Life for Our Time (1988). Sigmund Freud has not participated in a ReLoHu session. This is a cartographic exercise, not a clinical assessment or diagnosis.*",
+  "relatedMaps": ["carl-jung", "eckhart-tolle", "brene-brown"]
+}
