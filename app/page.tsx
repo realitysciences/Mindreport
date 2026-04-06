@@ -107,7 +107,7 @@ export default function HomePage() {
           className="font-bold leading-tight tracking-tight mb-5"
           style={{ color: 'var(--text-hi)', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', maxWidth: '780px' }}
         >
-          Psychological maps of public figures,<br className="hidden sm:block" /> cultural events, and creative works.
+          Psychological maps of public figures, cultural events,<br className="hidden sm:block" /> creative works, and archetypes.
         </h1>
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5" style={{ maxWidth: '780px' }}>
           <p
