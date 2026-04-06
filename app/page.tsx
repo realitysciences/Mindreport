@@ -147,27 +147,35 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Orientation */}
+      {/* Hero statement */}
       <section
-        className="px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-        style={{ borderBottom: '0.5px solid #1e1e1e' }}
+        className="px-8 pt-14 pb-10"
+        style={{ borderBottom: '0.5px solid #2e2e2e' }}
       >
-        <p
-          className="text-sm leading-relaxed max-w-2xl"
-          style={{ fontFamily: 'var(--font-serif)', color: '#888', fontStyle: 'italic' }}
+        <h1
+          className="font-bold leading-tight tracking-tight mb-5"
+          style={{ color: '#f0ece4', fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', maxWidth: '780px' }}
         >
-          Mind Report publishes psychological maps of public figures, cultural events, and creative works.
-          Each map reads its subject as terrain: identifying the wound beneath the pattern, the architecture beneath the behavior.
-        </p>
-        <a
-          href="https://www.relohu.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[0.65rem] uppercase tracking-widest whitespace-nowrap px-4 py-2 rounded flex-shrink-0 transition-colors"
-          style={{ fontFamily: 'var(--font-mono)', color: '#666', border: '0.5px solid #2e2e2e' }}
-        >
-          Get your own map →
-        </a>
+          Psychological maps of public figures,<br className="hidden sm:block" /> cultural events, and creative works.
+        </h1>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5" style={{ maxWidth: '780px' }}>
+          <p
+            className="text-sm leading-relaxed"
+            style={{ fontFamily: 'var(--font-serif)', color: '#888', fontStyle: 'italic', maxWidth: '520px' }}
+          >
+            Each map reads its subject as terrain: identifying the wound beneath the pattern,
+            the architecture beneath the behavior.
+          </p>
+          <a
+            href="https://www.relohu.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[0.65rem] uppercase tracking-widest whitespace-nowrap px-4 py-2 rounded flex-shrink-0 transition-colors"
+            style={{ fontFamily: 'var(--font-mono)', color: '#666', border: '0.5px solid #2e2e2e' }}
+          >
+            Get your own map →
+          </a>
+        </div>
       </section>
 
       {/* Hero — two featured maps */}
