@@ -95,12 +95,55 @@ function MapCard({ map }: { map: MapArticle }) {
   )
 }
 
+function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boolean }) {
+  const color = getCategoryColor(map.category)
+  const label = categoryLabels[map.category]
+  return (
+    <Link
+      href={`/${map.category}/${map.slug}`}
+      className="flex flex-col justify-between p-8 rounded h-full transition-colors"
+      style={{ background: '#111', border: '0.5px solid #2e2e2e' }}
+    >
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
+            <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: '#888' }}>
+              {label}
+            </span>
+          </div>
+          <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: '#555' }}>
+            {map.fileNumber}
+          </span>
+        </div>
+        <h2
+          className="font-bold leading-tight tracking-tight"
+          style={{ color: '#f0ece4', fontSize: primary ? '2.5rem' : '1.75rem' }}
+        >
+          {map.title}
+        </h2>
+        <p
+          className="leading-relaxed"
+          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#b0aca4', fontSize: primary ? '1rem' : '0.875rem' }}
+        >
+          {map.deck}
+        </p>
+      </div>
+      <div
+        className="text-[0.6rem] uppercase tracking-widest mt-6 pt-4"
+        style={{ borderTop: `0.5px solid #222`, fontFamily: 'var(--font-mono)', color }}
+      >
+        Read map →
+      </div>
+    </Link>
+  )
+}
+
 export default function HomePage() {
   const maps = getAllMaps()
-  const featured = maps.find((m) => m.slug === 'elon-musk') ?? maps[0]
+  const featured1 = maps.find((m) => m.slug === 'pope-francis') ?? maps[0]
+  const featured2 = maps.find((m) => m.slug === 'elon-musk') ?? maps[1]
   const recent = maps.slice(0, 3)
-  const color = getCategoryColor(featured.category)
-  const label = categoryLabels[featured.category]
 
   return (
     <div>
@@ -118,59 +161,13 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Hero */}
+      {/* Hero — two featured maps */}
       <section
-        className="px-8 py-10 grid gap-10 items-start grid-cols-1 md:grid-cols-[1fr_320px]"
+        className="px-8 py-8 grid gap-4 items-stretch grid-cols-1 md:grid-cols-[3fr_2fr]"
         style={{ borderBottom: '0.5px solid #2e2e2e' }}
       >
-        <div className="flex flex-col gap-5">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full" style={{ background: color }} />
-            <span
-              className="text-xs uppercase tracking-widest"
-              style={{ fontFamily: 'var(--font-mono)', color: '#888' }}
-            >
-              {label}
-            </span>
-          </div>
-          <h1
-            className="text-5xl font-bold leading-tight tracking-tight"
-            style={{ color: '#f0ece4' }}
-          >
-            {featured.title}
-          </h1>
-          <p
-            className="text-base leading-relaxed max-w-lg"
-            style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#b0aca4' }}
-          >
-            {featured.deck}
-          </p>
-          <div
-            className="flex gap-6 text-xs pt-2"
-            style={{ fontFamily: 'var(--font-mono)', color: '#888', borderTop: '0.5px solid #222' }}
-          >
-            {[
-              { label: 'TYPE', value: label },
-              { label: 'SUBJECT', value: featured.subject },
-              { label: 'FILE', value: featured.fileNumber },
-            ].map(({ label: l, value }) => (
-              <div key={l} className="flex flex-col gap-1 pt-3">
-                <span style={{ color: '#666', fontSize: '0.6rem', letterSpacing: '0.1em' }}>{l}</span>
-                <span style={{ color: '#bbb' }}>{value}</span>
-              </div>
-            ))}
-          </div>
-          <Link
-            href={`/${featured.category}/${featured.slug}`}
-            className="self-start mt-2 text-xs uppercase tracking-widest px-4 py-2 rounded transition-colors"
-            style={{ border: `0.5px solid ${color}`, color, fontFamily: 'var(--font-mono)' }}
-          >
-            Read map →
-          </Link>
-        </div>
-        <div className="flex items-start">
-          <TerrainCard map={featured} color={color} />
-        </div>
+        <FeaturedCard map={featured1} primary />
+        <FeaturedCard map={featured2} />
       </section>
 
       {/* Recent maps */}
