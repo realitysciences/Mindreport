@@ -1,0 +1,18 @@
+{
+  "title": "Carl Jung",
+  "slug": "carl-jung",
+  "category": "people",
+  "fileNumber": "P-022",
+  "subject": "Carl Jung",
+  "deck": "He built the most comprehensive map of the human interior the twentieth century produced, entirely from the inside. The wound was the insufficient framework he inherited from a father who lost his faith. The method was a new framework large enough to hold the question the old one could not.",
+  "terrainMap": {
+    "coreOrientation": "Wound-to-framework",
+    "primaryWound": "Father who lost his faith / inherited doubt and insufficient container",
+    "dominantPattern": "Built comprehensive interior map from direct interior experience",
+    "relationalStyle": "Interior richness making ordinary sustained closeness harder",
+    "secondaryPattern": "Bollingen: something that resists the framework entirely",
+    "markers": ["two personalities", "Freud rupture", "Red Book descent", "Bollingen tower", "wound-to-framework"]
+  },
+  "body": "## The Father Who Lost His Faith\n\nJohann Paul Jung was a Swiss Reformed pastor whose faith eroded under the weight of his own doubt. He preached while privately doubting, becoming increasingly depressed. He died when Carl was twenty-one, leaving his son with a structural inheritance: **inherited frameworks may be insufficient, and authority figures may be most tormented by the unanswered questions beneath those frameworks**.\n\nThe wound was not the death. It was watching a man trying to hold a framework that could no longer hold him.\n\n## Personality No. 1 and No. 2\n\nJung described existing as two people throughout his life. Personality No. 1 was the schoolboy, the son, the person who existed in the world of other people's expectations. Personality No. 2 was older, connected to something vast and historical — what he later identified as the collective unconscious.\n\n> \"He did not invent the concept of the collective unconscious from theory. He discovered it from the inside, by learning to distinguish between what was his and what was larger than him. The framework was built from primary experience, not from observation of others.\"\n\n## The Freud Rupture\n\nJung met Freud in 1907 and they formed a significant intellectual and personal bond. Freud required agreement on the primacy of sexuality as the non-negotiable foundation. Jung could not subordinate his interior experience to this fixed point. The break, completed in 1913, precipitated Jung's psychological crisis and, from within that crisis, the development of analytical psychology.\n\n## The Red Book\n\nBetween 1913 and 1930, Jung filled notebooks with visions, unconscious dialogues, and active imagination sequences, later transcribing them into an illuminated red leather volume he called *Liber Novus*. He kept it private until 2009. **It is the wound before the framework — the untranslated material that the methodology would later organize.**\n\n## Bollingen: The Tower Built by Hand\n\nStarting in 1923, Jung constructed a stone tower on the shore of Lake Zurich with his own hands, adding rooms across four decades. No electricity, no modern conveniences. Something that had to resist the framework entirely — built with the hands rather than the mind.\n\n---\n\n*Built from publicly available material only: Memories, Dreams, Reflections (1962), The Red Book (2009), and published correspondence and biography. Carl Jung has not participated in a ReLoHu session. This is a cartographic exercise, not a clinical assessment or diagnosis.*",
+  "relatedMaps": ["sigmund-freud", "eckhart-tolle", "darryl-anka"]
+}
