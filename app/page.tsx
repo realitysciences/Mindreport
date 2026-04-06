@@ -3,6 +3,17 @@ import { getAllMaps } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { MapArticle } from '@/lib/types'
 
+export const dynamic = 'force-dynamic'
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 function TerrainCard({ map, color }: { map: MapArticle; color: string }) {
   return (
     <div
@@ -140,10 +151,10 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
 }
 
 export default function HomePage() {
-  const maps = getAllMaps()
-  const featured1 = maps.find((m) => m.slug === 'pope-francis') ?? maps[0]
-  const featured2 = maps.find((m) => m.slug === 'elon-musk') ?? maps[1]
-  const recent = maps.slice(0, 3)
+  const shuffled = shuffle(getAllMaps())
+  const featured1 = shuffled[0]
+  const featured2 = shuffled[1]
+  const recent = shuffled.slice(2, 5)
 
   return (
     <div>
