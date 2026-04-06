@@ -19,4 +19,5 @@ export interface MapArticle {
   terrainMap: TerrainMap
   body: string
   relatedMaps: string[]
+  publishedDate?: string
 }

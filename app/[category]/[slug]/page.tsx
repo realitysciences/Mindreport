@@ -78,8 +78,8 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           {[
             { label: 'TYPE', value: label },
             { label: 'SUBJECT', value: map.subject },
-            { label: 'CATEGORY', value: label },
             { label: 'FILE', value: map.fileNumber },
+            ...(map.publishedDate ? [{ label: 'POSTED', value: new Date(map.publishedDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }] : []),
           ].map(({ label: l, value }) => (
             <div key={l} className="flex flex-col gap-1">
               <span style={{ color: '#666', fontSize: '0.6rem', letterSpacing: '0.1em' }}>{l}</span>
