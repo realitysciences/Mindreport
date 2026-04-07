@@ -93,18 +93,19 @@ export default function Nav() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="flex items-center justify-center rounded transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1 rounded transition-colors"
             style={{
-              width: '30px',
-              height: '30px',
               border: '0.5px solid var(--border)',
               color: 'var(--text-mid)',
               background: 'transparent',
-              fontSize: '14px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.65rem',
+              letterSpacing: '0.08em',
               flexShrink: 0,
             }}
           >
-            {theme === 'dark' ? '○' : '●'}
+            <span style={{ fontSize: '10px' }}>{theme === 'dark' ? '○' : '●'}</span>
+            {theme === 'dark' ? 'Light' : 'Dark'}
           </button>
 
           {/* Mobile hamburger */}
