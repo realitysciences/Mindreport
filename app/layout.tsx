@@ -14,6 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{
           __html: `(function(){try{var t=localStorage.getItem('mr-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})()`
         }} />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-87JNK4VQ80" />
+        <script dangerouslySetInnerHTML={{
+          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-87JNK4VQ80');`
+        }} />
       </head>
       <body className="min-h-full flex flex-col" style={{ background: 'var(--bg)', color: 'var(--text-body)' }}>
         <Nav />
