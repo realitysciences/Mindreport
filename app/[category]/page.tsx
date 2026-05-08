@@ -52,16 +52,18 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
               className="flex flex-col justify-between rounded transition-colors overflow-hidden"
               style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
             >
-              {map.image && (
-                <div style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
+              <div style={{ aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0 }}>
+                {map.image ? (
                   <img
                     src={map.image.url}
                     alt={map.title}
                     loading="lazy"
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 15%', display: 'block' }}
                   />
-                </div>
-              )}
+                ) : (
+                  <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}22 50%, ${color}08 100%)` }} />
+                )}
+              </div>
               <div className="p-6 flex flex-col justify-between flex-1">
               <div>
                 <div className="flex items-center justify-between mb-4">
