@@ -29,7 +29,7 @@ function MapCard({ map }: { map: MapArticle }) {
             src={map.image.url}
             alt={map.title}
             loading="lazy"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
           />
         </div>
       )}
@@ -76,7 +76,7 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
             src={map.image.url}
             alt={map.title}
             loading="lazy"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
           />
         </div>
       )}
