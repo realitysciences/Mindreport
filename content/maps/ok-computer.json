@@ -25,5 +25,9 @@
     "fight-club",
     "sam-altman"
   ],
-  "publishedDate": "2025-12-16"
+  "publishedDate": "2025-12-16",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Thom_Yorke_2010.jpg/600px-Thom_Yorke_2010.jpg",
+    "caption": "Thom Yorke of Radiohead, 2010."
+  }
 }

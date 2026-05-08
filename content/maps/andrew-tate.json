@@ -25,5 +25,9 @@
     "donald-trump",
     "elon-musk"
   ],
-  "publishedDate": "2025-01-14"
+  "publishedDate": "2025-01-14",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Andrew_Tate_-_2023_photo.jpg/600px-Andrew_Tate_-_2023_photo.jpg",
+    "caption": "Andrew Tate, 2023."
+  }
 }

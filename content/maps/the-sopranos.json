@@ -25,5 +25,9 @@
     "elon-musk",
     "fight-club"
   ],
-  "publishedDate": "2025-11-18"
+  "publishedDate": "2025-11-18",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/James_Gandolfini_2009.jpg/600px-James_Gandolfini_2009.jpg",
+    "caption": "James Gandolfini, who played Tony Soprano, 2009."
+  }
 }

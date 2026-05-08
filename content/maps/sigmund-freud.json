@@ -25,5 +25,9 @@
     "eckhart-tolle",
     "brene-brown"
   ],
-  "publishedDate": "2025-05-20"
+  "publishedDate": "2025-05-20",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Sigmund_Freud_LIFE.jpg/600px-Sigmund_Freud_LIFE.jpg",
+    "caption": "Sigmund Freud, circa 1921. Photo: Max Halberstadt. Public domain."
+  }
 }

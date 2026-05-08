@@ -25,5 +25,9 @@
     "steve-jobs",
     "andrew-tate"
   ],
-  "publishedDate": "2024-04-10"
+  "publishedDate": "2024-04-10",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg/600px-Elon_Musk_Royal_Society_%28crop2%29.jpg",
+    "caption": "Elon Musk at the Royal Society, London, 2016. Photo: CC BY-SA 4.0"
+  }
 }

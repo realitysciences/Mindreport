@@ -25,5 +25,9 @@
     "god-jewish",
     "god-hindu",
     "carl-jung"
-  ]
+  ],
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/600px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
+    "caption": "The Creation of Adam by Michelangelo, c. 1512. Sistine Chapel, Vatican City. Public domain."
+  }
 }

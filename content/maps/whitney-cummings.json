@@ -25,5 +25,9 @@
     "joe-rogan",
     "kill-tony-574"
   ],
-  "publishedDate": "2025-04-08"
+  "publishedDate": "2025-04-08",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Whitney_Cummings_2012.jpg/600px-Whitney_Cummings_2012.jpg",
+    "caption": "Whitney Cummings, 2012."
+  }
 }

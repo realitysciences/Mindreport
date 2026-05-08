@@ -49,9 +49,20 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
             <Link
               key={map.slug}
               href={`/${map.category}/${map.slug}`}
-              className="flex flex-col justify-between p-6 rounded transition-colors"
+              className="flex flex-col justify-between rounded transition-colors overflow-hidden"
               style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
             >
+              {map.image && (
+                <div style={{ height: '160px', overflow: 'hidden' }}>
+                  <img
+                    src={map.image.url}
+                    alt={map.title}
+                    loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+              )}
+              <div className="p-6 flex flex-col justify-between flex-1">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span
@@ -76,6 +87,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
                 style={{ borderTop: '0.5px solid #222', fontFamily: 'var(--font-mono)', color: color }}
               >
                 Read map →
+              </div>
               </div>
             </Link>
           ))}

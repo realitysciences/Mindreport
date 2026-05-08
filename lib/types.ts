@@ -20,4 +20,8 @@ export interface MapArticle {
   body: string
   relatedMaps: string[]
   publishedDate?: string
+  image?: {
+    url: string
+    caption: string
+  }
 }

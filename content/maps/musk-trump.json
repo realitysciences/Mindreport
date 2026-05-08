@@ -25,5 +25,9 @@
     "donald-trump",
     "jobs-wozniak"
   ],
-  "publishedDate": "2024-09-03"
+  "publishedDate": "2024-09-03",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/600px-Donald_Trump_official_portrait.jpg",
+    "caption": "Donald Trump, official White House portrait, 2017. Public domain."
+  }
 }

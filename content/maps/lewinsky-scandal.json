@@ -25,5 +25,9 @@
     "oj-simpson-trial",
     "swift-braun"
   ],
-  "publishedDate": "2025-08-19"
+  "publishedDate": "2025-08-19",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Bill_Clinton_%28cropped%29.jpg/600px-Bill_Clinton_%28cropped%29.jpg",
+    "caption": "President Bill Clinton, 1993. Photo: Bob McNeely / White House. Public domain."
+  }
 }

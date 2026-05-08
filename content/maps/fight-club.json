@@ -25,5 +25,9 @@
     "trent-reznor",
     "andrew-tate"
   ],
-  "publishedDate": "2025-12-02"
+  "publishedDate": "2025-12-02",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Chuck_Palahniuk_at_Powell%27s_Books%2C_Portland%2C_Oregon.jpg/600px-Chuck_Palahniuk_at_Powell%27s_Books%2C_Portland%2C_Oregon.jpg",
+    "caption": "Chuck Palahniuk, author of Fight Club."
+  }
 }

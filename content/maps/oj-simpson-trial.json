@@ -25,5 +25,9 @@
     "jonestown",
     "donald-trump"
   ],
-  "publishedDate": "2025-08-05"
+  "publishedDate": "2025-08-05",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/OJ_Simpson_1994_mug_shot.jpg/600px-OJ_Simpson_1994_mug_shot.jpg",
+    "caption": "O.J. Simpson booking photograph, 1994. Los Angeles Police Department. Public domain."
+  }
 }

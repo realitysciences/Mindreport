@@ -25,5 +25,9 @@
     "carl-jung",
     "joe-rogan"
   ],
-  "publishedDate": "2025-03-18"
+  "publishedDate": "2025-03-18",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/William_Shatner_2011.jpg/600px-William_Shatner_2011.jpg",
+    "caption": "William Shatner, 2011. Photo: Gage Skidmore / CC BY-SA 3.0"
+  }
 }
