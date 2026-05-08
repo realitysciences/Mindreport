@@ -76,6 +76,25 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           {map.deck}
         </p>
 
+        {/* Image */}
+        {map.image && (
+          <figure className="mb-10">
+            <img
+              src={map.image.url}
+              alt={map.title}
+              loading="lazy"
+              className="w-full rounded-lg"
+              style={{ objectFit: 'cover', maxHeight: '440px', display: 'block', border: '0.5px solid var(--border)' }}
+            />
+            <figcaption
+              className="mt-2 text-center"
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', lineHeight: '1.5' }}
+            >
+              {map.image.caption}
+            </figcaption>
+          </figure>
+        )}
+
         {/* ── AT A GLANCE infographic panel ────────────────────────────────── */}
         <div className="mb-14 rounded-lg overflow-hidden" style={{ border: `1px solid ${color}55` }}>
 

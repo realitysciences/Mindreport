@@ -25,5 +25,9 @@
     "musk-trump",
     "britney-spears"
   ],
-  "publishedDate": "2025-09-09"
+  "publishedDate": "2025-09-09",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Princess_Diana_1997_%28cropped%29.jpg/600px-Princess_Diana_1997_%28cropped%29.jpg",
+    "caption": "Princess Diana, 1997."
+  }
 }

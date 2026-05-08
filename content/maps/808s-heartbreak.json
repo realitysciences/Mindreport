@@ -25,5 +25,9 @@
     "closer",
     "trent-reznor"
   ],
-  "publishedDate": "2025-11-04"
+  "publishedDate": "2025-11-04",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Kanye_West_at_the_2009_Tribeca_Film_Festival.jpg/600px-Kanye_West_at_the_2009_Tribeca_Film_Festival.jpg",
+    "caption": "Kanye West, 2009."
+  }
 }

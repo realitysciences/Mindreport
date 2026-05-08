@@ -25,5 +25,9 @@
     "simone-biles",
     "britney-spears"
   ],
-  "publishedDate": "2024-07-30"
+  "publishedDate": "2024-07-30",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Malala_Yousafzai_at_Girl_Summit_2014.jpg/600px-Malala_Yousafzai_at_Girl_Summit_2014.jpg",
+    "caption": "Malala Yousafzai at the Girl Summit, London, 2014."
+  }
 }

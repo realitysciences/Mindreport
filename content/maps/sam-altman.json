@@ -25,5 +25,9 @@
     "steve-jobs",
     "donald-trump"
   ],
-  "publishedDate": "2025-02-04"
+  "publishedDate": "2025-02-04",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Sam_Altman_CCA_2.jpg/600px-Sam_Altman_CCA_2.jpg",
+    "caption": "Sam Altman, 2019. Photo: CC BY-SA 2.0"
+  }
 }

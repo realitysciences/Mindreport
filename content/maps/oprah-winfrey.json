@@ -25,5 +25,9 @@
     "malala-yousafzai",
     "simone-biles"
   ],
-  "publishedDate": "2024-05-03"
+  "publishedDate": "2024-05-03",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Oprah_in_2014.jpg/600px-Oprah_in_2014.jpg",
+    "caption": "Oprah Winfrey, 2014."
+  }
 }

@@ -25,5 +25,9 @@
     "anthony-bourdain",
     "kill-tony-574"
   ],
-  "publishedDate": "2024-01-15"
+  "publishedDate": "2024-01-15",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Joe_Rogan_by_Gage_Skidmore.jpg/600px-Joe_Rogan_by_Gage_Skidmore.jpg",
+    "caption": "Joe Rogan, 2022. Photo: Gage Skidmore / CC BY-SA 2.0"
+  }
 }

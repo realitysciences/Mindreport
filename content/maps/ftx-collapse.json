@@ -24,5 +24,9 @@
     "elon-musk",
     "jobs-wozniak"
   ],
-  "publishedDate": "2024-04-05"
+  "publishedDate": "2024-04-05",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Sam_Bankman-Fried_2021.jpg/600px-Sam_Bankman-Fried_2021.jpg",
+    "caption": "Sam Bankman-Fried, founder of FTX, 2021."
+  }
 }

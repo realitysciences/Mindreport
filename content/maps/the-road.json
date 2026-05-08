@@ -25,5 +25,9 @@
     "pope-francis",
     "closer"
   ],
-  "publishedDate": "2025-10-21"
+  "publishedDate": "2025-10-21",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Cormac_McCarthy.jpg/600px-Cormac_McCarthy.jpg",
+    "caption": "Cormac McCarthy, author of The Road."
+  }
 }

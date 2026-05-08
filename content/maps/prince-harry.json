@@ -25,5 +25,9 @@
     "simone-biles",
     "naomi-osaka"
   ],
-  "publishedDate": "2024-05-28"
+  "publishedDate": "2024-05-28",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Prince_Harry_2013.jpg/600px-Prince_Harry_2013.jpg",
+    "caption": "Prince Harry, 2013."
+  }
 }

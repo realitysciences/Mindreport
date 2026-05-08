@@ -25,5 +25,9 @@
     "carl-jung",
     "darryl-anka"
   ],
-  "publishedDate": "2025-04-22"
+  "publishedDate": "2025-04-22",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Pope_Francis_Korea_Haemi_Castle_19.jpg/600px-Pope_Francis_Korea_Haemi_Castle_19.jpg",
+    "caption": "Pope Francis in South Korea, 2014."
+  }
 }

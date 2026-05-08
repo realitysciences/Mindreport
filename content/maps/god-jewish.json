@@ -25,5 +25,9 @@
     "god-christian",
     "god-hindu",
     "sigmund-freud"
-  ]
+  ],
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Sefer_Torah_at_Glockengasse_Synagogue_%28Cologne%29.jpg/600px-Sefer_Torah_at_Glockengasse_Synagogue_%28Cologne%29.jpg",
+    "caption": "Sefer Torah at the Glockengasse Synagogue, Cologne. Photo: Willy Horsch / CC BY-SA 4.0"
+  }
 }

@@ -20,9 +20,20 @@ function MapCard({ map }: { map: MapArticle }) {
   return (
     <Link
       href={`/${map.category}/${map.slug}`}
-      className="flex flex-col justify-between p-6 rounded transition-colors group"
+      className="flex flex-col justify-between rounded transition-colors group overflow-hidden"
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
+      {map.image && (
+        <div style={{ height: '140px', overflow: 'hidden' }}>
+          <img
+            src={map.image.url}
+            alt={map.title}
+            loading="lazy"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+      )}
+      <div className="p-6 flex flex-col justify-between flex-1">
       <div>
         <div className="flex items-center gap-1.5 mb-3">
           <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
@@ -45,6 +56,7 @@ function MapCard({ map }: { map: MapArticle }) {
           {label} →
         </span>
       </div>
+      </div>
     </Link>
   )
 }
@@ -55,9 +67,20 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
   return (
     <Link
       href={`/${map.category}/${map.slug}`}
-      className="flex flex-col justify-between p-8 rounded h-full transition-colors"
+      className="flex flex-col justify-between rounded h-full transition-colors overflow-hidden"
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
+      {map.image && (
+        <div style={{ height: primary ? '260px' : '200px', overflow: 'hidden', flexShrink: 0 }}>
+          <img
+            src={map.image.url}
+            alt={map.title}
+            loading="lazy"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+      )}
+      <div className="p-8 flex flex-col gap-4 flex-1 justify-between">
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -88,6 +111,7 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
         style={{ borderTop: '0.5px solid var(--border-sub)', fontFamily: 'var(--font-mono)', color }}
       >
         Read map →
+      </div>
       </div>
     </Link>
   )

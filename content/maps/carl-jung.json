@@ -25,5 +25,9 @@
     "eckhart-tolle",
     "darryl-anka"
   ],
-  "publishedDate": "2025-04-29"
+  "publishedDate": "2025-04-29",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/CGJung.jpg/600px-CGJung.jpg",
+    "caption": "Carl Jung, circa 1910. Public domain."
+  }
 }

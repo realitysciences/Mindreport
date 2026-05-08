@@ -25,5 +25,9 @@
     "brene-brown",
     "darryl-anka"
   ],
-  "publishedDate": "2024-02-08"
+  "publishedDate": "2024-02-08",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Eckhart_Tolle_-_Hamburg_2006.jpg/600px-Eckhart_Tolle_-_Hamburg_2006.jpg",
+    "caption": "Eckhart Tolle, Hamburg, 2006."
+  }
 }

@@ -25,5 +25,9 @@
     "prince-harry",
     "malala-yousafzai"
   ],
-  "publishedDate": "2024-11-18"
+  "publishedDate": "2024-11-18",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Naomi_Osaka_2019_French_Open_%28cropped%29.jpg/600px-Naomi_Osaka_2019_French_Open_%28cropped%29.jpg",
+    "caption": "Naomi Osaka at the 2019 French Open."
+  }
 }
