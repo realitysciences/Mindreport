@@ -83,8 +83,8 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
               src={map.image.url}
               alt={map.title}
               loading="lazy"
-              className="w-full rounded-lg"
-              style={{ objectFit: 'cover', maxHeight: '440px', display: 'block', border: '0.5px solid var(--border)' }}
+              className="rounded-lg"
+              style={{ display: 'block', maxWidth: '100%', maxHeight: '480px', margin: '0 auto', border: '0.5px solid var(--border)' }}
             />
             <figcaption
               className="mt-2 text-center"
