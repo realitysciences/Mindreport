@@ -24,12 +24,12 @@ function MapCard({ map }: { map: MapArticle }) {
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
       {map.image && (
-        <div style={{ height: '140px', overflow: 'hidden' }}>
+        <div style={{ height: '180px', overflow: 'hidden', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             src={map.image.url}
             alt={map.title}
             loading="lazy"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 20%', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
         </div>
       )}
@@ -71,12 +71,12 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
       {map.image && (
-        <div style={{ height: primary ? '260px' : '200px', overflow: 'hidden', flexShrink: 0 }}>
+        <div style={{ height: primary ? '280px' : '220px', overflow: 'hidden', flexShrink: 0, background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             src={map.image.url}
             alt={map.title}
             loading="lazy"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 20%', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
           />
         </div>
       )}
