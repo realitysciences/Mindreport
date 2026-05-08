@@ -53,12 +53,12 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
               style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
             >
               {map.image && (
-                <div style={{ height: '200px', overflow: 'hidden', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ aspectRatio: '1/1', overflow: 'hidden' }}>
                   <img
                     src={map.image.url}
                     alt={map.title}
                     loading="lazy"
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 15%', display: 'block' }}
                   />
                 </div>
               )}
