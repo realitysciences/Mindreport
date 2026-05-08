@@ -25,5 +25,9 @@
     "eckhart-tolle",
     "carl-jung"
   ],
-  "publishedDate": "2025-05-13"
+  "publishedDate": "2025-05-13",
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Eagle_nebula_pillars.jpg/330px-Eagle_nebula_pillars.jpg",
+    "caption": "Pillars of Creation, Eagle Nebula. NASA/ESA Hubble Space Telescope. Public domain."
+  }
 }
