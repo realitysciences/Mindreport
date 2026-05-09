@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getMapsByCategory } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { Category } from '@/lib/types'
@@ -8,6 +9,16 @@ const validCategories: Category[] = ['people', 'events', 'relationships', 'works
 
 export function generateStaticParams() {
   return validCategories.map((category) => ({ category }))
+}
+
+export async function generateMetadata(props: PageProps<'/[category]'>): Promise<Metadata> {
+  const { category } = await props.params
+  const label = categoryLabels[category as Category]
+  if (!label) return {}
+  return {
+    title: `${label} | Mind Report`,
+    description: `Psychological maps of ${label.toLowerCase()} — terrain analysis of the figures, events, and works that shaped culture.`,
+  }
 }
 
 export default async function CategoryPage(props: PageProps<'/[category]'>) {
