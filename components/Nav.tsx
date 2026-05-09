@@ -53,7 +53,7 @@ export default function Nav() {
             className="text-xs whitespace-nowrap transition-colors"
             style={{ color: 'var(--text-mid)' }}
           >
-            by ReLoHu
+            by ReLoHu™
           </a>
         </div>
 
