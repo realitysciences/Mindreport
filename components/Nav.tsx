@@ -44,7 +44,7 @@ export default function Nav() {
             style={{ color: 'var(--text-hi)' }}
             onClick={() => setOpen(false)}
           >
-            MIND REPORT™
+            MIND REPORT
           </Link>
           <a
             href="https://www.relohu.com"
@@ -53,7 +53,7 @@ export default function Nav() {
             className="text-xs whitespace-nowrap transition-colors"
             style={{ color: 'var(--text-mid)' }}
           >
-            by ReLoHu™
+            by ReLoHu
           </a>
         </div>
 
