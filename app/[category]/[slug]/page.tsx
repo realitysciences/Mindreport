@@ -1,11 +1,22 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getAllMaps, getMapBySlug } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { MarkdownBody } from '@/lib/markdown'
 
 export function generateStaticParams() {
   return getAllMaps().map((m) => ({ category: m.category, slug: m.slug }))
+}
+
+export async function generateMetadata(props: PageProps<'/[category]/[slug]'>): Promise<Metadata> {
+  const { slug } = await props.params
+  const map = getMapBySlug(slug)
+  if (!map) return {}
+  return {
+    title: `${map.title} | Mind Report`,
+    description: map.deck,
+  }
 }
 
 export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>) {
