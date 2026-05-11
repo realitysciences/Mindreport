@@ -66,7 +66,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
               className="flex flex-col justify-between rounded transition-colors overflow-hidden"
               style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
             >
-              <div style={{ height: '160px', overflow: 'hidden', flexShrink: 0 }}>
+              <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
                 {map.image ? (
                   <img
                     src={map.image.url}

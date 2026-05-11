@@ -23,7 +23,7 @@ function MapCard({ map }: { map: MapArticle }) {
       className="flex flex-col justify-between rounded transition-colors group overflow-hidden"
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
-      <div style={{ height: '160px', overflow: 'hidden', flexShrink: 0 }}>
+      <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
         {map.image ? (
           <img
             src={map.image.url}
@@ -72,7 +72,7 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
       className="flex flex-col justify-between rounded h-full transition-colors overflow-hidden"
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
-      <div style={{ height: primary ? '220px' : '180px', overflow: 'hidden', flexShrink: 0 }}>
+      <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
         {map.image ? (
           <img
             src={map.image.url}
