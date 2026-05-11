@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getAllMaps, getMapBySlug } from '@/lib/content'
+import { getAllMaps, getMapBySlug, slugifyMarker } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { MarkdownBody } from '@/lib/markdown'
+import ReadingProgress from '@/components/ReadingProgress'
 
 export function generateStaticParams() {
   return getAllMaps().map((m) => ({ category: m.category, slug: m.slug }))
@@ -37,6 +38,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
   return (
     <div className="px-6 py-12">
+      <ReadingProgress color={color} />
       <div className="mx-auto" style={{ maxWidth: '780px' }}>
 
         {/* Disclaimer strip */}
@@ -204,9 +206,10 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
             </div>
             <div className="flex flex-wrap gap-2">
               {map.terrainMap.markers.map((m) => (
-                <span
+                <Link
                   key={m}
-                  className="px-3 py-1 rounded-full text-[0.65rem] tracking-wide"
+                  href={`/markers/${slugifyMarker(m)}`}
+                  className="px-3 py-1 rounded-full text-[0.65rem] tracking-wide transition-opacity hover:opacity-70"
                   style={{
                     background: `${color}18`,
                     border: `0.5px solid ${color}55`,
@@ -215,7 +218,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                   }}
                 >
                   {m}
-                </span>
+                </Link>
               ))}
             </div>
           </div>

@@ -16,3 +16,27 @@ export function getMapBySlug(slug: string): MapArticle | undefined {
 export function getMapsByCategory(category: string): MapArticle[] {
   return getAllMaps().filter(m => m.category === category)
 }
+
+export function getMapsByMarker(marker: string): MapArticle[] {
+  return getAllMaps().filter(m =>
+    m.terrainMap.markers.some(mk => slugifyMarker(mk) === marker)
+  )
+}
+
+export function getAllMarkers(): { marker: string; slug: string; count: number }[] {
+  const counts: Record<string, { marker: string; count: number }> = {}
+  for (const map of getAllMaps()) {
+    for (const mk of map.terrainMap.markers) {
+      const slug = slugifyMarker(mk)
+      if (!counts[slug]) counts[slug] = { marker: mk, count: 0 }
+      counts[slug].count++
+    }
+  }
+  return Object.entries(counts)
+    .map(([slug, { marker, count }]) => ({ marker, slug, count }))
+    .sort((a, b) => b.count - a.count)
+}
+
+export function slugifyMarker(marker: string): string {
+  return marker.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}

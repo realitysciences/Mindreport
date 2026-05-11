@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Legal & Disclaimer — Mind Report',
+  title: 'Legal & Disclaimer - Mind Report',
 }
 
 export default function LegalPage() {
@@ -15,7 +15,7 @@ export default function LegalPage() {
       {[
         {
           heading: 'Nature of This Publication',
-          body: `Mind Report is a publication of interpretive opinion and psychological cartography. All maps published on this site are analytical frameworks drawn from publicly available information — published interviews, books, documentaries, public statements, and the public record. They represent interpretive readings, not clinical assessments, diagnoses, legal conclusions, or statements of established fact about any person's motivations, psychology, or conduct.`,
+          body: `Mind Report is a publication of interpretive opinion and psychological cartography. All maps published on this site are analytical frameworks drawn from publicly available information - published interviews, books, documentaries, public statements, and the public record. They represent interpretive readings, not clinical assessments, diagnoses, legal conclusions, or statements of established fact about any person's motivations, psychology, or conduct.`,
         },
         {
           heading: 'No Clinical or Professional Relationship',
@@ -27,7 +27,7 @@ export default function LegalPage() {
         },
         {
           heading: 'Opinion and Commentary',
-          body: `All interpretive content on this site — including terrain map labels, body text, deck summaries, and marker terminology — constitutes opinion and analytical commentary protected under applicable law. Phrases such as "the wound is," "the pattern suggests," and similar formulations represent ReLoHu's interpretive framework, not assertions of clinical or factual certainty. Readers should understand all such language as shorthand for "in this interpretive reading."`,
+          body: `All interpretive content on this site - including terrain map labels, body text, deck summaries, and marker terminology - constitutes opinion and analytical commentary protected under applicable law. Phrases such as "the wound is," "the pattern suggests," and similar formulations represent ReLoHu's interpretive framework, not assertions of clinical or factual certainty. Readers should understand all such language as shorthand for "in this interpretive reading."`,
         },
         {
           heading: 'No Defamatory Intent',

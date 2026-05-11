@@ -17,7 +17,7 @@ export async function generateMetadata(props: PageProps<'/[category]'>): Promise
   if (!label) return {}
   return {
     title: `${label} | Mind Report`,
-    description: `Psychological maps of ${label.toLowerCase()} — terrain analysis of the figures, events, and works that shaped culture.`,
+    description: `Psychological maps of ${label.toLowerCase()} - terrain analysis of the figures, events, and works that shaped culture.`,
   }
 }
 
