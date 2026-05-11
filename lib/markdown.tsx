@@ -1,5 +1,23 @@
 import React from 'react'
 
+export function extractHeadings(body: string): { id: string; text: string; num: string }[] {
+  const headings: { id: string; text: string; num: string }[] = []
+  let count = 0
+  for (const line of body.split('\n')) {
+    if (line.startsWith('## ')) {
+      count++
+      const text = line.slice(3).trim()
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      headings.push({ id, text, num: String(count).padStart(2, '0') })
+    }
+  }
+  return headings
+}
+
+function headingId(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
 function formatInline(text: string): string {
   return text
     .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text-hi);font-weight:600">$1</strong>')
@@ -26,8 +44,9 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
           return (
             <div
               key={i}
+              id={headingId(text)}
               className="mt-14 mb-6 flex items-stretch rounded overflow-hidden"
-              style={{ border: '0.5px solid var(--border)' }}
+              style={{ border: '0.5px solid var(--border)', scrollMarginTop: '80px' }}
             >
               <div
                 className="flex items-center justify-center px-4 flex-shrink-0"

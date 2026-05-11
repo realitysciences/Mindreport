@@ -3,8 +3,9 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getAllMaps, getMapBySlug, slugifyMarker } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
-import { MarkdownBody } from '@/lib/markdown'
+import { MarkdownBody, extractHeadings } from '@/lib/markdown'
 import ReadingProgress from '@/components/ReadingProgress'
+import TableOfContents from '@/components/TableOfContents'
 
 export function generateStaticParams() {
   return getAllMaps().map((m) => ({ category: m.category, slug: m.slug }))
@@ -36,10 +37,14 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
     ? new Date(map.publishedDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null
 
+  const headings = extractHeadings(map.body)
+
   return (
     <div className="px-6 py-12">
       <ReadingProgress color={color} />
-      <div className="mx-auto" style={{ maxWidth: '780px' }}>
+      <div className="mx-auto" style={{ maxWidth: '1080px' }}>
+      <div className="flex gap-10 items-start">
+      <div style={{ flex: 1, minWidth: 0, maxWidth: '780px' }}>
 
         {/* Disclaimer strip */}
         <div
@@ -283,7 +288,20 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           </a>
         </div>
 
-      </div>
+      </div>{/* article content */}
+
+      {/* Sticky TOC — desktop only */}
+      {headings.length > 0 && (
+        <aside
+          className="hidden xl:block flex-shrink-0"
+          style={{ width: '200px', position: 'sticky', top: '80px', alignSelf: 'flex-start' }}
+        >
+          <TableOfContents headings={headings} color={color} />
+        </aside>
+      )}
+
+      </div>{/* flex row */}
+      </div>{/* max-width wrapper */}
     </div>
   )
 }
