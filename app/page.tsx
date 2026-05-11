@@ -23,7 +23,7 @@ function MapCard({ map }: { map: MapArticle }) {
       className="flex flex-col justify-between rounded transition-colors group overflow-hidden"
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
-      <div style={{ aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0 }}>
+      <div style={{ height: '160px', overflow: 'hidden', flexShrink: 0 }}>
         {map.image ? (
           <img
             src={map.image.url}
@@ -35,7 +35,7 @@ function MapCard({ map }: { map: MapArticle }) {
           <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}22 50%, ${color}08 100%)` }} />
         )}
       </div>
-      <div className="p-6 flex flex-col justify-between flex-1">
+      <div className="p-5 flex flex-col justify-between flex-1">
       <div>
         <div className="flex items-center gap-1.5 mb-3">
           <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
@@ -72,7 +72,7 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
       className="flex flex-col justify-between rounded h-full transition-colors overflow-hidden"
       style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
     >
-      <div style={{ aspectRatio: '1/1', overflow: 'hidden', flexShrink: 0 }}>
+      <div style={{ height: primary ? '220px' : '180px', overflow: 'hidden', flexShrink: 0 }}>
         {map.image ? (
           <img
             src={map.image.url}
@@ -84,8 +84,8 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
           <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}55 0%, ${color}22 50%, ${color}08 100%)` }} />
         )}
       </div>
-      <div className="p-8 flex flex-col gap-4 flex-1 justify-between">
-      <div className="flex flex-col gap-4">
+      <div className="p-6 flex flex-col gap-3 flex-1 justify-between">
+      <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: color }} />
@@ -99,19 +99,19 @@ function FeaturedCard({ map, primary = false }: { map: MapArticle; primary?: boo
         </div>
         <h2
           className="font-bold leading-tight tracking-tight"
-          style={{ color: 'var(--text-hi)', fontSize: primary ? '2.5rem' : '1.75rem' }}
+          style={{ color: 'var(--text-hi)', fontSize: primary ? '1.75rem' : '1.25rem' }}
         >
           {map.title}
         </h2>
         <p
-          className="leading-relaxed"
-          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: primary ? '1rem' : '0.875rem' }}
+          className="leading-relaxed line-clamp-3"
+          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '0.875rem' }}
         >
           {map.deck}
         </p>
       </div>
       <div
-        className="text-[0.6rem] uppercase tracking-widest mt-6 pt-4"
+        className="text-[0.6rem] uppercase tracking-widest mt-4 pt-3"
         style={{ borderTop: '0.5px solid var(--border-sub)', fontFamily: 'var(--font-mono)', color }}
       >
         Read map →
