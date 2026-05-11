@@ -3,8 +3,12 @@ import './globals.css'
 import Nav from '@/components/Nav'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://mindreport.ai'),
   title: 'Mind Report',
   description: 'Psychological cartography by ReLoHu™.',
+  alternates: {
+    canonical: 'https://mindreport.ai',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -18,6 +18,9 @@ export async function generateMetadata(props: PageProps<'/[category]'>): Promise
   return {
     title: `${label} | Mind Report`,
     description: `Psychological maps of ${label.toLowerCase()} - terrain analysis of the figures, events, and works that shaped culture.`,
+    alternates: {
+      canonical: `https://mindreport.ai/${category}`,
+    },
   }
 }
 

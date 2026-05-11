@@ -18,6 +18,9 @@ export async function generateMetadata(props: PageProps<'/[category]/[slug]'>): 
   return {
     title: `${map.title} | Mind Report`,
     description: map.deck,
+    alternates: {
+      canonical: `https://mindreport.ai/${map.category}/${map.slug}`,
+    },
   }
 }
 
