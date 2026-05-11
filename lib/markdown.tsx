@@ -4,6 +4,10 @@ function formatInline(text: string): string {
   return text
     .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--text-hi);font-weight:600">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(
+      /\[([^\]]+)\]\((\/[^)]+)\)/g,
+      '<a href="$2" style="color:var(--text-hi);text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px" class="transition-colors hover:text-[#c8c4bc]">$1</a>'
+    )
 }
 
 export function MarkdownBody({ content, categoryColor }: { content: string; categoryColor: string }) {
@@ -47,6 +51,40 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
                   {text}
                 </h2>
               </div>
+            </div>
+          )
+        }
+
+        if (trimmed.startsWith('>> ')) {
+          const raw = trimmed.slice(3)
+          const sepIdx = raw.lastIndexOf(' | ')
+          const quoteText = sepIdx !== -1 ? raw.slice(0, sepIdx).replace(/^"|"$/g, '') : raw.replace(/^"|"$/g, '')
+          const attribution = sepIdx !== -1 ? raw.slice(sepIdx + 3) : null
+          return (
+            <div
+              key={i}
+              className="my-10 rounded-lg overflow-hidden"
+              style={{ borderLeft: `3px solid ${categoryColor}`, background: 'var(--surface)', padding: '1.5rem 1.75rem' }}
+            >
+              <p
+                className="mb-3 leading-relaxed"
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontStyle: 'italic',
+                  fontSize: '1.1rem',
+                  lineHeight: '1.75',
+                  color: 'var(--text-hi)',
+                }}
+                dangerouslySetInnerHTML={{ __html: `“${formatInline(quoteText)}”` }}
+              />
+              {attribution && (
+                <p
+                  className="text-[0.65rem] uppercase tracking-widest"
+                  style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
+                >
+                  {attribution}
+                </p>
+              )}
             </div>
           )
         }
