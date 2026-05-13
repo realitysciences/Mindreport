@@ -38,8 +38,8 @@ export default function LegalPage() {
           body: `All original written content on this site is © ${new Date().getFullYear()} mindreport.ai. All rights reserved. Reproduction or republication without permission is prohibited.`,
         },
         {
-          heading: 'Contact',
-          body: `For legal inquiries, corrections, or removal requests, please contact us through relohu.com.`,
+          heading: 'Content Removal and Corrections',
+          body: `If you are a subject of a map, or represent a subject, and wish to request a correction or removal, email realitysciences@gmail.com with the subject line "Content Request." Please include the URL of the page in question and a description of your concern. All requests are reviewed and responded to promptly. You may also use the /contact page.`,
         },
       ].map(({ heading, body }) => (
         <div key={heading} className="mb-10">

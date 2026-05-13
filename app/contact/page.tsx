@@ -29,7 +29,7 @@ export default function ContactPage() {
           className="text-sm leading-relaxed mb-10"
           style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)' }}
         >
-          Questions about a map, suggestions for future subjects, or anything else - reach out directly.
+          Questions about a map, suggestions for future subjects, correction requests, or removal requests - reach out directly. All requests are reviewed promptly.
         </p>
 
         <a
