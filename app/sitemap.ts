@@ -22,6 +22,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
+  const staticUrls: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/about`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/methodology`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/contact`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/legal`, changeFrequency: 'yearly', priority: 0.2 },
+  ]
+
   return [
     {
       url: BASE_URL,
@@ -30,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     ...categoryUrls,
+    ...staticUrls,
     ...mapUrls,
   ]
 }

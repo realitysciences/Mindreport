@@ -42,8 +42,32 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
   const headings = extractHeadings(map.body)
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: map.title,
+    description: map.deck,
+    ...(map.publishedDate && { datePublished: map.publishedDate }),
+    ...(map.image?.url && { image: map.image.url }),
+    author: {
+      '@type': 'Organization',
+      name: 'Mind Report',
+      url: 'https://mindreport.ai',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Mind Report',
+      url: 'https://mindreport.ai',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://mindreport.ai/${map.category}/${map.slug}`,
+    },
+  }
+
   return (
     <div className="px-6 py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ReadingProgress color={color} />
       <div className="mx-auto" style={{ maxWidth: '1080px' }}>
       <div className="flex gap-10 items-start">
