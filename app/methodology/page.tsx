@@ -4,6 +4,9 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Methodology | Mind Report',
   description: 'How Mind Report reads its subjects: the terrain method, sources, and the difference between interpretation and diagnosis.',
+  alternates: {
+    canonical: 'https://mindreport.ai/methodology',
+  },
 }
 
 const qa: { q: string; a: string }[] = [

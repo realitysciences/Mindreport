@@ -4,6 +4,9 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'About | Mind Report',
   description: 'Mind Report publishes psychological maps of public figures, cultural events, creative works, and archetypes. Each map reads its subject as terrain.',
+  alternates: {
+    canonical: 'https://mindreport.ai/about',
+  },
 }
 
 export default function AboutPage() {

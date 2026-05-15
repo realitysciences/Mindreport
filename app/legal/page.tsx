@@ -1,5 +1,8 @@
 export const metadata = {
-  title: 'Legal & Disclaimer - Mind Report',
+  title: 'Legal & Disclaimer | Mind Report',
+  alternates: {
+    canonical: 'https://mindreport.ai/legal',
+  },
 }
 
 export default function LegalPage() {
