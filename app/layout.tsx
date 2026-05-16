@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Prevent theme flash — light is default, dark is opt-in */}
         <script dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem('mr-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');document.documentElement.style.background='#161616';}else{document.documentElement.style.background='#F4EDE0';}}catch(e){}})()`
+          __html: `(function(){try{var t=localStorage.getItem('mr-theme-v2');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');document.documentElement.style.background='#161616';}else{document.documentElement.style.background='#F4EDE0';}}catch(e){}})()`
         }} />
         {/* @ts-ignore */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-87JNK4VQ80" />

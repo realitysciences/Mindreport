@@ -68,7 +68,7 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                       src={map.image.url}
                       alt={map.title}
                       loading="lazy"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 15%', display: 'block' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
                     />
                   ) : (
                     <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)` }} />

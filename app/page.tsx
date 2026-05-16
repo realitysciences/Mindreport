@@ -97,7 +97,7 @@ function FeaturedCard({ map, dark = false }: { map: MapArticle; dark?: boolean }
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              objectPosition: '50% 15%',
+              objectPosition: 'center',
               display: 'block',
               opacity: dark ? 0.55 : 0.75,
             }}
@@ -185,7 +185,7 @@ function BrowseCard({ map }: { map: MapArticle }) {
             src={map.image.url}
             alt={map.title}
             loading="lazy"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 15%', display: 'block' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
           />
         ) : (
           <div
