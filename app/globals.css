@@ -64,11 +64,17 @@
   --text-faint:      #555555;
   --text-ghost:      #444444;
   --accent:          #C09230;
-  --accent-dark:     #e8e4dc;
+  --accent-dark:     #1A2B3C;
 }
 
 html {
   font-size: 18px;
+  background: #F4EDE0; /* prevents FOUC on light theme before CSS variables resolve */
+}
+
+[data-theme="dark"] html,
+html[data-theme="dark"] {
+  background: #161616;
 }
 
 body {
