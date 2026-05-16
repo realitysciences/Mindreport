@@ -15,15 +15,15 @@ export default function AboutPage() {
       <div className="mx-auto" style={{ maxWidth: '680px' }}>
 
         <div className="mb-12">
-          <p
-            className="text-xs uppercase tracking-widest mb-4"
-            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
+          <span
+            className="text-[0.65rem] uppercase tracking-widest"
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             About
-          </p>
+          </span>
           <h1
-            className="font-bold leading-tight tracking-tight mb-6"
-            style={{ color: 'var(--text-hi)', fontSize: '2rem' }}
+            className="font-bold leading-tight mt-3 mb-5"
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '2.25rem', letterSpacing: '-0.02em' }}
           >
             Psychological cartography
           </h1>
@@ -38,8 +38,11 @@ export default function AboutPage() {
 
         <div className="flex flex-col gap-10" style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', lineHeight: '1.9', color: 'var(--text-body)' }}>
 
-          <div>
-            <h2 className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+            <h2
+              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
+            >
               What this is
             </h2>
             <p className="mb-4">
@@ -50,8 +53,11 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div>
-            <h2 className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+            <h2
+              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
+            >
               The terrain method
             </h2>
             <p className="mb-4">
@@ -65,8 +71,11 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div>
-            <h2 className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+            <h2
+              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
+            >
               Who makes this
             </h2>
             <p className="mb-4">
@@ -75,7 +84,7 @@ export default function AboutPage() {
                 href="https://www.relohu.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: 'var(--text-hi)' }}
+                style={{ color: 'var(--accent)', textDecoration: 'underline', textDecorationColor: 'var(--border)', textUnderlineOffset: '3px' }}
               >
                 ReLoHu
               </a>
@@ -86,8 +95,11 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div>
-            <h2 className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+            <h2
+              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
+            >
               Get your own map
             </h2>
             <p className="mb-6">
@@ -97,26 +109,24 @@ export default function AboutPage() {
               href="https://www.relohu.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded text-xs uppercase tracking-widest transition-colors"
-              style={{ border: '0.5px solid var(--border)', color: 'var(--text-nav)', fontFamily: 'var(--font-mono)' }}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-sm text-sm transition-opacity hover:opacity-85"
+              style={{ background: 'var(--accent-dark)', color: '#F0ECE4', fontFamily: 'var(--font-sans)' }}
             >
-              ReLoHu.com
+              Visit ReLoHu.com →
             </a>
           </div>
 
         </div>
 
         <div
-          className="mt-16 pt-6 text-xs"
-          style={{ borderTop: '0.5px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
+          className="mt-16 pt-6 text-xs flex gap-4"
+          style={{ borderTop: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
-          <Link href="/legal" style={{ color: 'var(--text-faint)' }}>
-            Legal and disclaimer
-          </Link>
-          {' '}·{' '}
-          <Link href="/contact" style={{ color: 'var(--text-faint)' }}>
-            Contact
-          </Link>
+          <Link href="/methodology" style={{ color: 'var(--text-faint)' }}>Methodology</Link>
+          <span>·</span>
+          <Link href="/legal" style={{ color: 'var(--text-faint)' }}>Legal</Link>
+          <span>·</span>
+          <Link href="/contact" style={{ color: 'var(--text-faint)' }}>Contact</Link>
         </div>
 
       </div>

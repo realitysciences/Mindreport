@@ -54,15 +54,15 @@ export default function MethodologyPage() {
       <div className="mx-auto" style={{ maxWidth: '680px' }}>
 
         <div className="mb-12">
-          <p
-            className="text-xs uppercase tracking-widest mb-4"
-            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
+          <span
+            className="text-[0.65rem] uppercase tracking-widest"
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             Methodology
-          </p>
+          </span>
           <h1
-            className="font-bold leading-tight tracking-tight mb-6"
-            style={{ color: 'var(--text-hi)', fontSize: '2rem' }}
+            className="font-bold leading-tight mt-3 mb-5"
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '2.25rem', letterSpacing: '-0.02em' }}
           >
             How the maps work
           </h1>
@@ -76,10 +76,10 @@ export default function MethodologyPage() {
 
         <div className="flex flex-col gap-10">
           {qa.map(({ q, a }) => (
-            <div key={q} style={{ borderTop: '0.5px solid var(--border)', paddingTop: '2rem' }}>
+            <div key={q} style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
               <h2
-                className="font-semibold mb-4 leading-snug"
-                style={{ color: 'var(--text-hi)', fontSize: '1.05rem' }}
+                className="font-bold mb-4 leading-snug"
+                style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '1.15rem' }}
               >
                 {q}
               </h2>
@@ -94,24 +94,21 @@ export default function MethodologyPage() {
         </div>
 
         <div
-          className="mt-16 pt-6 flex flex-col gap-4"
-          style={{ borderTop: '0.5px solid var(--border)' }}
+          className="mt-16 pt-8 flex flex-col gap-5"
+          style={{ borderTop: '1px solid var(--border)' }}
         >
           <a
             href="https://www.relohu.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-3 rounded text-xs uppercase tracking-widest transition-colors self-start"
-            style={{ border: '0.5px solid var(--border)', color: 'var(--text-nav)', fontFamily: 'var(--font-mono)' }}
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-sm text-sm self-start transition-opacity hover:opacity-85"
+            style={{ background: 'var(--accent-dark)', color: '#F0ECE4', fontFamily: 'var(--font-sans)' }}
           >
-            Get your own map at ReLoHu.com
+            Get your own map at ReLoHu.com →
           </a>
-          <div
-            className="text-xs"
-            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
-          >
+          <div className="text-xs flex gap-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
             <Link href="/about" style={{ color: 'var(--text-faint)' }}>About Mind Report</Link>
-            {' '}·{' '}
+            <span>·</span>
             <Link href="/legal" style={{ color: 'var(--text-faint)' }}>Legal and disclaimer</Link>
           </div>
         </div>

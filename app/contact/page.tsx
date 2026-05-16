@@ -15,23 +15,25 @@ export default function ContactPage() {
       <div className="mx-auto" style={{ maxWidth: '560px' }}>
 
         <div className="mb-10">
-          <h1
-            className="text-xs uppercase tracking-widest mb-4"
-            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
+          <span
+            className="text-[0.65rem] uppercase tracking-widest"
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             Contact
-          </h1>
-          <p className="text-2xl font-bold leading-tight" style={{ color: 'var(--text-hi)' }}>
+          </span>
+          <h1
+            className="font-bold leading-tight mt-3 mb-5"
+            style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '2.25rem', letterSpacing: '-0.02em' }}
+          >
             Get in touch
+          </h1>
+          <p
+            className="text-base leading-relaxed"
+            style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)' }}
+          >
+            Questions about a map, suggestions for future subjects, correction requests, or removal requests — reach out directly. All requests are reviewed promptly.
           </p>
         </div>
-
-        <p
-          className="text-sm leading-relaxed mb-10"
-          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)' }}
-        >
-          Questions about a map, suggestions for future subjects, correction requests, or removal requests - reach out directly. All requests are reviewed promptly.
-        </p>
 
         <ContactForm />
 
@@ -44,7 +46,7 @@ export default function ContactPage() {
             href="https://www.relohu.com"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: 'var(--text-lo)' }}
+            style={{ color: 'var(--text-mid)' }}
           >
             ReLoHu™
           </a>

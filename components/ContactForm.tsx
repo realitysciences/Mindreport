@@ -5,11 +5,11 @@ import { useState } from 'react'
 const inputStyle: React.CSSProperties = {
   width: '100%',
   background: 'var(--surface)',
-  border: '0.5px solid var(--border)',
-  borderRadius: '4px',
+  border: '1px solid var(--border)',
+  borderRadius: '2px',
   color: 'var(--text-hi)',
-  fontFamily: 'var(--font-mono)',
-  fontSize: '0.8rem',
+  fontFamily: 'var(--font-sans)',
+  fontSize: '0.85rem',
   padding: '12px 14px',
   outline: 'none',
   boxSizing: 'border-box',
@@ -42,8 +42,8 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <div
-        className="px-6 py-8 rounded text-sm"
-        style={{ background: 'var(--surface)', border: '0.5px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}
+        className="px-6 py-8 rounded-sm text-sm"
+        style={{ background: 'var(--surface)', border: '1px solid var(--border)', fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)' }}
       >
         Message received. We will be in touch shortly.
       </div>
@@ -105,17 +105,17 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="text-[0.65rem] uppercase tracking-widest px-6 py-3 rounded transition-opacity"
+        className="text-sm px-6 py-3.5 rounded-sm transition-opacity self-start"
         style={{
-          background: 'var(--surface)',
-          border: '0.5px solid var(--border)',
-          color: status === 'sending' ? 'var(--text-faint)' : 'var(--text-hi)',
-          fontFamily: 'var(--font-mono)',
+          background: status === 'sending' ? 'var(--surface-deep)' : 'var(--accent-dark)',
+          color: status === 'sending' ? 'var(--text-faint)' : '#F0ECE4',
+          fontFamily: 'var(--font-sans)',
           cursor: status === 'sending' ? 'not-allowed' : 'pointer',
-          alignSelf: 'flex-start',
+          border: 'none',
+          opacity: status === 'sending' ? 0.6 : 1,
         }}
       >
-        {status === 'sending' ? 'Sending...' : 'Send message →'}
+        {status === 'sending' ? 'Sending…' : 'Send message →'}
       </button>
     </form>
   )
