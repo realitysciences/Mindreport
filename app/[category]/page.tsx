@@ -7,6 +7,14 @@ import { Category } from '@/lib/types'
 
 const validCategories: Category[] = ['people', 'events', 'relationships', 'works', 'archetypes']
 
+const categoryDecks: Record<Category, string> = {
+  people:        'Reading public figures as terrain — the wound beneath the persona, the architecture beneath the achievement.',
+  events:        'Cultural moments mapped as psychological events — what they revealed, what they changed, what the surface could not hold.',
+  relationships: 'Partnerships, rivalries, and bonds read as systems — two psychologies producing something neither could alone.',
+  works:         'Films, albums, and books as psychological objects — what the work carries that its creator could not say directly.',
+  archetypes:    'Recurring patterns that surface across people, eras, and cultures — the interior shapes that keep reappearing.',
+}
+
 export function generateStaticParams() {
   return validCategories.map((category) => ({ category }))
 }
@@ -33,24 +41,39 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
   const maps = getMapsByCategory(cat)
   const color = getCategoryColor(cat)
   const label = categoryLabels[cat]
+  const deck = categoryDecks[cat]
 
   return (
     <div className="px-8 py-12">
       <div className="mx-auto" style={{ maxWidth: '1200px' }}>
-        <div className="flex items-baseline gap-3 mb-10">
-          <span className="inline-block w-2 h-2 rounded-full" style={{ background: color }} />
-          <h1
-            className="font-bold"
-            style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '2rem' }}
+        <div className="mb-12" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '2.5rem' }}>
+          <span
+            className="text-[0.65rem] uppercase tracking-widest"
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             {label}
-          </h1>
-          <span
-            className="text-xs"
-            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
-          >
-            {maps.length} {maps.length === 1 ? 'map' : 'maps'}
           </span>
+          <div className="flex items-baseline gap-3 mt-3">
+            <span className="inline-block w-2 h-2 rounded-full flex-shrink-0" style={{ background: color, marginBottom: '3px' }} />
+            <h1
+              className="font-bold leading-tight"
+              style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '2.25rem', letterSpacing: '-0.02em' }}
+            >
+              {label}
+            </h1>
+            <span
+              className="text-xs"
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
+            >
+              {maps.length} {maps.length === 1 ? 'map' : 'maps'}
+            </span>
+          </div>
+          <p
+            className="mt-4 text-base leading-relaxed"
+            style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', maxWidth: '600px' }}
+          >
+            {deck}
+          </p>
         </div>
 
         {maps.length === 0 ? (
