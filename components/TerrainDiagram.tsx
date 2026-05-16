@@ -15,17 +15,17 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
 
   return (
     <div
-      className="rounded-lg overflow-hidden"
-      style={{ background: '#0e0e0e', border: '0.5px solid #2a2a2a' }}
+      className="rounded-sm overflow-hidden"
+      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
     >
       {/* Header */}
       <div
         className="flex items-center justify-between px-6 py-4"
-        style={{ borderBottom: '0.5px solid #2a2a2a' }}
+        style={{ borderBottom: '1px solid var(--border)' }}
       >
         <span
           className="text-[0.6rem] uppercase tracking-widest"
-          style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           Terrain Topology
         </span>
@@ -39,10 +39,10 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
 
       <div className="p-6 flex flex-col gap-8">
 
-        {/* Core orientation — top statement */}
+        {/* Core orientation */}
         <div
-          className="rounded px-5 py-4"
-          style={{ background: color + '12', border: `0.5px solid ${color}40` }}
+          className="rounded-sm px-5 py-4"
+          style={{ background: color + '12', border: `1px solid ${color}33` }}
         >
           <div
             className="text-[0.55rem] uppercase tracking-widest mb-1.5"
@@ -52,7 +52,7 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
           </div>
           <div
             className="text-sm leading-relaxed"
-            style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#e8e4dc' }}
+            style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-body)' }}
           >
             {terrain.coreOrientation}
           </div>
@@ -63,35 +63,24 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
           {flow.map((node, i) => (
             <div key={node.key} className="flex md:flex-row flex-col items-center gap-3 flex-1">
               <div
-                className="rounded p-4 flex flex-col gap-1.5 w-full"
-                style={{ background: '#141414', border: `0.5px solid #2a2a2a`, flex: 1 }}
+                className="rounded-sm p-4 flex flex-col gap-1.5 w-full"
+                style={{ background: 'var(--surface-deep)', border: `1px solid var(--border)`, flex: 1 }}
               >
                 <div className="flex items-center gap-1.5">
-                  <span
-                    className="inline-block w-1 h-1 rounded-full flex-shrink-0"
-                    style={{ background: color }}
-                  />
+                  <span className="inline-block w-1 h-1 rounded-full flex-shrink-0" style={{ background: color }} />
                   <span
                     className="text-[0.55rem] uppercase tracking-widest"
-                    style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
                   >
                     {node.label}
                   </span>
                 </div>
-                <p
-                  className="text-xs leading-relaxed"
-                  style={{ color: '#c8c4bc', paddingLeft: '1rem' }}
-                >
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-body)', paddingLeft: '1rem' }}>
                   {node.value}
                 </p>
               </div>
               {i < flow.length - 1 && (
-                <span
-                  className="md:rotate-0 rotate-90 text-xs flex-shrink-0"
-                  style={{ color: color, opacity: 0.5 }}
-                >
-                  →
-                </span>
+                <span className="md:rotate-0 rotate-90 text-xs flex-shrink-0" style={{ color: color, opacity: 0.5 }}>→</span>
               )}
             </div>
           ))}
@@ -100,21 +89,15 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
         {/* Secondary pattern */}
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-1.5">
-            <span
-              className="inline-block w-1 h-1 rounded-full flex-shrink-0"
-              style={{ background: color, opacity: 0.6 }}
-            />
+            <span className="inline-block w-1 h-1 rounded-full flex-shrink-0" style={{ background: color, opacity: 0.6 }} />
             <span
               className="text-[0.55rem] uppercase tracking-widest"
-              style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+              style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
             >
               Secondary Pattern
             </span>
           </div>
-          <p
-            className="text-xs leading-relaxed"
-            style={{ color: '#999', paddingLeft: '1rem' }}
-          >
+          <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)', paddingLeft: '1rem' }}>
             {terrain.secondaryPattern}
           </p>
         </div>
@@ -123,7 +106,7 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
         <div className="flex flex-col gap-2.5">
           <span
             className="text-[0.55rem] uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-mono)', color: '#555' }}
+            style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
           >
             Terrain Markers
           </span>
@@ -134,7 +117,7 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
                 className="px-3 py-1 rounded-full text-[0.6rem] tracking-wide"
                 style={{
                   background: color + '14',
-                  border: `0.5px solid ${color}44`,
+                  border: `1px solid ${color}33`,
                   color: color,
                   fontFamily: 'var(--font-mono)',
                 }}

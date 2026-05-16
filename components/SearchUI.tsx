@@ -94,8 +94,8 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
                 href={`/${map.category}/${map.slug}`}
                 className="flex items-start justify-between gap-6 px-5 py-4 transition-colors"
                 style={{ background: 'var(--surface)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#161616')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = '#111')}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--surface-deep)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--surface)')}
               >
                 <div className="flex items-start gap-4 min-w-0">
                   <span

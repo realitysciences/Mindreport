@@ -1,28 +1,51 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #161616;
-  --color-card: #111;
-  --color-border: #2e2e2e;
-  --color-border-subtle: #222;
-  --color-text-body: #c8c4bc;
-  --color-text-strong: #f0ece4;
-  --color-text-deck: #b0aca4;
-  --color-text-muted: #999;
-  --color-text-nav: #bbb;
+  --color-bg: #F4EDE0;
+  --color-card: #ffffff;
+  --color-border: #D8D0B8;
+  --color-border-subtle: #E4DDD0;
+  --color-text-body: #3C3830;
+  --color-text-strong: #1C1814;
+  --color-text-deck: #5A5450;
+  --color-text-muted: #8A847C;
+  --color-text-nav: #443F3A;
+  --color-accent: #C09230;
   --color-cat-people: #7F77DD;
   --color-cat-events: #BA7517;
   --color-cat-relationships: #D4537E;
   --color-cat-works: #378ADD;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, "SF Mono", "Fira Code", monospace;
 }
 
 /* ── Theme tokens ─────────────────────────────────────────────────────────── */
 
 :root {
+  --bg:              #F4EDE0;
+  --surface:         #FFFFFF;
+  --surface-deep:    #EDE6D4;
+  --surface-deepest: #E4DCCB;
+  --surface-raised:  #FBF8F3;
+  --border:          #D8D0B8;
+  --border-sub:      #E4DDD0;
+  --border-ghost:    #EDE6D8;
+  --text-hi:         #1C1814;
+  --text-strong:     #2A2420;
+  --text-body:       #3C3830;
+  --text-deck:       #5A5450;
+  --text-nav:        #443F3A;
+  --text-mid:        #6A6460;
+  --text-lo:         #8A847C;
+  --text-faint:      #A8A29A;
+  --text-ghost:      #C0BAB2;
+  --accent:          #C09230;
+  --accent-dark:     #1A2B3C;
+}
+
+[data-theme="dark"] {
   --bg:              #161616;
   --surface:         #111111;
   --surface-deep:    #0e0e0e;
@@ -40,26 +63,8 @@
   --text-lo:         #666666;
   --text-faint:      #555555;
   --text-ghost:      #444444;
-}
-
-[data-theme="light"] {
-  --bg:              #f5f2ed;
-  --surface:         #ffffff;
-  --surface-deep:    #f0ece4;
-  --surface-deepest: #e8e4dc;
-  --surface-raised:  #faf8f5;
-  --border:          #d4d0c8;
-  --border-sub:      #e0dcd4;
-  --border-ghost:    #dedad2;
-  --text-hi:         #1a1714;
-  --text-strong:     #262320;
-  --text-body:       #3d3a34;
-  --text-deck:       #5a5650;
-  --text-nav:        #444444;
-  --text-mid:        #6a6660;
-  --text-lo:         #8a8680;
-  --text-faint:      #999590;
-  --text-ghost:      #aeaaa4;
+  --accent:          #C09230;
+  --accent-dark:     #e8e4dc;
 }
 
 html {

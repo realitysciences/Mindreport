@@ -76,7 +76,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         {/* Disclaimer strip */}
         <div
           className="flex items-center justify-between gap-4 px-4 py-2 rounded mb-8 text-[0.6rem] uppercase tracking-widest"
-          style={{ background: 'var(--surface)', border: '0.5px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           <span>Interpretive opinion based on public record. Not a clinical assessment.</span>
           <a href="/legal" style={{ color: 'var(--text-faint)', whiteSpace: 'nowrap' }} className="hover:text-[#888] transition-colors">
@@ -109,7 +109,10 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         </div>
 
         {/* Title */}
-        <h1 className="font-bold leading-tight tracking-tight mb-5" style={{ color: 'var(--text-hi)', fontSize: '42px' }}>
+        <h1
+          className="font-bold leading-tight mb-5"
+          style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: 'clamp(2rem, 4vw, 2.75rem)', letterSpacing: '-0.02em' }}
+        >
           {map.title}
         </h1>
 
@@ -129,7 +132,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
               alt={map.title}
               loading="lazy"
               className="rounded-lg"
-              style={{ display: 'block', maxWidth: '100%', maxHeight: '480px', margin: '0 auto', border: '0.5px solid var(--border)' }}
+              style={{ display: 'block', maxWidth: '100%', maxHeight: '480px', margin: '0 auto', border: '1px solid var(--border)' }}
             />
             <figcaption
               className="mt-2 text-center"
@@ -261,7 +264,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
         {/* Related maps */}
         {related.length > 0 && (
-          <div className="mt-16 pt-10" style={{ borderTop: '0.5px solid var(--border)' }}>
+          <div className="mt-16 pt-10" style={{ borderTop: '1px solid var(--border)' }}>
             <h2
               className="text-xs uppercase tracking-widest mb-6"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
@@ -277,7 +280,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                     key={rel.slug}
                     href={`/${rel.category}/${rel.slug}`}
                     className="flex flex-col gap-2 p-4 rounded transition-colors"
-                    style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
+                    style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: rc }} />
@@ -298,7 +301,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         {/* CTA strip */}
         <div
           className="mt-12 p-8 rounded flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
-          style={{ background: 'var(--surface)', border: '0.5px solid var(--border)' }}
+          style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
         >
           <div className="flex flex-col gap-2 max-w-md">
             <span className="text-sm font-semibold" style={{ color: 'var(--text-strong)' }}>You have a map too.</span>
@@ -308,8 +311,10 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           </div>
           <a
             href="https://www.relohu.com"
-            className="text-xs uppercase tracking-widest px-5 py-3 rounded transition-colors whitespace-nowrap"
-            style={{ border: '0.5px solid #bbb', color: 'var(--text-nav)', fontFamily: 'var(--font-mono)' }}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs uppercase tracking-widest px-5 py-3 rounded-sm transition-opacity hover:opacity-85 whitespace-nowrap"
+            style={{ background: 'var(--accent-dark)', color: '#F0ECE4', fontFamily: 'var(--font-mono)' }}
           >
             Get your own map →
           </a>
