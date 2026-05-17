@@ -132,7 +132,7 @@ function FeaturedCard({ map, dark = false }: { map: MapArticle; dark?: boolean }
       <div className="relative p-7 flex flex-col gap-3">
         <div className="flex items-center justify-between mb-1">
           <span
-            className="text-[0.6rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.18em' }}
           >
             {label} · {map.fileNumber}
@@ -226,7 +226,7 @@ function BrowseCard({ map }: { map: MapArticle }) {
       {/* Text */}
       <div className="flex flex-col gap-1.5 min-w-0 flex-1">
         <span
-          className="text-[0.6rem] uppercase tracking-widest"
+          className="text-xs uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.14em' }}
         >
           {label} · {map.fileNumber}
@@ -238,14 +238,14 @@ function BrowseCard({ map }: { map: MapArticle }) {
           {map.title}
         </h3>
         <p
-          className="text-xs leading-relaxed line-clamp-2"
+          className="text-sm leading-relaxed line-clamp-2"
           style={{ color: 'var(--text-mid)' }}
         >
           {map.deck}
         </p>
         <span
           className="text-xs mt-1 transition-opacity group-hover:opacity-60"
-          style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontSize: '0.65rem', letterSpacing: '0.08em' }}
+          style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.08em' }}
         >
           Explore →
         </span>
@@ -272,7 +272,7 @@ export default function HomePage() {
             {/* Left: headline + CTAs */}
             <div className="flex flex-col gap-3">
               <span
-                className="text-[0.65rem] uppercase tracking-widest"
+                className="text-xs uppercase tracking-widest"
                 style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.2em' }}
               >
                 Psychological Maps
@@ -374,7 +374,7 @@ export default function HomePage() {
                   {value}
                 </span>
                 <span
-                  className="text-[0.65rem] uppercase tracking-widest"
+                  className="text-xs uppercase tracking-widest"
                   style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
                 >
                   {label}
@@ -454,18 +454,18 @@ export default function HomePage() {
             {/* 3-column links */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
               <div className="flex flex-col gap-3">
-                <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>Method</span>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)' }}>Our approach to psychological cartography.</p>
+                <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>Method</span>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>Our approach to psychological cartography.</p>
                 <Link href="/methodology" className="text-xs transition-opacity hover:opacity-70" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>Learn more →</Link>
               </div>
               <div className="flex flex-col gap-3">
-                <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>About</span>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)' }}>What Mind Report is and why it exists.</p>
+                <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>About</span>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>What Mind Report is and why it exists.</p>
                 <Link href="/about" className="text-xs transition-opacity hover:opacity-70" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>Learn more →</Link>
               </div>
               <div className="flex flex-col gap-3">
-                <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>In The Loop</span>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)' }}>Thoughts, new maps, and cultural analyses.</p>
+                <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>In The Loop</span>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>Thoughts, new maps, and cultural analyses.</p>
                 <NewsletterForm />
               </div>
             </div>

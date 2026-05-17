@@ -48,7 +48,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
       <div className="mx-auto" style={{ maxWidth: '1200px' }}>
         <div className="mb-12" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '2.5rem' }}>
           <span
-            className="text-[0.65rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             {label}
@@ -105,7 +105,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
                   <div>
                     <div className="flex items-center gap-1.5 mb-3">
                       <span
-                        className="text-[0.6rem] uppercase tracking-widest"
+                        className="text-xs uppercase tracking-widest"
                         style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.14em' }}
                       >
                         {map.fileNumber}
@@ -117,12 +117,12 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
                     >
                       {map.title}
                     </h2>
-                    <p className="text-xs leading-relaxed mb-3" style={{ color: 'var(--text-mid)' }}>
+                    <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-mid)' }}>
                       {map.deck}
                     </p>
                   </div>
                   <div
-                    className="text-[0.6rem] uppercase tracking-widest pt-3"
+                    className="text-xs uppercase tracking-widest pt-3"
                     style={{ borderTop: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
                   >
                     Read map →

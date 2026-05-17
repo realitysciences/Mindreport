@@ -58,17 +58,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               >
                 Mind Report
               </span>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
                 Psychological cartography by ReLoHu™.
               </p>
             </div>
 
             {/* Method */}
             <div className="flex flex-col gap-3">
-              <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
+              <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
                 Method
               </span>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
                 Our approach to psychological cartography.
               </p>
               <a href="/methodology" className="text-xs transition-colors" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>
@@ -78,10 +78,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* About */}
             <div className="flex flex-col gap-3">
-              <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
+              <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
                 About
               </span>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
                 What Mind Report is and why it exists.
               </p>
               <a href="/about" className="text-xs transition-colors" style={{ color: 'var(--accent)', fontFamily: 'var(--font-mono)' }}>
@@ -91,10 +91,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* Get a map */}
             <div className="flex flex-col gap-3">
-              <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
+              <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
                 Get Your Map
               </span>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)' }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)' }}>
                 Commission a personal psychological map from ReLoHu™.
               </p>
               <a
@@ -110,7 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           {/* Bottom row */}
-          <div className="px-8 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs" style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}>
+          <div className="px-8 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm" style={{ color: 'var(--text-faint)', fontFamily: 'var(--font-mono)' }}>
             <span>© {new Date().getFullYear()} Mind Report by <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>ReLoHu™</a></span>
             <div className="flex flex-wrap items-center gap-5">
               <a href="/methodology" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>Methodology</a>

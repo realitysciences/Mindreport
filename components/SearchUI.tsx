@@ -111,14 +111,14 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
                         {map.title}
                       </span>
                       <span
-                        className="text-[0.6rem] uppercase tracking-widest flex-shrink-0"
+                        className="text-xs uppercase tracking-widest flex-shrink-0"
                         style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
                       >
                         {map.fileNumber}
                       </span>
                     </div>
                     <p
-                      className="text-xs leading-relaxed truncate"
+                      className="text-sm leading-relaxed truncate"
                       style={{ color: 'var(--text-mid)', maxWidth: '520px' }}
                     >
                       {map.deck}
@@ -126,7 +126,7 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
                   </div>
                 </div>
                 <span
-                  className="text-[0.6rem] uppercase tracking-widest flex-shrink-0 mt-1"
+                  className="text-xs uppercase tracking-widest flex-shrink-0 mt-1"
                   style={{ fontFamily: 'var(--font-mono)', color }}
                 >
                   {label}

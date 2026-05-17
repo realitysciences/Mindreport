@@ -55,7 +55,7 @@ export default function MethodologyPage() {
 
         <div className="mb-12">
           <span
-            className="text-[0.65rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             Methodology

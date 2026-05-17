@@ -16,7 +16,7 @@ export default function ContactPage() {
 
         <div className="mb-10">
           <span
-            className="text-[0.65rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             Contact

@@ -16,7 +16,7 @@ export default function AboutPage() {
 
         <div className="mb-12">
           <span
-            className="text-[0.65rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             About
@@ -40,7 +40,7 @@ export default function AboutPage() {
 
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
             <h2
-              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              className="text-xs uppercase tracking-widest mb-4"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
             >
               What this is
@@ -55,7 +55,7 @@ export default function AboutPage() {
 
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
             <h2
-              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              className="text-xs uppercase tracking-widest mb-4"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
             >
               The terrain method
@@ -73,7 +73,7 @@ export default function AboutPage() {
 
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
             <h2
-              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              className="text-xs uppercase tracking-widest mb-4"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
             >
               Who makes this
@@ -97,7 +97,7 @@ export default function AboutPage() {
 
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
             <h2
-              className="text-[0.65rem] uppercase tracking-widest mb-4"
+              className="text-xs uppercase tracking-widest mb-4"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
             >
               Get your own map

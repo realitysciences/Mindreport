@@ -75,7 +75,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
         {/* Disclaimer strip */}
         <div
-          className="flex items-center justify-between gap-4 px-4 py-2 rounded mb-8 text-[0.6rem] uppercase tracking-widest"
+          className="flex items-center justify-between gap-4 px-4 py-2 rounded mb-8 text-xs uppercase tracking-widest"
           style={{ background: 'var(--surface)', border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           <span>Interpretive opinion based on public record. Not a clinical assessment.</span>
@@ -244,7 +244,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                 <Link
                   key={m}
                   href={`/markers/${slugifyMarker(m)}`}
-                  className="px-3 py-1 rounded-full text-[0.65rem] tracking-wide transition-opacity hover:opacity-70"
+                  className="px-3 py-1 rounded-full text-xs tracking-wide transition-opacity hover:opacity-70"
                   style={{
                     background: `${color}18`,
                     border: `0.5px solid ${color}55`,
@@ -284,7 +284,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ background: rc }} />
-                      <span className="text-[0.6rem] uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}>
+                      <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}>
                         {rl}
                       </span>
                     </div>

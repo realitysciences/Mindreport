@@ -59,7 +59,7 @@ export default function ContactForm() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="name"
-          className="text-[0.6rem] uppercase tracking-widest"
+          className="text-xs uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           Name
@@ -70,7 +70,7 @@ export default function ContactForm() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="email"
-          className="text-[0.6rem] uppercase tracking-widest"
+          className="text-xs uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           Email
@@ -81,7 +81,7 @@ export default function ContactForm() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="message"
-          className="text-[0.6rem] uppercase tracking-widest"
+          className="text-xs uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           Message

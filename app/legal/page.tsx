@@ -43,7 +43,7 @@ export default function LegalPage() {
 
         <div className="mb-12">
           <span
-            className="text-[0.65rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             Legal &amp; Disclaimer
@@ -66,7 +66,7 @@ export default function LegalPage() {
           {sections.map(({ heading, body }) => (
             <div key={heading} style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
               <h2
-                className="text-[0.65rem] uppercase tracking-widest mb-3"
+                className="text-xs uppercase tracking-widest mb-3"
                 style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
               >
                 {heading}
