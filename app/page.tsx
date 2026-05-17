@@ -20,11 +20,11 @@ function HeroDiagram() {
   return (
     <div className="relative w-full flex items-center justify-center">
       <svg
-        viewBox="0 0 500 440"
+        viewBox="0 0 580 440"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full"
-        style={{ maxWidth: '480px', maxHeight: '420px' }}
+        style={{ maxWidth: '520px', maxHeight: '420px' }}
       >
         {/* Organic topographic contour rings */}
         <path d="M 215,35 C 340,28 415,130 408,225 C 401,318 328,412 218,408 C 108,404 28,315 32,215 C 36,118 92,42 215,35 Z" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.42" fill="none"/>
@@ -59,23 +59,23 @@ function HeroDiagram() {
         <line x1="220" y1="140" x2="330" y2="110" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.7" />
         <circle cx="220" cy="140" r="3" fill="#C09230" fillOpacity="0.85" />
         <line x1="330" y1="110" x2="390" y2="110" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.55" />
-        <text x="394" y="107" fill="#1A2B3C" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em">PATTERN</text>
-        <text x="394" y="119" fill="#5C4F3D" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">Observable</text>
-        <text x="394" y="129" fill="#5C4F3D" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">behavior</text>
+        <text x="394" y="107" fill="#1A2B3C" fontSize="12" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fontWeight="600">PATTERN</text>
+        <text x="394" y="119" fill="#5C4F3D" fontSize="10" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">Observable</text>
+        <text x="394" y="129" fill="#5C4F3D" fontSize="10" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">behavior</text>
         {/* Callout: ARCHITECTURE */}
         <line x1="240" y1="210" x2="340" y2="195" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.7" />
         <circle cx="240" cy="210" r="3" fill="#C09230" fillOpacity="0.85" />
         <line x1="340" y1="195" x2="390" y2="195" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.55" />
-        <text x="394" y="192" fill="#1A2B3C" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em">ARCHITECTURE</text>
-        <text x="394" y="204" fill="#5C4F3D" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">Internal</text>
-        <text x="394" y="214" fill="#5C4F3D" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">structure</text>
+        <text x="394" y="192" fill="#1A2B3C" fontSize="12" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fontWeight="600">ARCHITECTURE</text>
+        <text x="394" y="204" fill="#5C4F3D" fontSize="10" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">Internal</text>
+        <text x="394" y="214" fill="#5C4F3D" fontSize="10" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">structure</text>
         {/* Callout: WOUND */}
         <line x1="230" y1="290" x2="340" y2="310" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.7" />
         <circle cx="230" cy="290" r="3" fill="#C09230" fillOpacity="0.85" />
         <line x1="340" y1="310" x2="390" y2="310" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.55" />
-        <text x="394" y="307" fill="#1A2B3C" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em">WOUND</text>
-        <text x="394" y="319" fill="#5C4F3D" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">Original</text>
-        <text x="394" y="329" fill="#5C4F3D" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">injury</text>
+        <text x="394" y="307" fill="#1A2B3C" fontSize="12" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fontWeight="600">WOUND</text>
+        <text x="394" y="319" fill="#5C4F3D" fontSize="10" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">Original</text>
+        <text x="394" y="329" fill="#5C4F3D" fontSize="10" fontFamily="ui-serif, Georgia, serif" fontStyle="italic">injury</text>
       </svg>
     </div>
   )
@@ -270,7 +270,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 items-center">
 
             {/* Left: headline + CTAs */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
               <span
                 className="text-[0.65rem] uppercase tracking-widest"
                 style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.2em' }}
@@ -283,9 +283,9 @@ export default function HomePage() {
                 style={{
                   fontFamily: 'var(--font-serif)',
                   color: 'var(--text-hi)',
-                  fontSize: 'clamp(2.4rem, 5vw, 3.75rem)',
+                  fontSize: 'clamp(1.9rem, 3.2vw, 2.75rem)',
                   letterSpacing: '-0.02em',
-                  lineHeight: 1.1,
+                  lineHeight: 1.15,
                 }}
               >
                 Understand the{' '}
