@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { getAllMaps } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 import { MapArticle } from '@/lib/types'
@@ -98,16 +99,14 @@ function FeaturedCard({ map, dark = false }: { map: MapArticle; dark?: boolean }
       {/* Image */}
       {map.image && (
         <div className="absolute inset-0">
-          <img
+          <Image
             src={map.image.url}
             alt={map.title}
-            loading="lazy"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             style={{
-              width: '100%',
-              height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
-              display: 'block',
               opacity: dark ? 0.55 : 0.75,
             }}
           />
@@ -191,11 +190,12 @@ function BrowseCard({ map }: { map: MapArticle }) {
           style={{ border: `1px solid var(--border)` }}
         >
           {map.image ? (
-            <img
+            <Image
               src={map.image.url}
               alt={map.title}
-              loading="lazy"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+              fill
+              sizes="88px"
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
             />
           ) : (
             <div

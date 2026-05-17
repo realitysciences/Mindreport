@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getAllMarkers, getMapsByMarker } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
@@ -62,13 +63,14 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                 className="flex flex-col justify-between overflow-hidden rounded-sm group transition-opacity hover:opacity-90"
                 style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
               >
-                <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+                <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
                   {map.image ? (
-                    <img
+                    <Image
                       src={map.image.url}
                       alt={map.title}
-                      loading="lazy"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                      style={{ objectFit: 'cover', objectPosition: 'center' }}
                     />
                   ) : (
                     <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)` }} />

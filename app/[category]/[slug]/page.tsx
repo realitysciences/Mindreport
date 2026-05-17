@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getAllMaps, getMapBySlug, slugifyMarker } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
@@ -127,13 +128,15 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         {/* Image */}
         {map.image && (
           <figure className="mb-10">
-            <img
-              src={map.image.url}
-              alt={map.title}
-              loading="lazy"
-              className="rounded-lg"
-              style={{ display: 'block', maxWidth: '100%', maxHeight: '480px', margin: '0 auto', border: '1px solid var(--border)' }}
-            />
+            <div className="rounded-lg overflow-hidden" style={{ position: 'relative', width: '100%', maxHeight: '480px', aspectRatio: '16/9', border: '1px solid var(--border)', margin: '0 auto' }}>
+              <Image
+                src={map.image.url}
+                alt={map.title}
+                fill
+                sizes="(max-width: 780px) 100vw, 780px"
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+              />
+            </div>
             <figcaption
               className="mt-2 text-center"
               style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-faint)', lineHeight: '1.5' }}
