@@ -7,7 +7,7 @@ import { MapArticle } from '@/lib/types'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
 
 function searchMaps(maps: MapArticle[], query: string): MapArticle[] {
-  if (!query.trim()) return []
+  if (!query.trim()) return maps
   const q = query.toLowerCase()
   return maps.filter((m) => {
     return (
@@ -71,16 +71,16 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
       </div>
 
       {/* Results count */}
-      {query.trim() && (
-        <div
-          className="text-xs uppercase tracking-widest mb-6"
-          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
-        >
-          {results.length === 0
+      <div
+        className="text-xs uppercase tracking-widest mb-6"
+        style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
+      >
+        {query.trim()
+          ? results.length === 0
             ? 'No maps found'
-            : `${results.length} ${results.length === 1 ? 'map' : 'maps'}`}
-        </div>
-      )}
+            : `${results.length} ${results.length === 1 ? 'map' : 'maps'} found`
+          : `${maps.length} maps`}
+      </div>
 
       {/* Results */}
       {results.length > 0 && (
@@ -137,15 +137,6 @@ export function SearchUI({ maps }: { maps: MapArticle[] }) {
         </div>
       )}
 
-      {/* Empty state */}
-      {!query.trim() && (
-        <div
-          className="text-xs leading-relaxed"
-          style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-ghost)' }}
-        >
-          {maps.length} maps indexed
-        </div>
-      )}
     </div>
   )
 }
