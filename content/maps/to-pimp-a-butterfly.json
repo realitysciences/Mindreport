@@ -26,5 +26,8 @@
     "amy-winehouse",
     "eminem"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/en/f/f6/Kendrick_Lamar_-_To_Pimp_a_Butterfly.png",
+    "caption": "To Pimp a Butterfly (2015), Kendrick Lamar"
+  }
 }

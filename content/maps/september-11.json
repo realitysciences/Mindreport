@@ -26,5 +26,8 @@
     "jonestown",
     "stanford-prison-experiment"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/United_States_Navy_photo_of_the_September_11%2C_2001_attacks_on_the_World_Trade_Center_%28WTC%29_during_2001.jpg/330px-United_States_Navy_photo_of_the_September_11%2C_2001_attacks_on_the_World_Trade_Center_%28WTC%29_during_2001.jpg",
+    "caption": "World Trade Center, September 11, 2001"
+  }
 }

@@ -26,5 +26,8 @@
     "american-psycho",
     "citizen-kane"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/en/b/bc/The_Truman_Show_film_poster.jpg",
+    "caption": "The Truman Show (1998), directed by Peter Weir"
+  }
 }
