@@ -10,7 +10,6 @@ const navLinks = [
   { label: 'Relationships', href: '/relationships' },
   { label: 'Works', href: '/works' },
   { label: 'Archetypes', href: '/archetypes' },
-  { label: 'Maps', href: '/search' },
 ]
 
 export default function Nav() {
