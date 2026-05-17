@@ -303,7 +303,7 @@ export default function HomePage() {
                 style={{ color: 'var(--text-mid)', maxWidth: '480px' }}
               >
                 Each map reveals the unseen forces shaping behavior, meaning, and
-                impact—across public figures, events, creative works, relationships, and archetypes.
+                impact across public figures, events, creative works, relationships, and archetypes.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 mt-2">

@@ -31,7 +31,7 @@ export default function ContactPage() {
             className="text-base leading-relaxed"
             style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)' }}
           >
-            Questions about a map, suggestions for future subjects, correction requests, or removal requests — reach out directly. All requests are reviewed promptly.
+            Questions about a map, suggestions for future subjects, correction requests, or removal requests. Reach out directly. All requests are reviewed promptly.
           </p>
         </div>
 

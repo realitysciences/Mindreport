@@ -8,11 +8,11 @@ import { Category } from '@/lib/types'
 const validCategories: Category[] = ['people', 'events', 'relationships', 'works', 'archetypes']
 
 const categoryDecks: Record<Category, string> = {
-  people:        'Reading public figures as terrain — the wound beneath the persona, the architecture beneath the achievement.',
-  events:        'Cultural moments mapped as psychological events — what they revealed, what they changed, what the surface could not hold.',
-  relationships: 'Partnerships, rivalries, and bonds read as systems — two psychologies producing something neither could alone.',
-  works:         'Films, albums, and books as psychological objects — what the work carries that its creator could not say directly.',
-  archetypes:    'Recurring patterns that surface across people, eras, and cultures — the interior shapes that keep reappearing.',
+  people:        'Reading public figures as terrain. The wound beneath the persona, the architecture beneath the achievement.',
+  events:        'Cultural moments mapped as psychological events. What they revealed, what they changed, what the surface could not hold.',
+  relationships: 'Partnerships, rivalries, and bonds read as systems. Two psychologies producing something neither could alone.',
+  works:         'Films, albums, and books as psychological objects. What the work carries that its creator could not say directly.',
+  archetypes:    'Recurring patterns that surface across people, eras, and cultures. The interior shapes that keep reappearing.',
 }
 
 export function generateStaticParams() {
