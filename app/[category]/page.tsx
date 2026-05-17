@@ -15,6 +15,10 @@ const categoryDecks: Record<Category, string> = {
   archetypes:    'Recurring patterns that surface across people, eras, and cultures. The interior shapes that keep reappearing.',
 }
 
+const PER_PAGE = 24
+
+export const dynamic = 'force-dynamic'
+
 export function generateStaticParams() {
   return validCategories.map((category) => ({ category }))
 }
@@ -34,14 +38,19 @@ export async function generateMetadata(props: PageProps<'/[category]'>): Promise
 
 export default async function CategoryPage(props: PageProps<'/[category]'>) {
   const { category } = await props.params
+  const searchParams = await props.searchParams
 
   if (!validCategories.includes(category as Category)) notFound()
 
   const cat = category as Category
-  const maps = getMapsByCategory(cat)
+  const allMaps = getMapsByCategory(cat)
   const color = getCategoryColor(cat)
   const label = categoryLabels[cat]
   const deck = categoryDecks[cat]
+
+  const totalPages = Math.ceil(allMaps.length / PER_PAGE)
+  const page = Math.min(Math.max(1, parseInt((searchParams?.page as string) ?? '1', 10)), totalPages || 1)
+  const maps = allMaps.slice((page - 1) * PER_PAGE, page * PER_PAGE)
 
   return (
     <div className="px-8 py-12">
@@ -65,7 +74,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
               className="text-xs"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
             >
-              {maps.length} {maps.length === 1 ? 'map' : 'maps'}
+              {allMaps.length} {allMaps.length === 1 ? 'map' : 'maps'}
             </span>
           </div>
           <p
@@ -76,61 +85,94 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
           </p>
         </div>
 
-        {maps.length === 0 ? (
+        {allMaps.length === 0 ? (
           <p style={{ color: 'var(--text-lo)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
             No maps in this category yet.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {maps.map((map) => (
-              <Link
-                key={map.slug}
-                href={`/${map.category}/${map.slug}`}
-                className="flex flex-col justify-between overflow-hidden rounded-sm group transition-opacity hover:opacity-90"
-                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
-              >
-                <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
-                  {map.image ? (
-                    <img
-                      src={map.image.url}
-                      alt={map.title}
-                      loading="lazy"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
-                    />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)` }} />
-                  )}
-                </div>
-                <div className="p-5 flex flex-col justify-between flex-1">
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-3">
-                      <span
-                        className="text-xs uppercase tracking-widest"
-                        style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.14em' }}
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {maps.map((map) => (
+                <Link
+                  key={map.slug}
+                  href={`/${map.category}/${map.slug}`}
+                  className="flex flex-col justify-between overflow-hidden rounded-sm group transition-opacity hover:opacity-90"
+                  style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                >
+                  <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
+                    {map.image ? (
+                      <img
+                        src={map.image.url}
+                        alt={map.title}
+                        loading="lazy"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+                      />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)` }} />
+                    )}
+                  </div>
+                  <div className="p-5 flex flex-col justify-between flex-1">
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-3">
+                        <span
+                          className="text-xs uppercase tracking-widest"
+                          style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.14em' }}
+                        >
+                          {map.fileNumber}
+                        </span>
+                      </div>
+                      <h2
+                        className="font-bold mb-2 leading-snug"
+                        style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '1.1rem' }}
                       >
-                        {map.fileNumber}
-                      </span>
+                        {map.title}
+                      </h2>
+                      <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-mid)' }}>
+                        {map.deck}
+                      </p>
                     </div>
-                    <h2
-                      className="font-bold mb-2 leading-snug"
-                      style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '1.1rem' }}
+                    <div
+                      className="text-xs uppercase tracking-widest pt-3"
+                      style={{ borderTop: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
                     >
-                      {map.title}
-                    </h2>
-                    <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-mid)' }}>
-                      {map.deck}
-                    </p>
+                      Read map →
+                    </div>
                   </div>
-                  <div
-                    className="text-xs uppercase tracking-widest pt-3"
-                    style={{ borderTop: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
+                </Link>
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="mt-12 flex items-center justify-between" style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
+                {page > 1 ? (
+                  <Link
+                    href={`/${category}?page=${page - 1}`}
+                    className="text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
                   >
-                    Read map →
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                    ← Previous
+                  </Link>
+                ) : <span />}
+
+                <span
+                  className="text-xs uppercase tracking-widest"
+                  style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
+                >
+                  {page} / {totalPages}
+                </span>
+
+                {page < totalPages ? (
+                  <Link
+                    href={`/${category}?page=${page + 1}`}
+                    className="text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
+                  >
+                    Next →
+                  </Link>
+                ) : <span />}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
