@@ -23,49 +23,50 @@ function HeroDiagram() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
-        style={{ maxWidth: '440px', opacity: 0.85 }}
+        style={{ maxWidth: '440px' }}
       >
         {/* Concentric circles */}
         {[200, 160, 120, 80, 45, 18].map((r, i) => (
-          <circle key={r} cx="220" cy="220" r={r} stroke="#C09230" strokeWidth={i === 0 ? 0.5 : 0.4} strokeOpacity={0.25 - i * 0.02} />
+          <circle key={r} cx="220" cy="220" r={r} stroke="#C09230" strokeWidth={i === 0 ? 0.8 : 0.6} strokeOpacity={0.5 - i * 0.04} />
         ))}
         {/* Cross hairs */}
-        <line x1="220" y1="20" x2="220" y2="420" stroke="#C09230" strokeWidth="0.4" strokeOpacity="0.2" />
-        <line x1="20" y1="220" x2="420" y2="220" stroke="#C09230" strokeWidth="0.4" strokeOpacity="0.2" />
+        <line x1="220" y1="20" x2="220" y2="420" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.4" />
+        <line x1="20" y1="220" x2="420" y2="220" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.4" />
         {/* Diagonal lines */}
-        <line x1="79" y1="79" x2="361" y2="361" stroke="#C09230" strokeWidth="0.4" strokeOpacity="0.12" />
-        <line x1="361" y1="79" x2="79" y2="361" stroke="#C09230" strokeWidth="0.4" strokeOpacity="0.12" />
+        <line x1="79" y1="79" x2="361" y2="361" stroke="#C09230" strokeWidth="0.5" strokeOpacity="0.25" />
+        <line x1="361" y1="79" x2="79" y2="361" stroke="#C09230" strokeWidth="0.5" strokeOpacity="0.25" />
         {/* Topographic contour arcs */}
-        <path d="M 220 60 A 160 130 0 0 1 380 220" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.3" fill="none" />
-        <path d="M 220 90 A 130 100 0 0 1 350 220" stroke="#C09230" strokeWidth="0.5" strokeOpacity="0.25" fill="none" />
-        <path d="M 155 100 A 100 80 -15 0 1 340 200" stroke="#C09230" strokeWidth="0.5" strokeOpacity="0.2" fill="none" />
+        <path d="M 220 60 A 160 130 0 0 1 380 220" stroke="#C09230" strokeWidth="1" strokeOpacity="0.55" fill="none" />
+        <path d="M 220 90 A 130 100 0 0 1 350 220" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.45" fill="none" />
+        <path d="M 155 100 A 100 80 -15 0 1 340 200" stroke="#C09230" strokeWidth="0.7" strokeOpacity="0.35" fill="none" />
         {/* Center dot */}
-        <circle cx="220" cy="220" r="6" fill="#C09230" fillOpacity="0.9" />
-        <circle cx="220" cy="220" r="3" fill="#C09230" />
+        <circle cx="220" cy="220" r="7" fill="#C09230" fillOpacity="0.15" />
+        <circle cx="220" cy="220" r="4.5" fill="#C09230" fillOpacity="0.9" />
+        <circle cx="220" cy="220" r="2" fill="#C09230" />
         {/* Callout: PATTERN */}
-        <line x1="220" y1="140" x2="330" y2="110" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.5" />
-        <circle cx="220" cy="140" r="2.5" fill="#C09230" fillOpacity="0.6" />
-        <line x1="330" y1="110" x2="390" y2="110" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.4" />
-        <text x="394" y="107" fill="#C09230" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fillOpacity="0.8">PATTERN</text>
-        <text x="394" y="119" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.5">Observable</text>
-        <text x="394" y="129" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.5">behavior</text>
+        <line x1="220" y1="140" x2="330" y2="110" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.7" />
+        <circle cx="220" cy="140" r="3" fill="#C09230" fillOpacity="0.85" />
+        <line x1="330" y1="110" x2="390" y2="110" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.55" />
+        <text x="394" y="107" fill="#C09230" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fillOpacity="1">PATTERN</text>
+        <text x="394" y="119" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.7">Observable</text>
+        <text x="394" y="129" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.7">behavior</text>
         {/* Callout: ARCHITECTURE */}
-        <line x1="240" y1="210" x2="340" y2="195" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.5" />
-        <circle cx="240" cy="210" r="2.5" fill="#C09230" fillOpacity="0.6" />
-        <line x1="340" y1="195" x2="390" y2="195" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.4" />
-        <text x="394" y="192" fill="#C09230" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fillOpacity="0.8">ARCHITECTURE</text>
-        <text x="394" y="204" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.5">Internal</text>
-        <text x="394" y="214" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.5">structure</text>
+        <line x1="240" y1="210" x2="340" y2="195" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.7" />
+        <circle cx="240" cy="210" r="3" fill="#C09230" fillOpacity="0.85" />
+        <line x1="340" y1="195" x2="390" y2="195" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.55" />
+        <text x="394" y="192" fill="#C09230" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fillOpacity="1">ARCHITECTURE</text>
+        <text x="394" y="204" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.7">Internal</text>
+        <text x="394" y="214" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.7">structure</text>
         {/* Callout: WOUND */}
-        <line x1="230" y1="290" x2="340" y2="310" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.5" />
-        <circle cx="230" cy="290" r="2.5" fill="#C09230" fillOpacity="0.6" />
-        <line x1="340" y1="310" x2="390" y2="310" stroke="#C09230" strokeWidth="0.6" strokeOpacity="0.4" />
-        <text x="394" y="307" fill="#C09230" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fillOpacity="0.8">WOUND</text>
-        <text x="394" y="319" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.5">Original</text>
-        <text x="394" y="329" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.5">injury</text>
+        <line x1="230" y1="290" x2="340" y2="310" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.7" />
+        <circle cx="230" cy="290" r="3" fill="#C09230" fillOpacity="0.85" />
+        <line x1="340" y1="310" x2="390" y2="310" stroke="#C09230" strokeWidth="0.8" strokeOpacity="0.55" />
+        <text x="394" y="307" fill="#C09230" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="0.12em" fillOpacity="1">WOUND</text>
+        <text x="394" y="319" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.7">Original</text>
+        <text x="394" y="329" fill="#C09230" fontSize="6.5" fontFamily="ui-serif, Georgia, serif" fontStyle="italic" fillOpacity="0.7">injury</text>
         {/* Decorative dots scattered */}
         {[[80, 80], [360, 100], [100, 360], [355, 340], [150, 55], [300, 380]].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r="1.5" fill="#C09230" fillOpacity="0.3" />
+          <circle key={i} cx={cx} cy={cy} r="2" fill="#C09230" fillOpacity="0.5" />
         ))}
       </svg>
     </div>
