@@ -90,7 +90,7 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
                 style={{
                   fontFamily: 'var(--font-serif)',
                   fontStyle: 'italic',
-                  fontSize: '1.1rem',
+                  fontSize: '1.25rem',
                   lineHeight: '1.75',
                   color: 'var(--text-hi)',
                 }}
@@ -98,7 +98,7 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
               />
               {attribution && (
                 <p
-                  className="text-[0.65rem] uppercase tracking-widest"
+                  className="text-xs uppercase tracking-widest"
                   style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-lo)' }}
                 >
                   {attribution}
@@ -117,7 +117,7 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
               style={{ border: `1px solid ${categoryColor}44`, background: `${categoryColor}0d` }}
             >
               <div
-                className="px-2 py-1 text-[0.55rem] uppercase tracking-widest"
+                className="px-2 py-1 text-xs uppercase tracking-widest"
                 style={{ background: `${categoryColor}22`, fontFamily: 'var(--font-mono)', color: categoryColor }}
               >
                 Key Insight
@@ -128,7 +128,7 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
                   style={{
                     fontFamily: 'var(--font-serif)',
                     fontStyle: 'italic',
-                    fontSize: '1.15rem',
+                    fontSize: '1.25rem',
                     lineHeight: '1.8',
                     color: 'var(--text-hi)',
                   }}
@@ -145,8 +145,8 @@ export function MarkdownBody({ content, categoryColor }: { content: string; cate
             className="mb-6"
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: '1rem',
-              lineHeight: '1.95',
+              fontSize: '1.2rem',
+              lineHeight: '1.9',
               color: 'var(--text-body)',
             }}
             dangerouslySetInnerHTML={{ __html: formatInline(trimmed) }}

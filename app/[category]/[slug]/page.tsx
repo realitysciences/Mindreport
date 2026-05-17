@@ -136,7 +136,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
             />
             <figcaption
               className="mt-2 text-center"
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', lineHeight: '1.5' }}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-faint)', lineHeight: '1.5' }}
             >
               {map.image.caption}
             </figcaption>
@@ -162,7 +162,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           {/* Core orientation — full-width hero cell */}
           <div className="px-6 py-5" style={{ background: `${color}18`, borderBottom: `0.5px solid ${color}33` }}>
             <div
-              className="text-[0.55rem] uppercase tracking-widest mb-2"
+              className="text-xs uppercase tracking-widest mb-2"
               style={{ fontFamily: 'var(--font-mono)', color }}
             >
               Core Orientation
@@ -179,7 +179,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           <div className="grid grid-cols-1 sm:grid-cols-2" style={{ borderBottom: `0.5px solid var(--border-sub)` }}>
             <div className="px-5 py-4" style={{ borderRight: '0.5px solid var(--border-sub)' }}>
               <div
-                className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
+                className="text-xs uppercase tracking-widest mb-2 flex items-center gap-1.5"
                 style={{ fontFamily: 'var(--font-mono)', color }}
               >
                 <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
@@ -191,7 +191,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
             </div>
             <div className="px-5 py-4">
               <div
-                className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
+                className="text-xs uppercase tracking-widest mb-2 flex items-center gap-1.5"
                 style={{ fontFamily: 'var(--font-mono)', color }}
               >
                 <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
@@ -206,7 +206,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           {/* Relational style */}
           <div className="px-5 py-4" style={{ borderBottom: `0.5px solid var(--border-sub)` }}>
             <div
-              className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
+              className="text-xs uppercase tracking-widest mb-2 flex items-center gap-1.5"
               style={{ fontFamily: 'var(--font-mono)', color }}
             >
               <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
@@ -220,7 +220,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           {/* Secondary pattern */}
           <div className="px-5 py-4" style={{ borderBottom: `0.5px solid var(--border-sub)` }}>
             <div
-              className="text-[0.55rem] uppercase tracking-widest mb-2 flex items-center gap-1.5"
+              className="text-xs uppercase tracking-widest mb-2 flex items-center gap-1.5"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
             >
               <span className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: '#555' }} />
@@ -234,7 +234,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
           {/* Terrain markers */}
           <div className="px-5 py-4" style={{ background: 'var(--surface-deep)' }}>
             <div
-              className="text-[0.55rem] uppercase tracking-widest mb-3"
+              className="text-xs uppercase tracking-widest mb-3"
               style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
             >
               Terrain Markers
@@ -305,7 +305,7 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
         >
           <div className="flex flex-col gap-2 max-w-md">
             <span className="text-sm font-semibold" style={{ color: 'var(--text-strong)' }}>You have a map too.</span>
-            <span className="text-xs leading-relaxed" style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+            <span className="text-sm leading-relaxed" style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
               Every pattern on this page exists because someone's interior became legible. ReLoHu sessions produce the same quality of reading, applied to you, with full information rather than reconstructed signal.
             </span>
           </div>
