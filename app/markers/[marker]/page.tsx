@@ -62,7 +62,7 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                 className="flex flex-col justify-between overflow-hidden rounded-sm group transition-opacity hover:opacity-90"
                 style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
               >
-                <div style={{ height: '140px', overflow: 'hidden', flexShrink: 0 }}>
+                <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}>
                   {map.image ? (
                     <img
                       src={map.image.url}
