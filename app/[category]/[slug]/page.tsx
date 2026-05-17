@@ -118,8 +118,8 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
 
         {/* Deck */}
         <p
-          className="mb-10 text-base leading-relaxed"
-          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)' }}
+          className="mb-10 leading-relaxed"
+          style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.35rem' }}
         >
           {map.deck}
         </p>
