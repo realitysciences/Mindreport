@@ -26,5 +26,8 @@
     "the-imposter",
     "the-inner-critic"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Titian_-_Sisyphus_-_Madrid_-_Prado.jpg/330px-Titian_-_Sisyphus_-_Madrid_-_Prado.jpg",
+    "caption": "Sisyphus by Titian, c. 1548-1549. Museo del Prado, Madrid. Public domain."
+  }
 }

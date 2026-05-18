@@ -26,5 +26,8 @@
     "the-people-pleaser",
     "the-wounded-healer"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Mary_Cassatt_-_The_Child%27s_Bath_-_1910.2_-_Art_Institute_of_Chicago.jpg/330px-Mary_Cassatt_-_The_Child%27s_Bath_-_1910.2_-_Art_Institute_of_Chicago.jpg",
+    "caption": "The Child's Bath by Mary Cassatt, 1893. Art Institute of Chicago. Public domain."
+  }
 }
