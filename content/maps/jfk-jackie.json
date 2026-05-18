@@ -26,5 +26,8 @@
     "heard-depp",
     "marilyn-monroe"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg/330px-John_F._Kennedy%2C_White_House_color_photo_portrait.jpg",
+    "caption": "John F. Kennedy, White House portrait, 1963. Public domain."
+  }
 }

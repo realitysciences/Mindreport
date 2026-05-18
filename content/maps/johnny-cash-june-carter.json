@@ -26,5 +26,8 @@
     "amy-winehouse",
     "diana-charles"
   ],
-  "image": null
+  "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Johnny_Cash_1977.jpg/330px-Johnny_Cash_1977.jpg",
+    "caption": "Johnny Cash, 1977. Public domain."
+  }
 }
