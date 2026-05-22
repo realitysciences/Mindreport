@@ -18,6 +18,8 @@ function VoiceInterviewInner() {
   const [phase, setPhase] = useState<Phase>('idle')
   const [transcript, setTranscript] = useState<Message[]>([])
   const [errorMsg, setErrorMsg] = useState('')
+  const [elapsed, setElapsed] = useState(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const transcriptEndRef = useRef<HTMLDivElement>(null)
 
   const { startSession, endSession, isSpeaking, status } = useConversation({
@@ -42,6 +44,22 @@ function VoiceInterviewInner() {
       setPhase('ended')
     }
   }, [status, phase])
+
+  // Start/stop elapsed timer based on phase
+  useEffect(() => {
+    if (phase === 'active') {
+      setElapsed(0)
+      timerRef.current = setInterval(() => setElapsed((s) => s + 1), 1000)
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [phase])
 
   // Auto-scroll transcript
   useEffect(() => {
@@ -216,6 +234,16 @@ function VoiceInterviewInner() {
               })}
             </div>
 
+            {/* Timer */}
+            <div className="flex justify-center">
+              <span
+                className="text-xs tabular-nums"
+                style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.1em' }}
+              >
+                {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
+              </span>
+            </div>
+
             {/* Live transcript */}
             {transcript.length > 0 && (
               <div
@@ -320,7 +348,7 @@ function VoiceInterviewInner() {
               style={{ borderTop: '1px solid var(--border)' }}
             >
               <p className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
-                {transcript.length} exchanges recorded
+                {transcript.length} exchanges &middot; {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
               </p>
               <Link
                 href="/your-map/lens"
