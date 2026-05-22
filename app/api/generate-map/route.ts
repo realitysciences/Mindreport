@@ -162,14 +162,11 @@ ${buildOutputSchema(terrainLabels)}`;
 
   const stream = new ReadableStream({
     async start(controller) {
-      // Synchronous ping — arrives at client before any await.
-      // If this shows up in the buffer, the streaming path works.
-      controller.enqueue(encoder.encode("PING\n"));
       try {
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 1500,
+          max_tokens: 2000,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
@@ -191,18 +188,25 @@ ${buildOutputSchema(terrainLabels)}`;
         raw = sanitizeLlmOutput(raw);
         raw = scrubProprietaryTerms(raw);
 
+        // Extract JSON: try raw first, then slice from first { to last }
         let parsed: unknown;
+        const jsonStart = raw.indexOf("{");
+        const jsonEnd   = raw.lastIndexOf("}");
+        const jsonStr   = jsonStart !== -1 && jsonEnd > jsonStart
+          ? raw.slice(jsonStart, jsonEnd + 1)
+          : raw;
+
         try {
-          parsed = JSON.parse(raw);
+          parsed = JSON.parse(jsonStr);
         } catch {
-          const match = raw.match(/\{[\s\S]*\}/);
-          if (match) {
-            try { parsed = JSON.parse(match[0]); } catch { /* fall through */ }
-          }
+          // Last-resort: try the whole raw (in case slicing made it worse)
+          try { parsed = JSON.parse(raw); } catch { /* fall through */ }
         }
 
         if (!parsed) {
-          controller.enqueue(encoder.encode("\nMINDREPORT_ERROR:Could not parse map result."));
+          // Include tail of raw so we can diagnose truncation vs. wrapping
+          const tail = raw.slice(-120).replace(/\n/g, "↵");
+          controller.enqueue(encoder.encode("\nMINDREPORT_ERROR:JSON parse failed. Tail: " + tail));
         } else {
           controller.enqueue(encoder.encode("\nMINDREPORT_RESULT:" + JSON.stringify(parsed)));
         }
@@ -229,7 +233,7 @@ function errorResponse(msg: string) {
   const encoder = new TextEncoder();
   const s = new ReadableStream({
     start(controller) {
-      controller.enqueue(encoder.encode("PING\nMINDREPORT_ERROR:" + msg));
+      controller.enqueue(encoder.encode("\nMINDREPORT_ERROR:" + msg));
       controller.close();
     },
   });
