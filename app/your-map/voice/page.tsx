@@ -227,19 +227,24 @@ function VoiceInterviewInner() {
                 }}
               >
                 {transcript.map((msg, i) => (
-                  <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                    <div
-                      className="text-xs uppercase tracking-widest flex-shrink-0 pt-1"
+                  <div key={i} className={`flex flex-col gap-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                    <span
+                      className="text-xs uppercase tracking-widest"
                       style={{
                         fontFamily: 'var(--font-mono)',
-                        color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-mid)',
-                        width: '76px',
-                        textAlign: msg.role === 'user' ? 'right' : 'left',
+                        color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-faint)',
                       }}
                     >
                       {msg.role === 'agent' ? 'Interviewer' : 'You'}
-                    </div>
-                    <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-body)' }}>
+                    </span>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{
+                        color: 'var(--text-body)',
+                        maxWidth: '85%',
+                        textAlign: msg.role === 'user' ? 'right' : 'left',
+                      }}
+                    >
                       {msg.text}
                     </p>
                   </div>
@@ -285,19 +290,24 @@ function VoiceInterviewInner() {
                   Your transcript
                 </div>
                 {transcript.map((msg, i) => (
-                  <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                    <div
-                      className="text-xs uppercase tracking-widest flex-shrink-0 pt-1"
+                  <div key={i} className={`flex flex-col gap-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                    <span
+                      className="text-xs uppercase tracking-widest"
                       style={{
                         fontFamily: 'var(--font-mono)',
-                        color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-mid)',
-                        width: '76px',
-                        textAlign: msg.role === 'user' ? 'right' : 'left',
+                        color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-faint)',
                       }}
                     >
                       {msg.role === 'agent' ? 'Interviewer' : 'You'}
-                    </div>
-                    <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-body)' }}>
+                    </span>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{
+                        color: 'var(--text-body)',
+                        maxWidth: '85%',
+                        textAlign: msg.role === 'user' ? 'right' : 'left',
+                      }}
+                    >
                       {msg.text}
                     </p>
                   </div>
