@@ -108,21 +108,20 @@ function sanitize(s: string, max: number): string {
   return sanitizeInput(s, max);
 }
 
-// ── Frame markers — newline-prefixed so they always start their own line ───────
-// JSON output never contains these strings; they are unambiguous delimiters.
-const RESULT_MARKER = "\n__MAP_RESULT__:";
-const ERROR_MARKER  = "\n__MAP_ERROR__:";
+// ── Frame markers — globally unique prefix, no special chars that could be stripped ──
+const RESULT_MARKER = "MINDREPORT_RESULT:";
+const ERROR_MARKER  = "MINDREPORT_ERROR:";
 
 export async function POST(req: NextRequest) {
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return errorResponse("Invalid request", 400);
+    return errorResponse("Invalid request");
   }
 
   if (typeof body !== "object" || body === null) {
-    return errorResponse("Invalid request", 400);
+    return errorResponse("Invalid request");
   }
 
   const b = body as Record<string, unknown>;
@@ -130,7 +129,7 @@ export async function POST(req: NextRequest) {
   const lens       = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
 
   if (transcript.length < 50) {
-    return errorResponse("Transcript too short to map.", 400);
+    return errorResponse("Transcript too short to map.");
   }
 
   const terrainLabels   = TERRAIN_LABELS[lens]   ?? TERRAIN_LABELS.pattern;
@@ -150,31 +149,32 @@ ${buildOutputSchema(terrainLabels)}`;
 
   const encoder = new TextEncoder();
 
-  // ── Streaming response ── keeps the connection alive while Claude works ───────
+  // ── Streaming response ────────────────────────────────────────────────────────
+  // We call Anthropic WITHOUT streaming (stream: false) so we get a single clean
+  // response. A setInterval keepalive trickle prevents the Vercel edge proxy from
+  // issuing a 504 while the Anthropic call is in-flight (can take 20-50s).
+  // Once the call resolves, we stop the timer and write the result marker + JSON.
+  // The client accumulates everything and scans for MINDREPORT_RESULT:.
   const stream = new ReadableStream({
     async start(controller) {
+      // Send a keepalive byte every 4 s to prevent the 30 s proxy idle timeout.
+      const keepalive = setInterval(() => {
+        try { controller.enqueue(encoder.encode(" ")); } catch { /* stream may have closed */ }
+      }, 4000);
+
       try {
         const anthropic = new Anthropic();
-        const aiStream = await anthropic.messages.create({
+        const message = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
           max_tokens: 3000,
-          stream: true,
+          stream: false,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
         });
 
-        let raw = "";
-        for await (const event of aiStream) {
-          if (
-            event.type === "content_block_delta" &&
-            event.delta.type === "text_delta"
-          ) {
-            raw += event.delta.text;
-          }
-          // Send a space every event to prevent the Vercel proxy 30s idle timeout
-          controller.enqueue(encoder.encode(" "));
-        }
+        clearInterval(keepalive);
 
+        let raw = message.content[0]?.type === "text" ? message.content[0].text : "";
         raw = raw.trim();
         raw = sanitizeLlmOutput(raw);
         raw = scrubProprietaryTerms(raw);
@@ -195,7 +195,9 @@ ${buildOutputSchema(terrainLabels)}`;
           controller.enqueue(encoder.encode(RESULT_MARKER + JSON.stringify(parsed)));
         }
       } catch (err) {
+        clearInterval(keepalive);
         const msg = err instanceof Error ? err.message : "Generation failed";
+        console.error("[generate-map] error:", msg);
         controller.enqueue(encoder.encode(ERROR_MARKER + msg));
       } finally {
         controller.close();
@@ -208,16 +210,14 @@ ${buildOutputSchema(terrainLabels)}`;
   });
 }
 
-function errorResponse(msg: string, _status: number) {
-  // Return via the same streaming format so the client parser always works
+function errorResponse(msg: string) {
+  // Sync error before the stream starts — return same format so client always works.
   const encoder = new TextEncoder();
-  const stream = new ReadableStream({
+  const s = new ReadableStream({
     start(controller) {
       controller.enqueue(encoder.encode(ERROR_MARKER + msg));
       controller.close();
     },
   });
-  return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
+  return new Response(s, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
 }

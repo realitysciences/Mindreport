@@ -24,9 +24,9 @@ type MapResult = {
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
 
-// Frame markers matching the streaming API
-const RESULT_MARKER = "\n__MAP_RESULT__:"
-const ERROR_MARKER  = "\n__MAP_ERROR__:"
+// Frame markers — must match generate-map/route.ts exactly
+const RESULT_MARKER = "MINDREPORT_RESULT:"
+const ERROR_MARKER  = "MINDREPORT_ERROR:"
 
 // ── Loading animation ─────────────────────────────────────────────────────────
 
