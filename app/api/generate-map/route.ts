@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { sanitizeInput, sanitizeLlmOutput, scrubProprietaryTerms } from "@/lib/sanitize";
 
 export const maxDuration = 60;
@@ -63,62 +63,14 @@ ${terrainSchema}
 }`;
 }
 
-// ── Per-lens terrain labels (must match lib/lenses/) ──────────────────────────
+// ── Per-lens terrain labels ────────────────────────────────────────────────────
 const TERRAIN_LABELS: Record<string, string[]> = {
-  pattern: [
-    "Surface Behavior",
-    "The Loop",
-    "The Driver",
-    "The Cost",
-    "The Protection",
-    "The Fracture Point",
-    "The First Move",
-  ],
-  shadow: [
-    "The Disowned",
-    "The Projection",
-    "The Trigger",
-    "The Root",
-    "The Gift in the Shadow",
-    "The Integration",
-    "The First Move",
-  ],
-  desire: [
-    "The Surface Want",
-    "The Actual Want",
-    "The Approach",
-    "The Retreat",
-    "The Fear of Arrival",
-    "The Fuel",
-    "The First Move",
-  ],
-  relational: [
-    "The Approach Style",
-    "The Pull",
-    "The Defense",
-    "The Dynamic You Recreate",
-    "The Actual Need",
-    "The Relational Cost",
-    "The First Move",
-  ],
-  origin: [
-    "The Formation",
-    "The Central Wound",
-    "The Survival Strategy",
-    "The Legacy Running Now",
-    "The Unfinished Business",
-    "The Revision",
-    "The First Move",
-  ],
-  identity: [
-    "The Roles",
-    "The Core Beneath the Roles",
-    "The Primary Mask",
-    "The Hidden Self",
-    "The Identity Conflict",
-    "The Unresolved Question",
-    "The First Move",
-  ],
+  pattern: ["Surface Behavior", "The Loop", "The Driver", "The Cost", "The Protection", "The Fracture Point", "The First Move"],
+  shadow:  ["The Disowned", "The Projection", "The Trigger", "The Root", "The Gift in the Shadow", "The Integration", "The First Move"],
+  desire:  ["The Surface Want", "The Actual Want", "The Approach", "The Retreat", "The Fear of Arrival", "The Fuel", "The First Move"],
+  relational: ["The Approach Style", "The Pull", "The Defense", "The Dynamic You Recreate", "The Actual Need", "The Relational Cost", "The First Move"],
+  origin:  ["The Formation", "The Central Wound", "The Survival Strategy", "The Legacy Running Now", "The Unfinished Business", "The Revision", "The First Move"],
+  identity: ["The Roles", "The Core Beneath the Roles", "The Primary Mask", "The Hidden Self", "The Identity Conflict", "The Unresolved Question", "The First Move"],
 };
 
 // ── Per-lens system prompt fragments ─────────────────────────────────────────
@@ -152,32 +104,35 @@ Read the full transcript. Notice how the person describes themselves in differen
 const MAX_TRANSCRIPT = 20_000;
 const MAX_LENS       = 50;
 
-// ── Sanitize function ─────────────────────────────────────────────────────────
 function sanitize(s: string, max: number): string {
   return sanitizeInput(s, max);
 }
+
+// ── Unique frame markers (not present in any natural text or JSON) ─────────────
+const RESULT_MARKER = "\x00RESULT\x00";
+const ERROR_MARKER  = "\x00ERROR\x00";
 
 export async function POST(req: NextRequest) {
   let body: unknown;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return errorResponse("Invalid request", 400);
   }
 
   if (typeof body !== "object" || body === null) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return errorResponse("Invalid request", 400);
   }
 
   const b = body as Record<string, unknown>;
   const transcript = sanitize(typeof b.transcript === "string" ? b.transcript : "", MAX_TRANSCRIPT);
-  const lens       = sanitize(typeof b.lens       === "string" ? b.lens       : "pattern", MAX_LENS);
+  const lens       = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
 
   if (transcript.length < 50) {
-    return NextResponse.json({ error: "Transcript too short to map." }, { status: 400 });
+    return errorResponse("Transcript too short to map.", 400);
   }
 
-  const terrainLabels = TERRAIN_LABELS[lens] ?? TERRAIN_LABELS.pattern;
+  const terrainLabels   = TERRAIN_LABELS[lens]   ?? TERRAIN_LABELS.pattern;
   const lensInstruction = LENS_INSTRUCTIONS[lens] ?? LENS_INSTRUCTIONS.pattern;
 
   const systemPrompt = `You are a psychological cartographer trained in a precise framework for reading human behavior and interior structure. You create personal psychological maps — not diagnoses, not therapy, but accurate, incisive cartography of a person's interior terrain.
@@ -192,42 +147,69 @@ Write with the precision of a psychologist and the voice of a great writer. The 
 
 ${buildOutputSchema(terrainLabels)}`;
 
-  let raw = "";
-  try {
-    const anthropic = new Anthropic();
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
-      max_tokens: 3000,
-      system: systemPrompt,
-      messages: [
-        {
-          role: "user",
-          content: `<transcript>\n${transcript}\n</transcript>`,
-        },
-      ],
-    });
-    raw = message.content[0].type === "text" ? message.content[0].text.trim() : "";
-    raw = sanitizeLlmOutput(raw);
-    raw = scrubProprietaryTerms(raw);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "Generation failed";
-    return NextResponse.json({ error: msg }, { status: 502 });
-  }
+  const encoder = new TextEncoder();
 
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    const match = raw.match(/\{[\s\S]*\}/);
-    if (match) {
+  // ── Streaming response ── keeps the connection alive while Claude works ───────
+  const stream = new ReadableStream({
+    async start(controller) {
       try {
-        parsed = JSON.parse(match[0]);
-      } catch { /* fall through */ }
-    }
-    if (!parsed) {
-      return NextResponse.json({ error: "Could not parse map result." }, { status: 500 });
-    }
-  }
+        const anthropic = new Anthropic();
+        const aiStream = await anthropic.messages.create({
+          model: "claude-sonnet-4-5",
+          max_tokens: 3000,
+          stream: true,
+          system: systemPrompt,
+          messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
+        });
 
-  return NextResponse.json(parsed);
+        let raw = "";
+        for await (const event of aiStream) {
+          if (
+            event.type === "content_block_delta" &&
+            event.delta.type === "text_delta"
+          ) {
+            raw += event.delta.text;
+          }
+          // Send a space every event to prevent the Vercel proxy 30s idle timeout
+          controller.enqueue(encoder.encode(" "));
+        }
+
+        raw = raw.trim();
+        raw = sanitizeLlmOutput(raw);
+        raw = scrubProprietaryTerms(raw);
+
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(raw);
+        } catch {
+          const match = raw.match(/\{[\s\S]*\}/);
+          if (match) {
+            try { parsed = JSON.parse(match[0]); } catch { /* fall through */ }
+          }
+        }
+
+        if (!parsed) {
+          controller.enqueue(encoder.encode(ERROR_MARKER + "Could not parse map result."));
+        } else {
+          controller.enqueue(encoder.encode(RESULT_MARKER + JSON.stringify(parsed)));
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "Generation failed";
+        controller.enqueue(encoder.encode(ERROR_MARKER + msg));
+      } finally {
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
+}
+
+function errorResponse(msg: string, status: number) {
+  return new Response(ERROR_MARKER + msg, {
+    status,
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
 }
