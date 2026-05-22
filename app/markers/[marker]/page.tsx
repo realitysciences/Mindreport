@@ -89,7 +89,7 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                   >
                     {map.title}
                   </h2>
-                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--text-mid)' }}>
+                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--text-body)' }}>
                     {map.deck}
                   </p>
                   <span

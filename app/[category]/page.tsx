@@ -129,7 +129,7 @@ export default async function CategoryPage(props: PageProps<'/[category]'>) {
                       >
                         {map.title}
                       </h2>
-                      <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-mid)' }}>
+                      <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-body)' }}>
                         {map.deck}
                       </p>
                     </div>
