@@ -4,8 +4,6 @@ import { sanitizeInput, sanitizeLlmOutput } from "@/lib/sanitize";
 
 export const maxDuration = 30;
 
-const anthropic = new Anthropic();
-
 // Lens menu — descriptions used only for the suggestion prompt, never exposed to client
 const LENS_MENU = [
   { id: "pattern",    description: "The recurring behavioral and emotional loops — the default architecture running across all contexts." },
@@ -43,6 +41,7 @@ export async function POST(req: NextRequest) {
 
   let raw = "";
   try {
+    const anthropic = new Anthropic();
     const message = await anthropic.messages.create({
       model: "claude-haiku-4-5",
       max_tokens: 200,

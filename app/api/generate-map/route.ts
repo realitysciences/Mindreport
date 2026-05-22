@@ -4,8 +4,6 @@ import { sanitizeInput, sanitizeLlmOutput, scrubProprietaryTerms } from "@/lib/s
 
 export const maxDuration = 60;
 
-const anthropic = new Anthropic();
-
 // ── ReLoHu internal vocabulary (never exposed to client) ──────────────────────
 const RELOHU_VOCAB = `
 CRITICAL — INTERNAL FRAMEWORK, NEVER APPEAR IN OUTPUT: The pattern names below are proprietary and must NEVER appear verbatim in any output field. Translate every finding into plain, specific language derived from this person's actual words. If any label below appears word-for-word in your response, you have failed this instruction.
@@ -196,6 +194,7 @@ ${buildOutputSchema(terrainLabels)}`;
 
   let raw = "";
   try {
+    const anthropic = new Anthropic();
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-5",
       max_tokens: 3000,

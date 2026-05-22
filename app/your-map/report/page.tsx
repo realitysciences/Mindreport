@@ -209,15 +209,24 @@ export default function ReportPage() {
       body: JSON.stringify({ transcript, lens }),
     })
       .then(async (res) => {
-        const data = await res.json()
-        if (!res.ok || data.error) {
-          throw new Error(data.error ?? 'Generation failed.')
+        let data: Record<string, unknown> = {}
+        try {
+          data = await res.json()
+        } catch {
+          throw new Error(`Server error (${res.status}). Please try again.`)
         }
-        setMapResult(data as MapResult)
+        if (!res.ok || data.error) {
+          throw new Error((data.error as string) ?? 'Generation failed.')
+        }
+        setMapResult(data as unknown as MapResult)
         setPhase('gate')
       })
       .catch((err: Error) => {
-        setErrorMsg(err.message)
+        // Swallow raw JSON parse messages — show something readable instead
+        const msg = err.message.includes('not valid JSON') || err.message.includes('Unexpected token')
+          ? 'Map generation failed. Please try again.'
+          : err.message
+        setErrorMsg(msg)
         setPhase('error')
       })
   }, [])
