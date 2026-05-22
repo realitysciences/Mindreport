@@ -1,13 +1,12 @@
 'use client'
 
 import { useCallback, useRef, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
 // ── Inner (reads searchParams) ────────────────────────────────────────────────
 
 function GateInner() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const from = searchParams.get('from') ?? '/your-map'
 
@@ -32,7 +31,8 @@ function GateInner() {
         })
 
         if (res.ok) {
-          router.push(from)
+          // Full navigation (not client-side) so middleware sees the new cookie
+          window.location.href = from
         } else {
           const data = await res.json()
           setError(data.error ?? 'Incorrect password.')
@@ -45,7 +45,7 @@ function GateInner() {
         setLoading(false)
       }
     },
-    [value, loading, from, router]
+    [value, loading, from]
   )
 
   return (
