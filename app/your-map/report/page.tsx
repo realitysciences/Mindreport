@@ -24,9 +24,9 @@ type MapResult = {
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
 
-// Unique null-byte markers used by the streaming API
-const RESULT_MARKER = "\x00RESULT\x00"
-const ERROR_MARKER  = "\x00ERROR\x00"
+// Frame markers matching the streaming API
+const RESULT_MARKER = "\n__MAP_RESULT__:"
+const ERROR_MARKER  = "\n__MAP_ERROR__:"
 
 // ── Loading animation ─────────────────────────────────────────────────────────
 

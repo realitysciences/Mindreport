@@ -108,9 +108,10 @@ function sanitize(s: string, max: number): string {
   return sanitizeInput(s, max);
 }
 
-// ── Unique frame markers (not present in any natural text or JSON) ─────────────
-const RESULT_MARKER = "\x00RESULT\x00";
-const ERROR_MARKER  = "\x00ERROR\x00";
+// ── Frame markers — newline-prefixed so they always start their own line ───────
+// JSON output never contains these strings; they are unambiguous delimiters.
+const RESULT_MARKER = "\n__MAP_RESULT__:";
+const ERROR_MARKER  = "\n__MAP_ERROR__:";
 
 export async function POST(req: NextRequest) {
   let body: unknown;
@@ -207,9 +208,16 @@ ${buildOutputSchema(terrainLabels)}`;
   });
 }
 
-function errorResponse(msg: string, status: number) {
-  return new Response(ERROR_MARKER + msg, {
-    status,
+function errorResponse(msg: string, _status: number) {
+  // Return via the same streaming format so the client parser always works
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(ERROR_MARKER + msg));
+      controller.close();
+    },
+  });
+  return new Response(stream, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }
