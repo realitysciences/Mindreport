@@ -97,6 +97,18 @@ function VoiceInterviewInner() {
     setPhase('ended')
   }, [endSession])
 
+  // ── Minimum content thresholds ─────────────────────────────────────────────
+  const MIN_USER_WORDS     = 120   // words the user personally spoke
+  const MIN_USER_EXCHANGES = 5     // number of user turns
+
+  const userMessages   = transcript.filter((m) => m.role === 'user')
+  const userWordCount  = userMessages.reduce(
+    (acc, m) => acc + m.text.trim().split(/\s+/).filter(Boolean).length,
+    0
+  )
+  const hasEnoughContent =
+    userMessages.length >= MIN_USER_EXCHANGES && userWordCount >= MIN_USER_WORDS
+
   return (
     <div className="px-6 py-14">
       <div className="mx-auto" style={{ maxWidth: '720px' }}>
@@ -302,6 +314,72 @@ function VoiceInterviewInner() {
         {/* ── Ended ── */}
         {phase === 'ended' && (
           <div className="flex flex-col gap-6">
+
+            {/* ── Thin content warning ── */}
+            {!hasEnoughContent && (
+              <div
+                className="rounded-sm px-5 py-4 flex flex-col gap-3"
+                style={{
+                  background: 'var(--surface-deep)',
+                  border: '1px solid var(--border)',
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--accent)', flexShrink: 0, marginTop: 2 }}>
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  <div className="flex flex-col gap-1">
+                    <p
+                      className="text-sm font-medium"
+                      style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)' }}
+                    >
+                      The interview may be too short for a strong map.
+                    </p>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)' }}
+                    >
+                      Good cartography needs depth. You gave {userMessages.length} {userMessages.length === 1 ? 'response' : 'responses'} and about {userWordCount} {userWordCount === 1 ? 'word' : 'words'} — ideally we need at least {MIN_USER_EXCHANGES} responses and {MIN_USER_WORDS} words from you to draw a meaningful map.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3 pt-1">
+                  <button
+                    onClick={() => {
+                      setPhase('idle')
+                      setTranscript([])
+                      setElapsed(0)
+                    }}
+                    className="px-5 py-2.5 rounded-sm text-xs font-medium transition-opacity hover:opacity-85"
+                    style={{
+                      background: 'var(--accent-dark)',
+                      color: '#F0ECE4',
+                      fontFamily: 'var(--font-mono)',
+                      letterSpacing: '0.08em',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    DO ANOTHER INTERVIEW
+                  </button>
+                  <Link
+                    href="/your-map/lens"
+                    className="px-5 py-2.5 rounded-sm text-xs transition-opacity hover:opacity-70"
+                    style={{
+                      border: '1px solid var(--border)',
+                      color: 'var(--text-faint)',
+                      fontFamily: 'var(--font-mono)',
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    Continue anyway
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Transcript */}
             {transcript.length > 0 && (
               <div
                 className="rounded-sm overflow-y-auto flex flex-col gap-5 p-5"
@@ -343,26 +421,29 @@ function VoiceInterviewInner() {
               </div>
             )}
 
-            <div
-              className="flex items-center justify-between pt-4"
-              style={{ borderTop: '1px solid var(--border)' }}
-            >
-              <p className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
-                {transcript.length} exchanges &middot; {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
-              </p>
-              <Link
-                href="/your-map/lens"
-                className="flex items-center gap-2 px-6 py-3 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
-                style={{
-                  background: 'var(--accent-dark)',
-                  color: '#F0ECE4',
-                  fontFamily: 'var(--font-mono)',
-                  letterSpacing: '0.08em',
-                }}
+            {/* Footer: stats + continue (only shown when content is sufficient) */}
+            {hasEnoughContent && (
+              <div
+                className="flex items-center justify-between pt-4"
+                style={{ borderTop: '1px solid var(--border)' }}
               >
-                CONTINUE →
-              </Link>
-            </div>
+                <p className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
+                  {userMessages.length} responses &middot; ~{userWordCount} words &middot; {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
+                </p>
+                <Link
+                  href="/your-map/lens"
+                  className="flex items-center gap-2 px-6 py-3 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
+                  style={{
+                    background: 'var(--accent-dark)',
+                    color: '#F0ECE4',
+                    fontFamily: 'var(--font-mono)',
+                    letterSpacing: '0.08em',
+                  }}
+                >
+                  CONTINUE →
+                </Link>
+              </div>
+            )}
           </div>
         )}
 
