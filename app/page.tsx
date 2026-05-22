@@ -307,10 +307,8 @@ export default function HomePage() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4 mt-2">
-                <a
-                  href="https://www.relohu.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/your-map"
                   className="flex items-center gap-2.5 px-6 py-3.5 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
                   style={{
                     background: 'var(--accent-dark)',
@@ -324,7 +322,7 @@ export default function HomePage() {
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                   </svg>
                   Get your own map
-                </a>
+                </Link>
                 <Link
                   href="/search"
                   className="text-sm transition-opacity hover:opacity-70"
