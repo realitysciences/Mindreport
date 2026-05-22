@@ -162,6 +162,9 @@ ${buildOutputSchema(terrainLabels)}`;
 
   const stream = new ReadableStream({
     async start(controller) {
+      // Synchronous ping — arrives at client before any await.
+      // If this shows up in the buffer, the streaming path works.
+      controller.enqueue(encoder.encode("PING\n"));
       try {
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
@@ -180,9 +183,8 @@ ${buildOutputSchema(terrainLabels)}`;
           ) {
             raw += event.delta.text;
           }
-          // Emit a tiny SSE tick for every Anthropic event — keeps proxy alive
-          // and signals to Vercel that this is an active streaming response.
-          controller.enqueue(sseEvent({ k: 1 }));
+          // Emit one dot per Anthropic event — keeps proxy alive with real data flow.
+          controller.enqueue(encoder.encode("."));
         }
 
         raw = raw.trim();
@@ -200,14 +202,14 @@ ${buildOutputSchema(terrainLabels)}`;
         }
 
         if (!parsed) {
-          controller.enqueue(sseEvent({ error: "Could not parse map result." }));
+          controller.enqueue(encoder.encode("\nMINDREPORT_ERROR:Could not parse map result."));
         } else {
-          controller.enqueue(sseEvent({ done: true, result: parsed }));
+          controller.enqueue(encoder.encode("\nMINDREPORT_RESULT:" + JSON.stringify(parsed)));
         }
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Generation failed";
         console.error("[generate-map] error:", msg);
-        controller.enqueue(sseEvent({ error: msg }));
+        controller.enqueue(encoder.encode("\nMINDREPORT_ERROR:" + msg));
       } finally {
         controller.close();
       }
@@ -216,26 +218,25 @@ ${buildOutputSchema(terrainLabels)}`;
 
   return new Response(stream, {
     headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
       "X-Accel-Buffering": "no",
     },
   });
 }
 
 function errorResponse(msg: string) {
-  // Sync error before the stream starts — return same SSE format so client always works.
   const encoder = new TextEncoder();
   const s = new ReadableStream({
     start(controller) {
-      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: msg })}\n\n`));
+      controller.enqueue(encoder.encode("PING\nMINDREPORT_ERROR:" + msg));
       controller.close();
     },
   });
   return new Response(s, {
     headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-cache, no-transform",
       "X-Accel-Buffering": "no",
     },
   });

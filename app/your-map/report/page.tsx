@@ -24,16 +24,9 @@ type MapResult = {
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
 
-// SSE event parser — reads data: {...}\n\n lines
-function parseSseEvents(text: string): object[] {
-  return text
-    .split('\n\n')
-    .filter((block) => block.startsWith('data: '))
-    .map((block) => {
-      try { return JSON.parse(block.slice(6)) } catch { return null }
-    })
-    .filter(Boolean) as object[]
-}
+// Result markers
+const RESULT_MARKER = "\nMINDREPORT_RESULT:"
+const ERROR_MARKER  = "\nMINDREPORT_ERROR:"
 
 // ── Loading animation ─────────────────────────────────────────────────────────
 
@@ -220,25 +213,22 @@ export default function ReportPage() {
           buffer += decoder.decode(value, { stream: true })
         }
 
-        // Parse SSE events — look for { done: true, result: ... } or { error: "..." }
-        const events = parseSseEvents(buffer)
-        let resolved = false
+        // Look for result/error markers
+        const resultIdx = buffer.indexOf(RESULT_MARKER)
+        const errorIdx  = buffer.indexOf(ERROR_MARKER)
 
-        for (const ev of events) {
-          const e = ev as Record<string, unknown>
-          if (e.error) throw new Error(String(e.error))
-          if (e.done && e.result) {
-            setMapResult(e.result as MapResult)
-            setPhase('gate')
-            resolved = true
-            break
-          }
-        }
-
-        if (!resolved) {
-          // Diagnostic fallback — show buffer length so we can diagnose
-          const preview = buffer.slice(0, 120).replace(/\s+/g, ' ').trim()
-          throw new Error(`Map generation failed. [buf:${buffer.length}] ${preview || '(empty)'}`)
+        if (resultIdx !== -1) {
+          const jsonStr = buffer.slice(resultIdx + RESULT_MARKER.length)
+          const data = JSON.parse(jsonStr) as MapResult
+          setMapResult(data)
+          setPhase('gate')
+        } else if (errorIdx !== -1) {
+          throw new Error(buffer.slice(errorIdx + ERROR_MARKER.length) || 'Generation failed.')
+        } else {
+          // Diagnostic — show escaped chars so we know exactly what arrived
+          const escaped = buffer.slice(0, 80)
+            .split('').map(c => c === '\n' ? '↵' : c === '\r' ? '↩' : c === ' ' ? '·' : c).join('')
+          throw new Error(`No result marker. [${buffer.length}b] "${escaped}"`)
         }
       } catch (err) {
         const raw = (err as Error).message
