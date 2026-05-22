@@ -153,11 +153,12 @@ function FeaturedCard({ map, dark = false }: { map: MapArticle; dark?: boolean }
           style={{ background: 'var(--accent)', opacity: 0.7 }}
         />
         <p
-          className="text-sm leading-relaxed line-clamp-3"
+          className="leading-relaxed line-clamp-3"
           style={{
             fontFamily: 'var(--font-serif)',
             fontStyle: 'italic',
-            color: dark ? '#b0aca4' : 'var(--text-deck)',
+            color: dark ? '#d4cfc8' : 'var(--text-body)',
+            fontSize: 'clamp(1rem, 1.5vw, 1.1rem)',
           }}
         >
           {map.deck}
@@ -238,8 +239,13 @@ function BrowseCard({ map }: { map: MapArticle }) {
           {map.title}
         </h3>
         <p
-          className="text-sm leading-relaxed line-clamp-2"
-          style={{ color: 'var(--text-mid)' }}
+          className="leading-relaxed line-clamp-2"
+          style={{
+            fontFamily: 'var(--font-serif)',
+            fontStyle: 'italic',
+            color: 'var(--text-body)',
+            fontSize: '0.97rem',
+          }}
         >
           {map.deck}
         </p>
