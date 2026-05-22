@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import Nav from '@/components/Nav'
 
@@ -30,17 +31,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`h-full ${cormorant.variable} ${inter.variable}`} suppressHydrationWarning>
-      <head>
-        {/* Prevent theme flash — light is default, dark is opt-in */}
-        <script dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem('mr-theme-v2');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');document.documentElement.style.background='#161616';}else{document.documentElement.style.background='#F4EDE0';}}catch(e){}})()`
-        }} />
-        {/* @ts-ignore */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-87JNK4VQ80" />
-        <script dangerouslySetInnerHTML={{
-          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-87JNK4VQ80');`
-        }} />
-      </head>
       <body className="min-h-full flex flex-col" style={{ background: 'var(--bg)', color: 'var(--text-body)' }}>
         <Nav />
         <main className="flex-1">{children}</main>
@@ -133,6 +123,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </footer>
       </body>
+      <Script src="/theme-init.js" strategy="beforeInteractive" />
+      <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-87JNK4VQ80" />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-87JNK4VQ80');`
+        }}
+      />
     </html>
   )
 }

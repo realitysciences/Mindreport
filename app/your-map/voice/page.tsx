@@ -1,15 +1,10 @@
 'use client'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CONFIGURATION
-// Set your ElevenLabs Agent ID here, or better: add it to .env.local as
-// NEXT_PUBLIC_ELEVENLABS_AGENT_ID=your_agent_id_here
-// ─────────────────────────────────────────────────────────────────────────────
-const AGENT_ID = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID ?? 'YOUR_AGENT_ID_HERE'
-
-import { useConversation } from '@11labs/react'
+import { ConversationProvider, useConversation } from '@elevenlabs/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+
+const AGENT_ID = 'agent_5901kp0d9n5gfd4va0n9ffzt5sqd'
 
 type Message = {
   role: 'agent' | 'user'
@@ -19,35 +14,41 @@ type Message = {
 
 type Phase = 'idle' | 'requesting' | 'active' | 'ended' | 'error'
 
-export default function VoiceInterviewPage() {
+function VoiceInterviewInner() {
   const [phase, setPhase] = useState<Phase>('idle')
   const [transcript, setTranscript] = useState<Message[]>([])
   const [errorMsg, setErrorMsg] = useState('')
   const transcriptEndRef = useRef<HTMLDivElement>(null)
 
-  const conversation = useConversation({
-    onConnect: () => setPhase('active'),
-    onDisconnect: () => {
-      if (phase !== 'error') setPhase('ended')
-    },
-    onMessage: ({ message, source }: { message: string; source: 'ai' | 'user' }) => {
+  const { startSession, endSession, isSpeaking, status } = useConversation({
+    onMessage: (message: { message: string; source: string }) => {
+      const role = message.source === 'ai' ? 'agent' : 'user'
       setTranscript((prev) => [
         ...prev,
-        { role: source === 'ai' ? 'agent' : 'user', text: message, timestamp: Date.now() },
+        { role, text: message.message, timestamp: Date.now() },
       ])
     },
-    onError: (msg: string) => {
-      setErrorMsg(msg)
+    onError: (error: string | Error) => {
+      setErrorMsg(typeof error === 'string' ? error : error.message)
       setPhase('error')
     },
   })
+
+  // Sync phase with SDK connection status
+  useEffect(() => {
+    if (status === 'connected' && phase === 'requesting') {
+      setPhase('active')
+    } else if (status === 'disconnected' && phase === 'active') {
+      setPhase('ended')
+    }
+  }, [status, phase])
 
   // Auto-scroll transcript
   useEffect(() => {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [transcript])
 
-  // Save transcript to sessionStorage when interview ends
+  // Save transcript to sessionStorage on end
   useEffect(() => {
     if (phase === 'ended' && transcript.length > 0) {
       const raw = transcript
@@ -63,26 +64,27 @@ export default function VoiceInterviewPage() {
     setErrorMsg('')
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true })
-      await conversation.startSession({ agentId: AGENT_ID })
+      await startSession({
+        agentId: AGENT_ID,
+        connectionType: 'webrtc',
+      })
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Microphone access was denied.')
       setPhase('error')
     }
-  }, [conversation])
+  }, [startSession])
 
   const endInterview = useCallback(async () => {
-    await conversation.endSession()
+    await endSession()
     setPhase('ended')
-  }, [conversation])
-
-  const isSpeaking = conversation.isSpeaking
+  }, [endSession])
 
   return (
     <div className="px-6 py-14">
       <div className="mx-auto" style={{ maxWidth: '720px' }}>
 
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-10">
+        <div className="mb-10">
           <Link
             href="/your-map"
             className="text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
@@ -111,7 +113,7 @@ export default function VoiceInterviewPage() {
           >
             {phase === 'idle' && 'Ready when you are.'}
             {phase === 'requesting' && 'Connecting...'}
-            {phase === 'active' && (isSpeaking ? 'Listening...' : 'Your turn to speak.')}
+            {phase === 'active' && (isSpeaking ? 'Interviewer is speaking.' : 'Your turn.')}
             {phase === 'ended' && 'Interview complete.'}
             {phase === 'error' && 'Something went wrong.'}
           </h1>
@@ -133,7 +135,7 @@ export default function VoiceInterviewPage() {
           </p>
         </div>
 
-        {/* ── Idle state ── */}
+        {/* ── Idle ── */}
         {phase === 'idle' && (
           <div className="flex flex-col items-center gap-8 py-12">
             <div
@@ -171,7 +173,7 @@ export default function VoiceInterviewPage() {
           </div>
         )}
 
-        {/* ── Connecting state ── */}
+        {/* ── Connecting ── */}
         {phase === 'requesting' && (
           <div className="flex items-center justify-center py-16">
             <div
@@ -182,43 +184,42 @@ export default function VoiceInterviewPage() {
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
                 color: 'var(--text-faint)',
-                animation: 'pulse 1.5s ease-in-out infinite',
               }}
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1.5s linear infinite' }}>
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
               </svg>
             </div>
           </div>
         )}
 
-        {/* ── Active interview ── */}
+        {/* ── Active ── */}
         {phase === 'active' && (
           <div className="flex flex-col gap-6">
-            {/* Waveform indicator */}
-            <div className="flex items-center justify-center gap-1.5 py-6">
-              {[...Array(9)].map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: '3px',
-                    borderRadius: '2px',
-                    background: 'var(--accent)',
-                    height: isSpeaking
-                      ? `${12 + Math.sin(i * 0.9) * 10 + 8}px`
-                      : '6px',
-                    opacity: isSpeaking ? 0.8 : 0.3,
-                    transition: 'height 0.15s ease, opacity 0.15s ease',
-                  }}
-                />
-              ))}
+            {/* Waveform */}
+            <div className="flex items-center justify-center gap-1.5 py-8">
+              {[...Array(11)].map((_, i) => {
+                const heights = [8, 14, 20, 26, 32, 36, 32, 26, 20, 14, 8]
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      width: '3px',
+                      borderRadius: '2px',
+                      background: 'var(--accent)',
+                      height: isSpeaking ? `${heights[i]}px` : '5px',
+                      opacity: isSpeaking ? 0.75 : 0.25,
+                      transition: `height ${0.1 + i * 0.02}s ease, opacity 0.2s ease`,
+                    }}
+                  />
+                )
+              })}
             </div>
 
             {/* Live transcript */}
             {transcript.length > 0 && (
               <div
-                className="rounded-sm overflow-y-auto flex flex-col gap-4 p-5"
+                className="rounded-sm overflow-y-auto flex flex-col gap-5 p-5"
                 style={{
                   background: 'var(--surface)',
                   border: '1px solid var(--border)',
@@ -226,14 +227,19 @@ export default function VoiceInterviewPage() {
                 }}
               >
                 {transcript.map((msg, i) => (
-                  <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     <div
-                      className="text-xs uppercase tracking-widest flex-shrink-0 pt-0.5"
-                      style={{ fontFamily: 'var(--font-mono)', color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-mid)', width: '72px', textAlign: msg.role === 'user' ? 'right' : 'left' }}
+                      className="text-xs uppercase tracking-widest flex-shrink-0 pt-1"
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-mid)',
+                        width: '76px',
+                        textAlign: msg.role === 'user' ? 'right' : 'left',
+                      }}
                     >
                       {msg.role === 'agent' ? 'Interviewer' : 'You'}
                     </div>
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
+                    <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-body)' }}>
                       {msg.text}
                     </p>
                   </div>
@@ -242,7 +248,6 @@ export default function VoiceInterviewPage() {
               </div>
             )}
 
-            {/* End button */}
             <div className="flex justify-center pt-2">
               <button
                 onClick={endInterview}
@@ -261,34 +266,38 @@ export default function VoiceInterviewPage() {
           </div>
         )}
 
-        {/* ── Ended state ── */}
+        {/* ── Ended ── */}
         {phase === 'ended' && (
-          <div className="flex flex-col gap-8">
-            {/* Full transcript review */}
+          <div className="flex flex-col gap-6">
             {transcript.length > 0 && (
               <div
-                className="rounded-sm overflow-y-auto flex flex-col gap-4 p-5"
+                className="rounded-sm overflow-y-auto flex flex-col gap-5 p-5"
                 style={{
                   background: 'var(--surface)',
                   border: '1px solid var(--border)',
-                  maxHeight: '400px',
+                  maxHeight: '420px',
                 }}
               >
                 <div
-                  className="text-xs uppercase tracking-widest mb-2"
+                  className="text-xs uppercase tracking-widest mb-1"
                   style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
                 >
                   Your transcript
                 </div>
                 {transcript.map((msg, i) => (
-                  <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     <div
-                      className="text-xs uppercase tracking-widest flex-shrink-0 pt-0.5"
-                      style={{ fontFamily: 'var(--font-mono)', color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-mid)', width: '72px', textAlign: msg.role === 'user' ? 'right' : 'left' }}
+                      className="text-xs uppercase tracking-widest flex-shrink-0 pt-1"
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        color: msg.role === 'agent' ? 'var(--accent)' : 'var(--text-mid)',
+                        width: '76px',
+                        textAlign: msg.role === 'user' ? 'right' : 'left',
+                      }}
                     >
                       {msg.role === 'agent' ? 'Interviewer' : 'You'}
                     </div>
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-body)' }}>
+                    <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-body)' }}>
                       {msg.text}
                     </p>
                   </div>
@@ -296,7 +305,10 @@ export default function VoiceInterviewPage() {
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid var(--border)' }}>
+            <div
+              className="flex items-center justify-between pt-4"
+              style={{ borderTop: '1px solid var(--border)' }}
+            >
               <p className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
                 {transcript.length} exchanges recorded
               </p>
@@ -316,10 +328,13 @@ export default function VoiceInterviewPage() {
           </div>
         )}
 
-        {/* ── Error state ── */}
+        {/* ── Error ── */}
         {phase === 'error' && (
           <div className="flex flex-col items-center gap-6 py-10">
-            <p className="text-sm" style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+            <p
+              className="text-sm text-center"
+              style={{ color: 'var(--text-mid)', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: '400px' }}
+            >
               {errorMsg || 'An unexpected error occurred.'}
             </p>
             <button
@@ -340,5 +355,13 @@ export default function VoiceInterviewPage() {
 
       </div>
     </div>
+  )
+}
+
+export default function VoiceInterviewPage() {
+  return (
+    <ConversationProvider>
+      <VoiceInterviewInner />
+    </ConversationProvider>
   )
 }
