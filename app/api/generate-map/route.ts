@@ -44,7 +44,7 @@ function buildOutputSchema(terrainLabels: string[]): string {
       (label, i) => `    {
       "label": "${label}",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "2-3 paragraphs of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
+      "body": "1-2 paragraphs of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
       "markers": ["2-3 short phrases naming specific features of this terrain in this person"]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
@@ -149,32 +149,42 @@ ${buildOutputSchema(terrainLabels)}`;
 
   const encoder = new TextEncoder();
 
-  // ── Streaming response ────────────────────────────────────────────────────────
-  // We call Anthropic WITHOUT streaming (stream: false) so we get a single clean
-  // response. A setInterval keepalive trickle prevents the Vercel edge proxy from
-  // issuing a 504 while the Anthropic call is in-flight (can take 20-50s).
-  // Once the call resolves, we stop the timer and write the result marker + JSON.
-  // The client accumulates everything and scans for MINDREPORT_RESULT:.
+  // ── SSE streaming response ────────────────────────────────────────────────────
+  // Use Anthropic stream: true so the first token arrives at the client within ~1s.
+  // This keeps the Vercel edge proxy alive (no idle timeout) while the full
+  // generation runs. We send each Anthropic event as an SSE keepalive tick, then
+  // send one final SSE event carrying the parsed result.
+  //
+  // SSE format:  data: <json>\n\n
+  // Markers:     { done: true, result: ... }  |  { error: "..." }
+  const sseEvent = (payload: object) =>
+    encoder.encode(`data: ${JSON.stringify(payload)}\n\n`);
+
   const stream = new ReadableStream({
     async start(controller) {
-      // Send a keepalive byte every 4 s to prevent the 30 s proxy idle timeout.
-      const keepalive = setInterval(() => {
-        try { controller.enqueue(encoder.encode(" ")); } catch { /* stream may have closed */ }
-      }, 4000);
-
       try {
         const anthropic = new Anthropic();
-        const message = await anthropic.messages.create({
+        const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 3000,
-          stream: false,
+          max_tokens: 1500,
+          stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
         });
 
-        clearInterval(keepalive);
+        let raw = "";
+        for await (const event of aiStream) {
+          if (
+            event.type === "content_block_delta" &&
+            event.delta.type === "text_delta"
+          ) {
+            raw += event.delta.text;
+          }
+          // Emit a tiny SSE tick for every Anthropic event — keeps proxy alive
+          // and signals to Vercel that this is an active streaming response.
+          controller.enqueue(sseEvent({ k: 1 }));
+        }
 
-        let raw = message.content[0]?.type === "text" ? message.content[0].text : "";
         raw = raw.trim();
         raw = sanitizeLlmOutput(raw);
         raw = scrubProprietaryTerms(raw);
@@ -190,15 +200,14 @@ ${buildOutputSchema(terrainLabels)}`;
         }
 
         if (!parsed) {
-          controller.enqueue(encoder.encode(ERROR_MARKER + "Could not parse map result."));
+          controller.enqueue(sseEvent({ error: "Could not parse map result." }));
         } else {
-          controller.enqueue(encoder.encode(RESULT_MARKER + JSON.stringify(parsed)));
+          controller.enqueue(sseEvent({ done: true, result: parsed }));
         }
       } catch (err) {
-        clearInterval(keepalive);
         const msg = err instanceof Error ? err.message : "Generation failed";
         console.error("[generate-map] error:", msg);
-        controller.enqueue(encoder.encode(ERROR_MARKER + msg));
+        controller.enqueue(sseEvent({ error: msg }));
       } finally {
         controller.close();
       }
@@ -206,18 +215,28 @@ ${buildOutputSchema(terrainLabels)}`;
   });
 
   return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "X-Accel-Buffering": "no",
+    },
   });
 }
 
 function errorResponse(msg: string) {
-  // Sync error before the stream starts — return same format so client always works.
+  // Sync error before the stream starts — return same SSE format so client always works.
   const encoder = new TextEncoder();
   const s = new ReadableStream({
     start(controller) {
-      controller.enqueue(encoder.encode(ERROR_MARKER + msg));
+      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: msg })}\n\n`));
       controller.close();
     },
   });
-  return new Response(s, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  return new Response(s, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "X-Accel-Buffering": "no",
+    },
+  });
 }

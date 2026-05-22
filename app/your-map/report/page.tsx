@@ -24,9 +24,16 @@ type MapResult = {
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
 
-// Frame markers — must match generate-map/route.ts exactly
-const RESULT_MARKER = "MINDREPORT_RESULT:"
-const ERROR_MARKER  = "MINDREPORT_ERROR:"
+// SSE event parser — reads data: {...}\n\n lines
+function parseSseEvents(text: string): object[] {
+  return text
+    .split('\n\n')
+    .filter((block) => block.startsWith('data: '))
+    .map((block) => {
+      try { return JSON.parse(block.slice(6)) } catch { return null }
+    })
+    .filter(Boolean) as object[]
+}
 
 // ── Loading animation ─────────────────────────────────────────────────────────
 
@@ -202,7 +209,7 @@ export default function ReportPage() {
 
         if (!res.body) throw new Error(`Server error (${res.status}). Please try again.`)
 
-        // Read the streaming response
+        // Read the full SSE stream into a buffer
         const reader  = res.body.getReader()
         const decoder = new TextDecoder()
         let buffer    = ''
@@ -213,20 +220,23 @@ export default function ReportPage() {
           buffer += decoder.decode(value, { stream: true })
         }
 
-        // Extract the final payload using null-byte markers
-        const resultIdx = buffer.indexOf(RESULT_MARKER)
-        const errorIdx  = buffer.indexOf(ERROR_MARKER)
+        // Parse SSE events — look for { done: true, result: ... } or { error: "..." }
+        const events = parseSseEvents(buffer)
+        let resolved = false
 
-        if (resultIdx !== -1) {
-          const jsonStr = buffer.slice(resultIdx + RESULT_MARKER.length)
-          const data = JSON.parse(jsonStr) as MapResult
-          setMapResult(data)
-          setPhase('gate')
-        } else if (errorIdx !== -1) {
-          const msg = buffer.slice(errorIdx + ERROR_MARKER.length)
-          throw new Error(msg || 'Generation failed.')
-        } else {
-          // Diagnostic: show first 120 chars of buffer so we can see what arrived
+        for (const ev of events) {
+          const e = ev as Record<string, unknown>
+          if (e.error) throw new Error(String(e.error))
+          if (e.done && e.result) {
+            setMapResult(e.result as MapResult)
+            setPhase('gate')
+            resolved = true
+            break
+          }
+        }
+
+        if (!resolved) {
+          // Diagnostic fallback — show buffer length so we can diagnose
           const preview = buffer.slice(0, 120).replace(/\s+/g, ' ').trim()
           throw new Error(`Map generation failed. [buf:${buffer.length}] ${preview || '(empty)'}`)
         }
