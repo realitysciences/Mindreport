@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 // ── Limits ────────────────────────────────────────────────────────────────────
 const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
