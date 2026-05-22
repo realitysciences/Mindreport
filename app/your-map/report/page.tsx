@@ -226,7 +226,9 @@ export default function ReportPage() {
           const msg = buffer.slice(errorIdx + ERROR_MARKER.length)
           throw new Error(msg || 'Generation failed.')
         } else {
-          throw new Error('Map generation failed. Please try again.')
+          // Diagnostic: show first 120 chars of buffer so we can see what arrived
+          const preview = buffer.slice(0, 120).replace(/\s+/g, ' ').trim()
+          throw new Error(`Map generation failed. [buf:${buffer.length}] ${preview || '(empty)'}`)
         }
       } catch (err) {
         const raw = (err as Error).message
