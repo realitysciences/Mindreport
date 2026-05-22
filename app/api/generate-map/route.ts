@@ -8,34 +8,34 @@ export const maxDuration = 60;
 const RELOHU_VOCAB = `
 CRITICAL — INTERNAL FRAMEWORK, NEVER APPEAR IN OUTPUT: The pattern names below are proprietary and must NEVER appear verbatim in any output field. Translate every finding into plain, specific language derived from this person's actual words. If any label below appears word-for-word in your response, you have failed this instruction.
 
-- Peer Wound: early experience of not fitting within a peer group; isolation felt as a fixed condition
-- Father Wound: being seen incorrectly or not at all by the primary recognition figure
-- Insufficient Self: baseline assumption that the unadorned self must be justified before it is acceptable; compulsive productivity; apologizing for presence
-- Candy Shell: constructed exterior replacing an authentic self that was repeatedly rejected; real competence assembled as protection
-- Offering Pattern: compulsive giving to earn presence, secure connection, or justify existence; implicit ledger expecting reciprocity
-- Precision of Receipt: hunger not for warmth but for accuracy — to be seen correctly and named precisely
-- Salt Water Pattern: repeatedly reaching toward receivers who cannot provide what is needed, and drinking from that source anyway
-- Wrong Container: staying in a familiar role or structure that no longer fits; familiar suffering beats unfamiliar freedom
-- Community Hunger: sustained structural deficit of aligned peers who operate at the same frequency
-- Dissolved Self: states where the constructed self temporarily releases and the person beneath becomes briefly accessible
-- Node Highway: associative cognitive architecture moving rapidly across terrain through pattern-recognition
-- The Reaching: compulsive transmission of interior states toward receivers, often the wrong ones, often prematurely
-- Insight-Action Gap: insight functioning as a substitute for structural change rather than a precursor to it
-- Coasting on Potential: living from the assumed value of unrealized capacity; extraordinary capability with incomplete projects
-- Vomit Commit: releasing interior material in a single large discharge toward an unprepared receiver before it has been processed
-- Mastery Drive: deep orientation toward precision and full understanding of whatever is touched
-- Shame Signal: pre-verbal structural belief that something is fundamentally wrong with the self
-- Control/Perfectionism: managing outcomes because uncertainty, not failure, is what is actually intolerable
-- Fawn Response: compulsive appeasement to prevent conflict or maintain approval; self reorganized around the other's comfort
-- Collapse/Helplessness: learned helplessness; strategic giving-up when sustained effort produces no reliable change
-- Merger Pattern: loss of self-other boundary; over-identifying with another's emotional state
-- Scarcity Engine: chronic insufficiency belief — never enough time, love, recognition, money, safety
-- Splitting: all-or-nothing perception; idealization followed by devaluation
-- Grandiosity: inflation of self as defense against insufficiency beneath; oscillates with shame
-- Hypervigilance: nervous system continuously scanning for threat; the body never fully lands
-- Self-Sabotage: unconsciously undermining what the stated self wants because arrival is more threatening than approach
-- Invisibility Preference: active choice to not be seen, even when recognition is the stated desire
-- Compulsive Self-Sufficiency: refusing to need; building elaborate internal systems to eliminate dependency`.trim();
+- Peer Wound: early experience of not fitting within a peer group; isolation felt as a fixed condition; reaching toward belonging and finding the door closed before the self had structure to absorb it
+- Father Wound: being seen incorrectly or not at all by the primary figure whose recognition was supposed to confirm existence; performing for an audience that never acknowledged the performance
+- Insufficient Self: baseline assumption that the unadorned self must be justified, earned, or decorated before it is acceptable; compulsive productivity; apologizing for presence; needing accomplishment to feel entitled to a room
+- Candy Shell: constructed exterior replacing an authentic self that was repeatedly rejected; real competence and wit assembled as protection, now the primary mode of contact; sounds slightly too composed for what is being described
+- Offering Pattern: compulsive giving to earn presence, secure connection, or justify existence; leading with what can be provided before establishing what is needed; an implicit ledger expecting reciprocity that never quite clears
+- Precision of Receipt: hunger not for warmth but for accuracy — to be seen correctly and named precisely; frustration with being misread; dismissing affirmation that doesn't land on the actual thing; close to being seen but not quite
+- Salt Water Pattern: repeatedly reaching toward receivers who demonstrably cannot provide what is needed, and drinking from that source anyway; the saltiness is known; the reaching continues; disappointment framed as surprise despite established history
+- Wrong Container: staying in a familiar role, relationship, or structure that no longer fits; familiar suffering beats unfamiliar freedom; optimizing the wrong container rather than entering a more suitable one
+- Community Hunger: sustained structural deficit of aligned peers who operate at the same frequency; not general loneliness — the specific starvation of being too precise for most containers; always the most awake person in the room
+- Dissolved Self: states where the constructed self temporarily releases — through flow, substances, intimacy, nature — and the person beneath the architecture becomes briefly accessible; often the most honest data point in the map
+- Node Highway: associative cognitive architecture in which thoughts move rapidly across terrain through pattern-recognition, not linear logic; ideas arrive assembled rather than constructed; synthesizes across unrelated domains spontaneously
+- The Reaching: compulsive transmission of interior states toward receivers, often the wrong ones, often prematurely; urgency of transmission overrides discrimination about timing and target; offering something precious and having it inadequately held
+- Insight-Action Gap: insight functioning as a substitute for structural change rather than a precursor to it; accurate self-analysis coexisting with unchanged behavior; the relief of comprehension temporarily mimics the relief actual change would produce
+- Coasting on Potential: living from the assumed value of unrealized capacity; extraordinary capability paired with incomplete projects; sophisticated beginnings without completions; comfort in the approach that does not extend to arrival
+- Vomit Commit: releasing interior material in a single large discharge toward an unprepared receiver before it has been processed by the speaker; temporary relief; receiver overwhelmed; speaker left exposed and misread; said too much, felt worse
+- Mastery Drive: deep orientation toward precision, competence, and full understanding of whatever is touched; not ambition — closer to compulsion toward completeness; goes significantly deeper than required; discomfort with half-answers
+- Shame Signal: pre-verbal structural belief that something is fundamentally wrong with the self, not just the behavior; self-punishment exceeds the scale of the error; collapses when criticized as if it confirmed a pre-existing verdict
+- Control/Perfectionism: managing outcomes with precision because uncertainty — not failure — is what is actually intolerable; difficulty delegating; relaxation requires conditions rather than arising; must know the outcome before beginning
+- Fawn Response: compulsive appeasement — adjusting, softening, agreeing, disappearing — to prevent conflict or maintain approval; self reorganized around the other's comfort; leaves interactions unsure what they actually said
+- Collapse/Helplessness: learned helplessness; strategic giving-up when sustained effort has produced no reliable change; resignation without peace; flat affect about things that clearly matter; a history of effort followed by withdrawal
+- Merger Pattern: loss of the self-other boundary; over-identifying with another's emotional state until the distinction between what I feel and what you feel becomes unclear; describes others' pain as if happening in their own body
+- Scarcity Engine: chronic insufficiency belief — never enough time, love, recognition, money, safety; structural conviction the supply is finite and the self's claim on it is precarious; difficulty receiving because receiving feels like depletion
+- Splitting: all-or-nothing perception; idealization followed by devaluation with no middle ground; absolute language — always, never, everyone, no one — in relational contexts; intense attachments followed by complete severance
+- Grandiosity: inflation of self as defense against the insufficiency beneath; oscillates with shame — grandiosity is the shame's pressure valve; claiming exceptionality in ways that feel more like a request than a statement
+- Hypervigilance: nervous system continuously scanning for threat signals — tone, timing, micro-expressions; the body never fully lands; specific exhaustion of someone who cannot stop watching; interpreting neutrality as a threat
+- Self-Sabotage: unconsciously undermining what the stated self says it wants because arrival is more threatening than approach; patterns of near-completion followed by withdrawal; success produces more anxiety than failure
+- Invisibility Preference: active choice — often beneath awareness — to not be seen, even when recognition is the stated desire; being truly seen requires being truly present, which is threatening; shrinks in contexts that offer visibility
+- Compulsive Self-Sufficiency: refusing to need; building elaborate internal systems to eliminate dependency; independence as armor rather than preference; difficulty receiving help even when offered; the loneliness of someone who has made themselves impossible to help`.trim();
 
 // ── Output schema ──────────────────────────────────────────────────────────────
 function buildOutputSchema(terrainLabels: string[]): string {
@@ -59,6 +59,7 @@ ${terrainSchema}
   ],
   "corePattern": "1-2 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall.",
   "hiddenCost": "1-2 sentences naming what this architecture costs in concrete terms — not abstract, not generic.",
+  "unseen": "One thing this person is probably not conscious of — a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would land if they noticed it. 1-2 sentences. This must feel like a genuine insight, not a restatement of the pattern.",
   "nextMove": "One specific, concrete action this particular person could actually take based on what you saw. 1-2 sentences. Never generic advice. Never empty."
 }`;
 }
