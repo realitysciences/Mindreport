@@ -152,9 +152,10 @@ function VoiceInterviewInner() {
             style={{
               fontFamily: 'var(--font-serif)',
               fontStyle: 'italic',
-              color: 'var(--text-deck)',
-              fontSize: '1.1rem',
-              maxWidth: '520px',
+              color: 'var(--text-body)',
+              fontSize: 'clamp(1.15rem, 2.5vw, 1.35rem)',
+              maxWidth: '560px',
+              lineHeight: 1.7,
             }}
           >
             {phase === 'idle' && 'The interviewer will ask you questions and follow threads as you speak. Answer as fully or as briefly as feels right. There are no wrong answers.'}
