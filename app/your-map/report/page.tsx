@@ -379,9 +379,12 @@ export default function ReportPage() {
   const handleExportText = useCallback(() => {
     if (!activeMap) return
     const text = buildExportText(activeMap, activeLens.label)
-    const slug = activeMap.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 40)
-    downloadText(text, `mind-report-${slug}.txt`)
-  }, [activeMap, activeLens.label])
+    const slug   = activeMap.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 36)
+    const lens   = activeLensId.toLowerCase()
+    const d      = new Date()
+    const stamp  = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
+    downloadText(text, `mind-report-${slug}-${lens}-${stamp}.txt`)
+  }, [activeMap, activeLens.label, activeLensId])
 
   const handleCopyLink = useCallback(async () => {
     if (!activeMap) return

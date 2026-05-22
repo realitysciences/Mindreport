@@ -44,7 +44,7 @@ function buildOutputSchema(terrainLabels: string[]): string {
       (label, i) => `    {
       "label": "${label}",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "1-2 paragraphs of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
+      "body": "3-4 sentences of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
       "markers": ["2-3 short phrases naming specific features of this terrain in this person"]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
@@ -194,7 +194,7 @@ ${buildOutputSchema(terrainLabels)}`;
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 2500,
+          max_tokens: 1800,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
