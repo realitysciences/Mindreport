@@ -108,6 +108,33 @@ function sanitize(s: string, max: number): string {
   return sanitizeInput(s, max);
 }
 
+// ── JSON truncation repair ─────────────────────────────────────────────────────
+// When max_tokens cuts the response mid-JSON, close any open string then
+// append the right number of closing ] and } to make it parseable.
+function repairTruncatedJson(s: string): string {
+  let inString = false;
+  let escaped  = false;
+  let braces   = 0;
+  let brackets = 0;
+
+  for (const ch of s) {
+    if (escaped)           { escaped = false; continue; }
+    if (ch === "\\" && inString) { escaped = true; continue; }
+    if (ch === '"')        { inString = !inString; continue; }
+    if (inString)          continue;
+    if (ch === "{")        braces++;
+    else if (ch === "}")   braces--;
+    else if (ch === "[")   brackets++;
+    else if (ch === "]")   brackets--;
+  }
+
+  let out = s;
+  if (inString) out += '"';                        // close open string
+  out += "]".repeat(Math.max(0, brackets));         // close open arrays
+  out += "}".repeat(Math.max(0, braces));           // close open objects
+  return out;
+}
+
 // ── Frame markers — globally unique prefix, no special chars that could be stripped ──
 const RESULT_MARKER = "MINDREPORT_RESULT:";
 const ERROR_MARKER  = "MINDREPORT_ERROR:";
@@ -166,7 +193,7 @@ ${buildOutputSchema(terrainLabels)}`;
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 2000,
+          max_tokens: 2500,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
@@ -188,7 +215,7 @@ ${buildOutputSchema(terrainLabels)}`;
         raw = sanitizeLlmOutput(raw);
         raw = scrubProprietaryTerms(raw);
 
-        // Extract JSON: try raw first, then slice from first { to last }
+        // Extract JSON: slice from first { to last }
         let parsed: unknown;
         const jsonStart = raw.indexOf("{");
         const jsonEnd   = raw.lastIndexOf("}");
@@ -196,11 +223,17 @@ ${buildOutputSchema(terrainLabels)}`;
           ? raw.slice(jsonStart, jsonEnd + 1)
           : raw;
 
-        try {
-          parsed = JSON.parse(jsonStr);
-        } catch {
-          // Last-resort: try the whole raw (in case slicing made it worse)
-          try { parsed = JSON.parse(raw); } catch { /* fall through */ }
+        const tryParse = (s: string) => {
+          try { return JSON.parse(s) as unknown; } catch { return null; }
+        };
+
+        // 1. Try clean extract
+        parsed = tryParse(jsonStr) ?? tryParse(raw);
+
+        // 2. Truncation repair — if still null, close any open string + braces
+        if (!parsed) {
+          const repaired = repairTruncatedJson(jsonStart !== -1 ? raw.slice(jsonStart) : raw);
+          parsed = tryParse(repaired);
         }
 
         if (!parsed) {
