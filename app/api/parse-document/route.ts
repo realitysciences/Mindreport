@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PDFParse } from "pdf-parse";
-import mammoth from "mammoth";
 
 export const maxDuration = 30;
 
 // ── Limits ────────────────────────────────────────────────────────────────────
 const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
-const MAX_TEXT_CHARS = 60_000;           // cap before sending to client
+const MAX_TEXT_CHARS = 60_000;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function wordCount(text: string): number {
@@ -18,7 +16,6 @@ function trimText(text: string): string {
 }
 
 function cleanText(text: string): string {
-  // Collapse excessive blank lines, normalise whitespace
   return text
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
@@ -57,6 +54,8 @@ export async function POST(req: NextRequest) {
 
   try {
     if (ext === "pdf" || mime === "application/pdf") {
+      // Dynamic import — prevents cold-start failure if pdfjs worker can't init
+      const { PDFParse } = await import("pdf-parse");
       const parser = new PDFParse({ data: new Uint8Array(buffer) });
       const result = await parser.getText();
       text = result.text;
@@ -65,6 +64,7 @@ export async function POST(req: NextRequest) {
       ext === "docx" ||
       mime === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ) {
+      const mammoth = await import("mammoth");
       const result = await mammoth.extractRawText({ buffer });
       text = result.value;
       method = "docx";
@@ -79,7 +79,8 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Parse failed";
-    return NextResponse.json({ error: `Could not read file: ${msg}` }, { status: 422 });
+    console.error("[parse-document]", msg);
+    return NextResponse.json({ error: `Could not read the file: ${msg}` }, { status: 422 });
   }
 
   text = cleanText(text);

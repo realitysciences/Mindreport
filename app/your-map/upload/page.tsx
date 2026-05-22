@@ -348,18 +348,27 @@ export default function UploadPage() {
         method: 'POST',
         body: formData,
       })
-      const data = await res.json()
 
-      if (!res.ok) {
-        setErrorMsg(data.error ?? 'Could not read the file.')
+      // Try to parse JSON — if the server returned an HTML error page, this throws
+      let data: Record<string, unknown> = {}
+      try {
+        data = await res.json()
+      } catch {
+        setErrorMsg(`Server error (${res.status}). Please try again or use a different file.`)
         setPhase('error')
         return
       }
 
-      setResult(data as ParseResult)
+      if (!res.ok) {
+        setErrorMsg((data.error as string) ?? 'Could not read the file.')
+        setPhase('error')
+        return
+      }
+
+      setResult(data as unknown as ParseResult)
       setPhase('ready')
     } catch {
-      setErrorMsg('Network error — please try again.')
+      setErrorMsg('Could not reach the server. Please check your connection and try again.')
       setPhase('error')
     }
   }, [])
