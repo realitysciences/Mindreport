@@ -30,13 +30,16 @@ export default function UploadPage() {
   const [selectedSpeaker, setSelectedSpeaker] = useState<string | null>(null)
   const [viewerSpeaker,   setViewerSpeaker]   = useState<string | null>(null)
   const [speakerAliases,  setSpeakerAliases]  = useState<Record<string, string>>({})
+  // User can override a false-positive speaker detection by clicking
+  // "This isn't a conversation" — forces document mode regardless of speakers.
+  const [forceDocMode, setForceDocMode] = useState(false)
 
   // ── Document mode state ──────────────────────────────────────────────────────
   const [authorMode, setAuthorMode] = useState<'self' | 'other'>('self')
   const [authorName, setAuthorName] = useState('')
 
   // ── Computed ─────────────────────────────────────────────────────────────────
-  const isConversation = (result?.speakers?.length ?? 0) >= 2
+  const isConversation = !forceDocMode && (result?.speakers?.length ?? 0) >= 2
   const canContinue    = !isConversation || !!selectedSpeaker
 
   // Auto-set viewerSpeaker when conversation detected
@@ -54,7 +57,9 @@ export default function UploadPage() {
     setResult(null)
     setErrorMsg('')
     setSelectedSpeaker(null)
+    setViewerSpeaker(null)
     setSpeakerAliases({})
+    setForceDocMode(false)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -111,6 +116,7 @@ export default function UploadPage() {
     setSelectedSpeaker(null)
     setViewerSpeaker(null)
     setSpeakerAliases({})
+    setForceDocMode(false)
   }, [])
 
   const handleContinue = useCallback(() => {
@@ -195,7 +201,7 @@ export default function UploadPage() {
             className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.2em' }}
           >
-            Upload a Document
+            Upload a File
           </span>
           <h1
             className="font-bold leading-tight mt-3 mb-4"
@@ -311,6 +317,10 @@ export default function UploadPage() {
                 setViewerSpeaker={setViewerSpeaker}
                 speakerAliases={speakerAliases}
                 setSpeakerAliases={setSpeakerAliases}
+                onNotConversation={() => {
+                  setForceDocMode(true)
+                  setSelectedSpeaker(null)
+                }}
               />
             ) : (
               /* ── Document mode ── */
@@ -392,14 +402,16 @@ function ConversationSelector({
   setViewerSpeaker,
   speakerAliases,
   setSpeakerAliases,
+  onNotConversation,
 }: {
-  speakers:          string[]
-  selectedSpeaker:   string | null
+  speakers:           string[]
+  selectedSpeaker:    string | null
   setSelectedSpeaker: (s: string | null) => void
-  viewerSpeaker:     string | null
-  setViewerSpeaker:  (s: string | null) => void
-  speakerAliases:    Record<string, string>
-  setSpeakerAliases: React.Dispatch<React.SetStateAction<Record<string, string>>>
+  viewerSpeaker:      string | null
+  setViewerSpeaker:   (s: string | null) => void
+  speakerAliases:     Record<string, string>
+  setSpeakerAliases:  React.Dispatch<React.SetStateAction<Record<string, string>>>
+  onNotConversation:  () => void
 }) {
   const scopeCard = (isSelected: boolean): React.CSSProperties => ({
     display:        'flex',
@@ -587,6 +599,26 @@ function ConversationSelector({
           </div>
         ))}
       </div>
+
+      {/* Escape hatch — if speaker detection was wrong */}
+      <button
+        onClick={onNotConversation}
+        style={{
+          marginTop:      '0.85rem',
+          background:     'none',
+          border:         'none',
+          padding:        0,
+          fontFamily:     'var(--font-serif)',
+          fontStyle:      'italic',
+          fontSize:       '0.8rem',
+          color:          'var(--text-faint)',
+          cursor:         'pointer',
+          textDecoration: 'underline',
+          textDecorationColor: 'var(--border)',
+        }}
+      >
+        This isn&apos;t a conversation
+      </button>
     </div>
   )
 }

@@ -308,8 +308,14 @@ export async function POST(req: NextRequest) {
   const terrainLabels   = TERRAIN_LABELS[lens]   ?? TERRAIN_LABELS.pattern;
   const lensInstruction = LENS_INSTRUCTIONS[lens] ?? LENS_INSTRUCTIONS.pattern;
 
+  // Three subject modes:
+  // 'you'                     → second person, direct address
+  // 'the dynamic between X and Y' → relational mode, both people as subject
+  // anything else             → third person, single named subject
   const subjectInstruction = subject === 'you'
     ? `POINT OF VIEW: Write in second person throughout. Address the subject directly as "you" and "your" in every field. Never write "they", "them", "this person", or "the person" when referring to the subject — it is always "you". Every observation is addressed to them personally.`
+    : subject.startsWith('the dynamic between')
+    ? `SUBJECT: You are mapping ${subject} — not either individual in isolation, but the pattern that forms between them. Write about what happens in the space between both people: what each produces in the other, what they recreate together, and what the interaction as a whole reveals. Use "the dynamic", "between them", "both", or their names specifically. Where a terrain section seems written for one person, interpret it relationally — name what that section reveals about how both people function together. Do not flatten this into a description of one person.`
     : `SUBJECT: You are mapping ${subject}. Write in third person throughout — "they", "them", "their". Do not address the subject directly.`;
 
   const systemPrompt = `You are a psychological cartographer trained in a precise framework for reading human behavior and interior structure. You create personal psychological maps  -  not diagnoses, not therapy, but accurate, incisive cartography of a person's interior terrain.
