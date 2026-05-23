@@ -12,7 +12,7 @@ const methods = [
     tag: 'Most guided',
     tagColor: 'var(--accent)',
     title: 'Voice Interview',
-    description: 'Talk with an AI interviewer. It will ask you questions, follow threads, and listen. The most natural way to map your interior — no writing required.',
+    description: 'Talk with an AI interviewer. It will ask you questions, follow threads, and listen. The most natural way to map your interior - no writing required.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
@@ -120,7 +120,7 @@ export default function YourMapPage() {
               maxWidth: '560px',
             }}
           >
-            Every map starts with input. Choose the method that feels most natural to you — they all lead to the same place.
+            Every map starts with input. Choose the method that feels most natural to you - they all lead to the same place.
           </p>
         </div>
 

@@ -20,7 +20,7 @@ const origin: Lens = {
   sample: {
     quote: "Still solving for a room that no longer exists.",
     pattern:
-      "The strategies that kept a child safe — staying small, performing, over-giving, staying alert — become the default architecture of the adult. The original conditions are gone; the adaptations continue, aimed at ghosts.",
+      "The strategies that kept a child safe - staying small, performing, over-giving, staying alert - become the default architecture of the adult. The original conditions are gone; the adaptations continue, aimed at ghosts.",
     cost:
       "Present circumstances are filtered through old lenses. People in the now are responded to as if they were people from then.",
     nextMove:

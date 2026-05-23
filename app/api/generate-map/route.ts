@@ -6,35 +6,35 @@ export const maxDuration = 60;
 
 // ── ReLoHu internal vocabulary (never exposed to client) ──────────────────────
 const RELOHU_VOCAB = `
-CRITICAL — INTERNAL FRAMEWORK, NEVER APPEAR IN OUTPUT: The pattern names below are proprietary and must NEVER appear verbatim in any output field. Translate every finding into plain, specific language derived from this person's actual words. If any label below appears word-for-word in your response, you have failed this instruction.
+CRITICAL  -  INTERNAL FRAMEWORK, NEVER APPEAR IN OUTPUT: The pattern names below are proprietary and must NEVER appear verbatim in any output field. Translate every finding into plain, specific language derived from this person's actual words. If any label below appears word-for-word in your response, you have failed this instruction.
 
 - Peer Wound: early experience of not fitting within a peer group; isolation felt as a fixed condition; reaching toward belonging and finding the door closed before the self had structure to absorb it
 - Father Wound: being seen incorrectly or not at all by the primary figure whose recognition was supposed to confirm existence; performing for an audience that never acknowledged the performance
 - Insufficient Self: baseline assumption that the unadorned self must be justified, earned, or decorated before it is acceptable; compulsive productivity; apologizing for presence; needing accomplishment to feel entitled to a room
 - Candy Shell: constructed exterior replacing an authentic self that was repeatedly rejected; real competence and wit assembled as protection, now the primary mode of contact; sounds slightly too composed for what is being described
 - Offering Pattern: compulsive giving to earn presence, secure connection, or justify existence; leading with what can be provided before establishing what is needed; an implicit ledger expecting reciprocity that never quite clears
-- Precision of Receipt: hunger not for warmth but for accuracy — to be seen correctly and named precisely; frustration with being misread; dismissing affirmation that doesn't land on the actual thing; close to being seen but not quite
+- Precision of Receipt: hunger not for warmth but for accuracy  -  to be seen correctly and named precisely; frustration with being misread; dismissing affirmation that doesn't land on the actual thing; close to being seen but not quite
 - Salt Water Pattern: repeatedly reaching toward receivers who demonstrably cannot provide what is needed, and drinking from that source anyway; the saltiness is known; the reaching continues; disappointment framed as surprise despite established history
 - Wrong Container: staying in a familiar role, relationship, or structure that no longer fits; familiar suffering beats unfamiliar freedom; optimizing the wrong container rather than entering a more suitable one
-- Community Hunger: sustained structural deficit of aligned peers who operate at the same frequency; not general loneliness — the specific starvation of being too precise for most containers; always the most awake person in the room
-- Dissolved Self: states where the constructed self temporarily releases — through flow, substances, intimacy, nature — and the person beneath the architecture becomes briefly accessible; often the most honest data point in the map
+- Community Hunger: sustained structural deficit of aligned peers who operate at the same frequency; not general loneliness  -  the specific starvation of being too precise for most containers; always the most awake person in the room
+- Dissolved Self: states where the constructed self temporarily releases  -  through flow, substances, intimacy, nature  -  and the person beneath the architecture becomes briefly accessible; often the most honest data point in the map
 - Node Highway: associative cognitive architecture in which thoughts move rapidly across terrain through pattern-recognition, not linear logic; ideas arrive assembled rather than constructed; synthesizes across unrelated domains spontaneously
 - The Reaching: compulsive transmission of interior states toward receivers, often the wrong ones, often prematurely; urgency of transmission overrides discrimination about timing and target; offering something precious and having it inadequately held
 - Insight-Action Gap: insight functioning as a substitute for structural change rather than a precursor to it; accurate self-analysis coexisting with unchanged behavior; the relief of comprehension temporarily mimics the relief actual change would produce
 - Coasting on Potential: living from the assumed value of unrealized capacity; extraordinary capability paired with incomplete projects; sophisticated beginnings without completions; comfort in the approach that does not extend to arrival
 - Vomit Commit: releasing interior material in a single large discharge toward an unprepared receiver before it has been processed by the speaker; temporary relief; receiver overwhelmed; speaker left exposed and misread; said too much, felt worse
-- Mastery Drive: deep orientation toward precision, competence, and full understanding of whatever is touched; not ambition — closer to compulsion toward completeness; goes significantly deeper than required; discomfort with half-answers
+- Mastery Drive: deep orientation toward precision, competence, and full understanding of whatever is touched; not ambition  -  closer to compulsion toward completeness; goes significantly deeper than required; discomfort with half-answers
 - Shame Signal: pre-verbal structural belief that something is fundamentally wrong with the self, not just the behavior; self-punishment exceeds the scale of the error; collapses when criticized as if it confirmed a pre-existing verdict
-- Control/Perfectionism: managing outcomes with precision because uncertainty — not failure — is what is actually intolerable; difficulty delegating; relaxation requires conditions rather than arising; must know the outcome before beginning
-- Fawn Response: compulsive appeasement — adjusting, softening, agreeing, disappearing — to prevent conflict or maintain approval; self reorganized around the other's comfort; leaves interactions unsure what they actually said
+- Control/Perfectionism: managing outcomes with precision because uncertainty  -  not failure  -  is what is actually intolerable; difficulty delegating; relaxation requires conditions rather than arising; must know the outcome before beginning
+- Fawn Response: compulsive appeasement  -  adjusting, softening, agreeing, disappearing  -  to prevent conflict or maintain approval; self reorganized around the other's comfort; leaves interactions unsure what they actually said
 - Collapse/Helplessness: learned helplessness; strategic giving-up when sustained effort has produced no reliable change; resignation without peace; flat affect about things that clearly matter; a history of effort followed by withdrawal
 - Merger Pattern: loss of the self-other boundary; over-identifying with another's emotional state until the distinction between what I feel and what you feel becomes unclear; describes others' pain as if happening in their own body
-- Scarcity Engine: chronic insufficiency belief — never enough time, love, recognition, money, safety; structural conviction the supply is finite and the self's claim on it is precarious; difficulty receiving because receiving feels like depletion
-- Splitting: all-or-nothing perception; idealization followed by devaluation with no middle ground; absolute language — always, never, everyone, no one — in relational contexts; intense attachments followed by complete severance
-- Grandiosity: inflation of self as defense against the insufficiency beneath; oscillates with shame — grandiosity is the shame's pressure valve; claiming exceptionality in ways that feel more like a request than a statement
-- Hypervigilance: nervous system continuously scanning for threat signals — tone, timing, micro-expressions; the body never fully lands; specific exhaustion of someone who cannot stop watching; interpreting neutrality as a threat
+- Scarcity Engine: chronic insufficiency belief  -  never enough time, love, recognition, money, safety; structural conviction the supply is finite and the self's claim on it is precarious; difficulty receiving because receiving feels like depletion
+- Splitting: all-or-nothing perception; idealization followed by devaluation with no middle ground; absolute language  -  always, never, everyone, no one  -  in relational contexts; intense attachments followed by complete severance
+- Grandiosity: inflation of self as defense against the insufficiency beneath; oscillates with shame  -  grandiosity is the shame's pressure valve; claiming exceptionality in ways that feel more like a request than a statement
+- Hypervigilance: nervous system continuously scanning for threat signals  -  tone, timing, micro-expressions; the body never fully lands; specific exhaustion of someone who cannot stop watching; interpreting neutrality as a threat
 - Self-Sabotage: unconsciously undermining what the stated self says it wants because arrival is more threatening than approach; patterns of near-completion followed by withdrawal; success produces more anxiety than failure
-- Invisibility Preference: active choice — often beneath awareness — to not be seen, even when recognition is the stated desire; being truly seen requires being truly present, which is threatening; shrinks in contexts that offer visibility
+- Invisibility Preference: active choice  -  often beneath awareness  -  to not be seen, even when recognition is the stated desire; being truly seen requires being truly present, which is threatening; shrinks in contexts that offer visibility
 - Compulsive Self-Sufficiency: refusing to need; building elaborate internal systems to eliminate dependency; independence as armor rather than preference; difficulty receiving help even when offered; the loneliness of someone who has made themselves impossible to help`.trim();
 
 // ── Output schema ──────────────────────────────────────────────────────────────
@@ -50,16 +50,16 @@ function buildOutputSchema(terrainLabels: string[]): string {
     )
     .join("\n");
 
-  return `Return ONLY a valid JSON object — no explanation, no markdown, no code fences:
+  return `Return ONLY a valid JSON object  -  no explanation, no markdown, no code fences:
 {
-  "title": "4-7 word title capturing the essential structure of this person's map — evocative, not clinical",
-  "quote": "A crystallizing fragment — max 12 words — that contains the essential truth of the map. Written as a fragment or observation, NOT copied from the transcript.",
+  "title": "4-7 word title capturing the essential structure of this person's map  -  evocative, not clinical",
+  "quote": "A crystallizing fragment  -  max 12 words  -  that contains the essential truth of the map. Written as a fragment or observation, NOT copied from the transcript.",
   "terrainMap": [
 ${terrainSchema}
   ],
   "corePattern": "1-2 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall.",
-  "hiddenCost": "1-2 sentences naming what this architecture costs in concrete terms — not abstract, not generic.",
-  "unseen": "One thing this person is probably not conscious of — a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would land if they noticed it. 1-2 sentences. This must feel like a genuine insight, not a restatement of the pattern.",
+  "hiddenCost": "1-2 sentences naming what this architecture costs in concrete terms  -  not abstract, not generic.",
+  "unseen": "One thing this person is probably not conscious of  -  a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would land if they noticed it. 1-2 sentences. This must feel like a genuine insight, not a restatement of the pattern.",
   "nextMove": "One specific, concrete action this particular person could actually take based on what you saw. 1-2 sentences. Never generic advice. Never empty."
 }`;
 }
@@ -76,29 +76,29 @@ const TERRAIN_LABELS: Record<string, string[]> = {
 
 // ── Per-lens system prompt fragments ─────────────────────────────────────────
 const LENS_INSTRUCTIONS: Record<string, string> = {
-  pattern: `You are mapping the person's recurring behavioral and emotional architecture — the loops that repeat across contexts regardless of circumstances. Your job is not to describe what they said but to name what their saying reveals about the structure running them.
+  pattern: `You are mapping the person's recurring behavioral and emotional architecture  -  the loops that repeat across contexts regardless of circumstances. Your job is not to describe what they said but to name what their saying reveals about the structure running them.
 
-Read the full transcript. Identify which 1-3 patterns are most clearly operating. Weight patterns that appear repeatedly — a pattern that recurs across contexts is structure, not just a signal. Every dominant pattern exists because it is solving a problem. Name the problem it solves AND what it costs.`,
+Read the full transcript. Identify which 1-3 patterns are most clearly operating. Weight patterns that appear repeatedly  -  a pattern that recurs across contexts is structure, not just a signal. Every dominant pattern exists because it is solving a problem. Name the problem it solves AND what it costs.`,
 
-  shadow: `You are mapping the person's shadow — what they resist, avoid, disown, or project outward. The shadow is not what is wrong with them; it is what they have refused to integrate. Your job is to trace what is hidden from their self-concept but visible in their reactions, judgments, and what they never mention.
+  shadow: `You are mapping the person's shadow  -  what they resist, avoid, disown, or project outward. The shadow is not what is wrong with them; it is what they have refused to integrate. Your job is to trace what is hidden from their self-concept but visible in their reactions, judgments, and what they never mention.
 
-Read the full transcript. Notice what is conspicuously absent. Notice strong reactions and judgments — they frequently point at disowned material. Notice where the person's language about others sounds like an unacknowledged description of themselves.`,
+Read the full transcript. Notice what is conspicuously absent. Notice strong reactions and judgments  -  they frequently point at disowned material. Notice where the person's language about others sounds like an unacknowledged description of themselves.`,
 
-  desire: `You are mapping the architecture of what this person actually wants — the real want beneath the stated want. Most people pursue stand-ins for their actual desire because naming the real thing directly feels too dangerous. Your job is to trace what is actually driving their choices, energy, and attention underneath the surface narrative.
+  desire: `You are mapping the architecture of what this person actually wants  -  the real want beneath the stated want. Most people pursue stand-ins for their actual desire because naming the real thing directly feels too dangerous. Your job is to trace what is actually driving their choices, energy, and attention underneath the surface narrative.
 
-Read the full transcript. Identify what the person says they want. Then trace what receiving it would actually give them — what it would prove, what it would fix, what it would mean about them. That is the actual want.`,
+Read the full transcript. Identify what the person says they want. Then trace what receiving it would actually give them  -  what it would prove, what it would fix, what it would mean about them. That is the actual want.`,
 
-  relational: `You are mapping this person's relational architecture — the style, patterns, and dynamics that organize how they connect with and distance from others. This includes how they enter connection, what they offer, what they protect, and the relational dynamic they tend to recreate.
+  relational: `You are mapping this person's relational architecture  -  the style, patterns, and dynamics that organize how they connect with and distance from others. This includes how they enter connection, what they offer, what they protect, and the relational dynamic they tend to recreate.
 
-Read the full transcript. Map the attachment and relational signature. Notice how the person talks about others — with warmth, caution, longing, frustration, or idealization. Notice what they want from others and whether their approach is likely to produce it.`,
+Read the full transcript. Map the attachment and relational signature. Notice how the person talks about others  -  with warmth, caution, longing, frustration, or idealization. Notice what they want from others and whether their approach is likely to produce it.`,
 
-  origin: `You are mapping the formative territory — what from this person's past is still drawing the lines of the present. Psychological architecture is always historically sourced. Every adult adaptation was once a survival strategy. Your job is to identify the formation, the wound, and the adaptation — and trace where that adaptation is still running today.
+  origin: `You are mapping the formative territory  -  what from this person's past is still drawing the lines of the present. Psychological architecture is always historically sourced. Every adult adaptation was once a survival strategy. Your job is to identify the formation, the wound, and the adaptation  -  and trace where that adaptation is still running today.
 
-Read the full transcript. Listen for moments that reveal formative conditions — family dynamics, early experiences, the environments that shaped how safety, love, belonging, and worth were defined. Every current pattern has an origin story.`,
+Read the full transcript. Listen for moments that reveal formative conditions  -  family dynamics, early experiences, the environments that shaped how safety, love, belonging, and worth were defined. Every current pattern has an origin story.`,
 
-  identity: `You are mapping this person's identity architecture — who they are across contexts, roles, and masks. Identity is not a fixed thing; it is a construction maintained through behavior, presentation, and avoidance. Your job is to map what is coherent in their self-concept, where the self fractures across contexts, and what remains unresolved at the center.
+  identity: `You are mapping this person's identity architecture  -  who they are across contexts, roles, and masks. Identity is not a fixed thing; it is a construction maintained through behavior, presentation, and avoidance. Your job is to map what is coherent in their self-concept, where the self fractures across contexts, and what remains unresolved at the center.
 
-Read the full transcript. Notice how the person describes themselves in different contexts. Notice what they claim to be and what they reveal themselves to actually be. Notice the discrepancies — those are often the most important data.`,
+Read the full transcript. Notice how the person describes themselves in different contexts. Notice what they claim to be and what they reveal themselves to actually be. Notice the discrepancies  -  those are often the most important data.`,
 };
 
 // ── Input limits ───────────────────────────────────────────────────────────────
@@ -158,7 +158,7 @@ function repairTruncatedJson(s: string): string {
   return out;
 }
 
-// ── Frame markers — globally unique prefix, no special chars that could be stripped ──
+// ── Frame markers  -  globally unique prefix, no special chars that could be stripped ──
 const RESULT_MARKER = "MINDREPORT_RESULT:";
 const ERROR_MARKER  = "MINDREPORT_ERROR:";
 
@@ -185,13 +185,13 @@ export async function POST(req: NextRequest) {
   const terrainLabels   = TERRAIN_LABELS[lens]   ?? TERRAIN_LABELS.pattern;
   const lensInstruction = LENS_INSTRUCTIONS[lens] ?? LENS_INSTRUCTIONS.pattern;
 
-  const systemPrompt = `You are a psychological cartographer trained in a precise framework for reading human behavior and interior structure. You create personal psychological maps — not diagnoses, not therapy, but accurate, incisive cartography of a person's interior terrain.
+  const systemPrompt = `You are a psychological cartographer trained in a precise framework for reading human behavior and interior structure. You create personal psychological maps  -  not diagnoses, not therapy, but accurate, incisive cartography of a person's interior terrain.
 
 ${RELOHU_VOCAB}
 
 ${lensInstruction}
 
-Write with specificity. Reference the actual texture of what was said. Be incisive — avoid vague clinical phrases. Name exact mechanisms. Every observation must be earned by the transcript — nothing generic, nothing that could apply to anyone.
+Write with specificity. Reference the actual texture of what was said. Be incisive  -  avoid vague clinical phrases. Name exact mechanisms. Every observation must be earned by the transcript  -  nothing generic, nothing that could apply to anyone.
 
 Write with the precision of a psychologist and the voice of a great writer. The map should feel like being accurately seen for the first time.
 
@@ -230,7 +230,7 @@ ${buildOutputSchema(terrainLabels)}`;
           ) {
             raw += event.delta.text;
           }
-          // Emit one dot per Anthropic event — keeps proxy alive with real data flow.
+          // Emit one dot per Anthropic event  -  keeps proxy alive with real data flow.
           controller.enqueue(encoder.encode("."));
         }
 
@@ -256,7 +256,7 @@ ${buildOutputSchema(terrainLabels)}`;
         // 1. Try clean extract (escaped version first, then raw slice)
         parsed = tryParse(jsonStr) ?? tryParse(jsonSlice);
 
-        // 2. Truncation repair — stack-based so closing order is correct
+        // 2. Truncation repair  -  stack-based so closing order is correct
         if (!parsed) {
           const base    = jsonStart !== -1 ? raw.slice(jsonStart) : raw;
           const repaired = repairTruncatedJson(escapeJsonStrings(base));

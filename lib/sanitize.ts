@@ -3,9 +3,9 @@ export function sanitizeInput(s: string, max: number): string {
   return s.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, "").trim().slice(0, max);
 }
 
-/** Strip em-dashes from LLM output so JSON.parse succeeds across all models */
+/** Strip em-dashes and en-dashes from LLM output so they never surface in reports */
 export function sanitizeLlmOutput(raw: string): string {
-  return raw.replace(/—/g, " - ");
+  return raw.replace(/—|–/g, " - ");
 }
 
 /**
@@ -33,8 +33,8 @@ const RELOHU_SCRUB: [RegExp, string][] = [
   [/\bmastery\s+drive\b/gi,                       "a deep orientation toward precision and full understanding of whatever is touched"],
   [/\bshame\s+signal\b/gi,                        "the pre-verbal belief that something is fundamentally wrong with the self, not just the behavior"],
   [/\bcontrol\s*[\/]\s*perfectionism\b/gi,        "managing outcomes with precision because uncertainty, not failure, is what is actually intolerable"],
-  [/\bfawn\s+response\b/gi,                       "compulsive appeasement — adjusting, softening, agreeing — to prevent conflict or maintain approval"],
-  [/\bcollapse\s*[\/]\s*helplessness\b/gi,        "learned helplessness — the strategic giving-up when sustained effort produces no reliable change"],
+  [/\bfawn\s+response\b/gi,                       "compulsive appeasement - adjusting, softening, agreeing - to prevent conflict or maintain approval"],
+  [/\bcollapse\s*[\/]\s*helplessness\b/gi,        "learned helplessness - the strategic giving-up when sustained effort produces no reliable change"],
   [/\bmerger\s+pattern\b/gi,                      "loss of the self-other boundary, over-identifying with another's emotional state"],
   [/\bscarcity\s+engine\b/gi,                     "the chronic belief that there is never enough of whatever matters most"],
   [/\bsplitting\b/gi,                             "all-or-nothing perception with no middle ground"],
@@ -42,7 +42,7 @@ const RELOHU_SCRUB: [RegExp, string][] = [
   [/\bhypervigilance\b/gi,                        "the nervous system continuously scanning for threat, never fully landing"],
   [/\bself[\s\-–]+sabotage\b/gi,                  "unconsciously undermining what is wanted because arrival is more threatening than approach"],
   [/\binvisibility\s+preference\b/gi,             "the active choice to not be seen, even when recognition is the stated desire"],
-  [/\bcompulsive\s+self[\s\-–]+sufficiency\b/gi,  "refusing to need — building systems to eliminate dependency"],
+  [/\bcompulsive\s+self[\s\-–]+sufficiency\b/gi,  "refusing to need - building systems to eliminate dependency"],
 ];
 
 export function scrubProprietaryTerms(raw: string): string {

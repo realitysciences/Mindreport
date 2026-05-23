@@ -178,6 +178,7 @@ export default function LensPage() {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [sampleExpanded, setSampleExpanded] = useState(false)
   const [transcriptMeta, setTranscriptMeta] = useState<{ method: string; words: number } | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
   const hasFetched = useRef(false)
 
   // Read transcript from sessionStorage and fire suggestion request
@@ -216,6 +217,17 @@ export default function LensPage() {
   }, [selectedLens, router])
 
   const activeLens = LENSES.find((l) => l.id === selectedLens) ?? LENSES[0]
+
+  const filteredLenses = searchQuery.trim()
+    ? LENSES.filter((l) => {
+        const q = searchQuery.toLowerCase()
+        return (
+          l.label.toLowerCase().includes(q) ||
+          l.description.toLowerCase().includes(q) ||
+          l.badge.toLowerCase().includes(q)
+        )
+      })
+    : LENSES
 
   const methodLabel: Record<string, string> = {
     voice:   'Voice interview',
@@ -331,20 +343,98 @@ export default function LensPage() {
           </div>
         )}
 
+        {/* Search bar */}
+        <div className="relative mb-5">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              position: 'absolute',
+              left: '0.85rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: 'var(--text-faint)',
+              pointerEvents: 'none',
+            }}
+          >
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            placeholder="Search lenses..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              paddingLeft: '2.4rem',
+              paddingRight: searchQuery ? '2.2rem' : '0.9rem',
+              paddingTop: '0.65rem',
+              paddingBottom: '0.65rem',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: '4px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.85rem',
+              color: 'var(--text-body)',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent)' }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--border)' }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              style={{
+                position: 'absolute',
+                right: '0.7rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--text-faint)',
+                fontSize: '1rem',
+                lineHeight: 1,
+                padding: '0.15rem',
+              }}
+              aria-label="Clear search"
+            >
+              ×
+            </button>
+          )}
+        </div>
+
         {/* Lens cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-          {LENSES.map((lens) => (
-            <LensCard
-              key={lens.id}
-              lens={lens}
-              selected={selectedLens === lens.id}
-              suggestion={suggestions.find((s) => s.id === lens.id)}
-              onSelect={() => {
-                setSelectedLens(lens.id)
-                setSampleExpanded(false)
-              }}
-            />
-          ))}
+          {filteredLenses.length > 0 ? (
+            filteredLenses.map((lens) => (
+              <LensCard
+                key={lens.id}
+                lens={lens}
+                selected={selectedLens === lens.id}
+                suggestion={suggestions.find((s) => s.id === lens.id)}
+                onSelect={() => {
+                  setSelectedLens(lens.id)
+                  setSampleExpanded(false)
+                }}
+              />
+            ))
+          ) : (
+            <div
+              className="col-span-full py-10 text-center"
+              style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-faint)' }}
+            >
+              No lenses match &ldquo;{searchQuery}&rdquo;
+            </div>
+          )}
         </div>
 
         {/* Sample preview — collapsible */}
@@ -363,7 +453,7 @@ export default function LensPage() {
                 className="text-sm font-medium"
                 style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-body)', letterSpacing: '0.04em' }}
               >
-                Sample — {activeLens.label} lens
+                Sample: {activeLens.label} lens
               </span>
             </div>
             <span

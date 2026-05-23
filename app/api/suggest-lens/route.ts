@@ -4,14 +4,14 @@ import { sanitizeInput, sanitizeLlmOutput } from "@/lib/sanitize";
 
 export const maxDuration = 30;
 
-// Lens menu — descriptions used only for the suggestion prompt, never exposed to client
+// Lens menu  -  descriptions used only for the suggestion prompt, never exposed to client
 const LENS_MENU = [
-  { id: "pattern",    description: "The recurring behavioral and emotional loops — the default architecture running across all contexts." },
-  { id: "shadow",     description: "What is disowned, resisted, or projected outward — what is hidden from the self but visible in reactions." },
-  { id: "desire",     description: "What the person is actually moving toward beneath their stated wants — the real driver underneath the goals." },
-  { id: "relational", description: "How the person connects, protects, and creates distance — the attachment and relational style at work." },
-  { id: "origin",     description: "The formative experiences and wounds still organizing present behavior — what from the past is running now." },
-  { id: "identity",   description: "Who the person is across roles and contexts — where the self is coherent and where it is fractured." },
+  { id: "pattern",    description: "The recurring behavioral and emotional loops  -  the default architecture running across all contexts." },
+  { id: "shadow",     description: "What is disowned, resisted, or projected outward  -  what is hidden from the self but visible in reactions." },
+  { id: "desire",     description: "What the person is actually moving toward beneath their stated wants  -  the real driver underneath the goals." },
+  { id: "relational", description: "How the person connects, protects, and creates distance  -  the attachment and relational style at work." },
+  { id: "origin",     description: "The formative experiences and wounds still organizing present behavior  -  what from the past is running now." },
+  { id: "identity",   description: "Who the person is across roles and contexts  -  where the self is coherent and where it is fractured." },
 ];
 
 export async function POST(req: NextRequest) {
@@ -45,12 +45,12 @@ export async function POST(req: NextRequest) {
     const message = await anthropic.messages.create({
       model: "claude-haiku-4-5",
       max_tokens: 200,
-      system: `You are a lens selector for a psychological cartography tool. Given a person's interview transcript, identify the 1 or 2 lenses that will produce the most revealing map for this specific person. Only recommend 2 if both are genuinely illuminating — otherwise recommend 1.
+      system: `You are a lens selector for a psychological cartography tool. Given a person's interview transcript, identify the 1 or 2 lenses that will produce the most revealing map for this specific person. Only recommend 2 if both are genuinely illuminating  -  otherwise recommend 1.
 
 Available lenses:
 ${lensMenu}
 
-Return ONLY a valid JSON object — no explanation, no markdown, no code fences:
+Return ONLY a valid JSON object  -  no explanation, no markdown, no code fences:
 {"suggestions": [{"id": "lens_id", "reason": "one precise sentence, max 15 words, explaining why this lens fits this person's specific words"}]}`,
       messages: [
         {

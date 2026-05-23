@@ -20,7 +20,7 @@ const desire: Lens = {
   sample: {
     quote: "Moving toward recognition, not the thing itself.",
     pattern:
-      "The stated goal — the project, the relationship, the achievement — is often a carrier for the real want underneath it: to be seen, to matter, to be free. The actual desire stays hidden because naming it directly feels more dangerous than pursuing its stand-in.",
+      "The stated goal - the project, the relationship, the achievement - is often a carrier for the real want underneath it: to be seen, to matter, to be free. The actual desire stays hidden because naming it directly feels more dangerous than pursuing its stand-in.",
     cost:
       "The stand-in never fully satisfies. The goal is reached; the real want remains unaddressed. The next goal appears immediately.",
     nextMove:

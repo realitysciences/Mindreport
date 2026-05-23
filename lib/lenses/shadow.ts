@@ -20,7 +20,7 @@ const shadow: Lens = {
   sample: {
     quote: "Criticizing in others what cannot be seen in the self.",
     pattern:
-      "Strong reactions to a quality in others — neediness, arrogance, carelessness — often signal the disowned version of that same quality. The shadow does not disappear when refused; it goes underground and leaks through judgment.",
+      "Strong reactions to a quality in others - neediness, arrogance, carelessness - often signal the disowned version of that same quality. The shadow does not disappear when refused; it goes underground and leaks through judgment.",
     cost:
       "The energy spent managing the disowned self is unavailable for actual growth. Relationships become projections rather than encounters.",
     nextMove:

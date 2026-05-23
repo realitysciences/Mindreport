@@ -249,7 +249,7 @@ function buildExportText(result: MapResult, lensLabel: string): string {
       const paras = slice.body.split(/\n+/).map((p) => p.trim()).filter(Boolean)
       const markers = slice.markers?.length ? `\nMarkers: ${slice.markers.join('  ·  ')}` : ''
       return [
-        `${num} — ${slice.label.toUpperCase()}`,
+        `${num}. ${slice.label.toUpperCase()}`,
         `${slice.summary}`,
         '',
         paras.join('\n\n'),
@@ -447,7 +447,7 @@ export default function ReportPage() {
             READ YOUR MAP →
           </button>
           <Link href="/your-map/lens" className="w-full py-3 rounded-sm text-xs text-center transition-opacity hover:opacity-70" style={{ border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.08em' }}>
-            Not yet — go back
+            Not yet, go back
           </Link>
         </div>
       </div>
@@ -472,7 +472,7 @@ export default function ReportPage() {
           {/* Inline lens-generation error */}
           {lensError && (
             <p className="mb-6 text-xs text-center" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#D4537E' }}>
-              {lensError} — tap the lens to try again.
+              {lensError} - tap the lens to try again.
             </p>
           )}
 
@@ -547,7 +547,7 @@ export default function ReportPage() {
               <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.2em' }}>Go deeper</span>
               <p className="font-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '1.2rem' }}>This is a first reading.</p>
               <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '0.95rem', lineHeight: 1.65 }}>
-                A full cartographic commission from ReLoHu™ goes significantly deeper — a complete map of your psychological terrain, rendered as a document built to last.
+                A full cartographic commission from ReLoHu™ goes significantly deeper. A complete map of your psychological terrain, rendered as a document built to last.
               </p>
               <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="self-start text-xs transition-opacity hover:opacity-70" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.08em' }}>
                 Commission a full map at relohu.com →

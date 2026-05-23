@@ -20,7 +20,7 @@ const identity: Lens = {
   sample: {
     quote: "Known everywhere, seen nowhere.",
     pattern:
-      "A capacity to adapt the self across contexts — professional, social, intimate — so fluidly that the consistent core becomes hard to locate. Others receive a version; the person themselves may struggle to name what remains constant.",
+      "A capacity to adapt the self across contexts - professional, social, intimate - so fluidly that the consistent core becomes hard to locate. Others receive a version; the person themselves may struggle to name what remains constant.",
     cost:
       "The adaptability that makes a person effective in rooms also makes them unknowable. Loneliness inside high function.",
     nextMove:

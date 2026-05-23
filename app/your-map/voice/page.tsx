@@ -341,7 +341,7 @@ function VoiceInterviewInner() {
                       className="text-sm leading-relaxed"
                       style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)' }}
                     >
-                      Good cartography needs depth. You gave {userMessages.length} {userMessages.length === 1 ? 'response' : 'responses'} and about {userWordCount} {userWordCount === 1 ? 'word' : 'words'} — ideally we need at least {MIN_USER_EXCHANGES} responses and {MIN_USER_WORDS} words from you to draw a meaningful map.
+                      Good cartography needs depth. You gave {userMessages.length} {userMessages.length === 1 ? 'response' : 'responses'} and about {userWordCount} {userWordCount === 1 ? 'word' : 'words'} - ideally we need at least {MIN_USER_EXCHANGES} responses and {MIN_USER_WORDS} words from you to draw a meaningful map.
                     </p>
                   </div>
                 </div>

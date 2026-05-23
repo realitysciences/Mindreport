@@ -560,7 +560,7 @@ export default function UploadPage() {
                     lineHeight: 1.55,
                   }}
                 >
-                  <strong>Short document</strong> — the map draws better with more material. If you have other notes or writing, consider combining them into a single file before uploading.
+                  <strong>Short document</strong> - the map draws better with more material. If you have other notes or writing, consider combining them into a single file before uploading.
                 </p>
               </div>
             ) : result.wordCount >= 800 ? (
@@ -578,7 +578,7 @@ export default function UploadPage() {
                     lineHeight: 1.55,
                   }}
                 >
-                  Rich material — {result.wordCount.toLocaleString()} words gives the map a lot to work with.
+                  Rich material - {result.wordCount.toLocaleString()} words gives the map a lot to work with.
                 </p>
               </div>
             ) : null}
@@ -641,7 +641,7 @@ export default function UploadPage() {
               {[
                 'Journal entries or personal writing',
                 'Therapy session notes or summaries',
-                'Letters — sent or unsent',
+                'Letters - sent or unsent',
                 'Anything you wrote during a difficult time',
                 'Stream-of-consciousness writing',
               ].map((item) => (
