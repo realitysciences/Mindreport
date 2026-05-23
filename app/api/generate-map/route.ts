@@ -45,8 +45,8 @@ function buildOutputSchema(terrainLabels: string[]): string {
       "label": "${label}",
       "prominence": "primary, secondary, or supporting — how central this section is to this person's overall map",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "EXACTLY 2 sentences of specific analysis. Reference the actual texture of what was said. Do NOT exceed 2 sentences. Do NOT use the internal framework labels.",
-      "markers": ["EXACTLY 2 recognition signals — specific short phrases naming how this pattern shows up in this person's real-time behavior or inner experience. Keep each phrase under 15 words."]
+      "body": "4-6 sentences. This is an excavation, not a summary. Reference exact phrases, specific moments, and concrete textures from what was said. Draw non-obvious connections. Name the mechanism with precision. Write with the weight of someone who genuinely sees this person. Do NOT use internal framework labels.",
+      "markers": ["3 recognition signals — each a vivid, specific phrase (15-25 words) naming exactly how this pattern lives in this person's real-time behavior, speech patterns, or internal logic. Make them feel like being seen."]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
     .join("\n");
@@ -58,11 +58,11 @@ function buildOutputSchema(terrainLabels: string[]): string {
   "terrainMap": [
 ${terrainSchema}
   ],
-  "corePattern": "1-2 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall.",
-  "hiddenCost": "1-2 sentences naming what this architecture costs in concrete terms  -  not abstract, not generic.",
-  "unseen": "One thing this person is probably not conscious of  -  a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would land if they noticed it. 1-2 sentences. This must feel like a genuine insight, not a restatement of the pattern.",
-  "nextMoveNow": "One specific, concrete action this person could take this week. 1 sentence. Earned by the transcript. Not generic.",
-  "nextMoveStructural": "One structural change to build toward over the next month. 1 sentence. Something that addresses the architecture, not just the symptom."
+  "corePattern": "2-4 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall. Name it precisely, show how it connects the sections, and say what it produces.",
+  "hiddenCost": "2-4 sentences naming what this architecture costs in concrete, specific terms. Not abstract. Name the actual losses  -  in relationships, capacity, aliveness, time. What is this person not getting to have because of this structure?",
+  "unseen": "2-3 sentences on something this person is probably not conscious of  -  a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would genuinely land if they noticed it. Not a restatement of what they already know about themselves.",
+  "nextMoveNow": "One specific, concrete action this person could take this week. 1-2 sentences. Earned by the transcript, not generic advice.",
+  "nextMoveStructural": "One structural change to build toward over the next month. 1-2 sentences. Something that addresses the architecture itself, not just one symptom of it."
 }`;
 }
 
@@ -204,7 +204,7 @@ Write with specificity. Reference the actual texture of what was said. Be incisi
 
 Write with the precision of a psychologist and the voice of a great writer. The map should feel like being accurately seen for the first time.
 
-TOKEN BUDGET: You have limited output space. Every field must be completed. Keep each terrain "body" to EXACTLY 2 sentences. Keep each marker under 15 words. Do not expand beyond the stated limits  -  the quality is in the precision, not the length.
+Every field must be completed. Write with density and weight  -  every sentence should earn its place. The goal is depth, not length: be specific and incisive rather than comprehensive and vague.
 
 ${buildOutputSchema(terrainLabels)}`;
 
@@ -227,7 +227,7 @@ ${buildOutputSchema(terrainLabels)}`;
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 2000,
+          max_tokens: 3500,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
