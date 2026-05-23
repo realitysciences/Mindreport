@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 
 export const maxDuration = 60;
 
@@ -24,36 +23,13 @@ function cleanText(text: string): string {
     .trim();
 }
 
-// ── PDF extraction via Anthropic (avoids Node.js-incompatible browser APIs) ──
+// ── PDF extraction via pdf-parse (pure Node.js, no API call) ─────────────────
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  const anthropic = new Anthropic();
-  const base64 = buffer.toString("base64");
-
-  const message = await anthropic.messages.create({
-    model: "claude-haiku-4-5",
-    max_tokens: 4000,
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "document",
-            source: {
-              type: "base64",
-              media_type: "application/pdf",
-              data: base64,
-            },
-          },
-          {
-            type: "text",
-            text: "Extract all the text from this document exactly as written. Return only the raw text content. Preserve paragraph breaks. No commentary, no formatting, no preamble — just the text.",
-          },
-        ],
-      },
-    ],
-  });
-
-  return message.content[0].type === "text" ? message.content[0].text : "";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pdfParse = (await import("pdf-parse")) as any;
+  const fn = pdfParse.default ?? pdfParse;
+  const result = await fn(buffer);
+  return result.text as string;
 }
 
 // ── Route handler ─────────────────────────────────────────────────────────────
