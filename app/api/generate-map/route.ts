@@ -104,7 +104,10 @@ Read the full transcript. Notice how the person describes themselves in differen
 };
 
 // ── Input limits ───────────────────────────────────────────────────────────────
-const MAX_TRANSCRIPT = 20_000;
+// MAX_TRANSCRIPT applies to the *compacted* transcript (user words only for
+// voice, raw text for uploads). 12,000 chars ≈ 1,800 tokens of input — enough
+// to represent a 60-minute interview without blowing the generation budget.
+const MAX_TRANSCRIPT = 12_000;
 const MAX_LENS       = 50;
 
 function sanitize(s: string, max: number): string {
@@ -114,27 +117,27 @@ function sanitize(s: string, max: number): string {
 // ── Voice transcript compaction ───────────────────────────────────────────────
 // Voice interviews include both sides of the conversation. The interviewer's
 // questions can be long and elaborate — good for the conversation, but wasteful
-// as model input since we're only mapping the *subject's* words. This strips
-// "Interviewer: ..." turns, keeping only the subject's responses while
-// preserving a brief [Q] placeholder so Claude has context about what they
-// were responding to (without the full text of each question).
+// as model input since we're only mapping the *subject's* words.
 //
-// A 6,000-char voice transcript typically compacts to ~2,500 chars — cutting
-// generation time roughly in half and making 60s Vercel limits reliable.
+// This runs BEFORE the length cap so that the cap applies to the subject's
+// actual words, not the combined raw conversation. For a 60-minute interview
+// the raw transcript might be 80,000+ chars; after compaction the subject's
+// responses are typically 15,000-25,000 chars, which then get capped cleanly.
 //
-// Only applied when the transcript matches the voice format (contains "Interviewer:").
+// Interviewer turns are replaced with a short [Q] placeholder so Claude knows
+// a question was asked without having to process the full text.
+//
+// Only applied when the transcript matches the voice format ("Interviewer:").
 function compactVoiceTranscript(transcript: string): string {
   if (!transcript.includes('Interviewer:')) return transcript;
 
-  const lines = transcript.split(/\n\n+/);
+  const blocks = transcript.split(/\n\n+/);
   const out: string[] = [];
 
-  for (const block of lines) {
+  for (const block of blocks) {
     const trimmed = block.trim();
     if (!trimmed) continue;
     if (trimmed.startsWith('Interviewer:')) {
-      // Replace full question text with a short [Q] marker so Claude knows
-      // a question was asked here without having to process the whole thing.
       out.push('[Q]');
     } else {
       out.push(trimmed);
@@ -210,8 +213,12 @@ export async function POST(req: NextRequest) {
   }
 
   const b = body as Record<string, unknown>;
-  const rawTranscript = sanitize(typeof b.transcript === "string" ? b.transcript : "", MAX_TRANSCRIPT);
-  const transcript    = compactVoiceTranscript(rawTranscript);
+  // Compact first so the length cap applies to the subject's words, not the
+  // combined raw conversation. For a 60-min voice interview this turns ~80,000
+  // chars of raw transcript into ~20,000 chars of user responses, then caps
+  // cleanly at MAX_TRANSCRIPT. For uploaded documents nothing changes.
+  const rawTranscript = sanitize(typeof b.transcript === "string" ? b.transcript : "", 200_000);
+  const transcript    = sanitize(compactVoiceTranscript(rawTranscript), MAX_TRANSCRIPT);
   const lens          = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
   const subject       = sanitize(typeof b.subject === "string" ? b.subject : "the person", 200);
 
