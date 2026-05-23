@@ -244,7 +244,11 @@ export default function LensPage() {
         {/* Breadcrumb */}
         <div className="mb-10">
           <Link
-            href="/your-map"
+            href={
+              transcriptMeta?.method === 'upload' ? '/your-map/upload'
+              : transcriptMeta?.method === 'voice' ? '/your-map/voice'
+              : '/your-map'
+            }
             className="text-xs uppercase tracking-widest transition-opacity hover:opacity-70"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-mid)' }}
           >
