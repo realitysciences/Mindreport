@@ -5,8 +5,8 @@
 
 import { useRef } from 'react'
 
-const ACCEPTED        = '.pdf,.docx,.rtf,.txt,.md'
-const ACCEPTED_LABELS = ['PDF', 'DOCX', 'RTF', 'TXT', 'Markdown']
+const ACCEPTED        = '.pdf,.docx,.rtf,.txt,.md,.png,.jpg,.jpeg,.webp,.vtt,.srt,.html,.htm,.json,.csv,.zip'
+const ACCEPTED_LABELS = ['PDF', 'DOCX', 'TXT', 'Image', 'JSON', 'VTT/SRT', 'ZIP', 'more…']
 
 export function DropZone({
   onFile,
@@ -72,7 +72,7 @@ export function DropZone({
           fontSize:   '1.05rem', fontWeight: 500, marginBottom: '0.35rem',
           transition: 'color 0.15s ease',
         }}>
-          {isDragging ? 'Drop to upload' : 'Drop your document here'}
+          {isDragging ? 'Drop to upload' : 'Drop a file here'}
         </p>
         <p style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', fontSize: '0.72rem', letterSpacing: '0.06em' }}>
           or click to browse
