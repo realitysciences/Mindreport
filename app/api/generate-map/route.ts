@@ -109,30 +109,52 @@ function sanitize(s: string, max: number): string {
   return sanitizeInput(s, max);
 }
 
-// ── JSON truncation repair ─────────────────────────────────────────────────────
-// When max_tokens cuts the response mid-JSON, close any open string then
-// append the right number of closing ] and } to make it parseable.
-function repairTruncatedJson(s: string): string {
+// ── Escape literal newlines inside JSON string values ─────────────────────────
+// LLMs sometimes output raw \n / \t inside string values instead of \\n / \\t.
+// JSON.parse rejects these. Walk the string and escape them only while inside a
+// quoted value (not at structural level).
+function escapeJsonStrings(s: string): string {
+  let out      = "";
   let inString = false;
   let escaped  = false;
-  let braces   = 0;
-  let brackets = 0;
 
   for (const ch of s) {
-    if (escaped)           { escaped = false; continue; }
-    if (ch === "\\" && inString) { escaped = true; continue; }
-    if (ch === '"')        { inString = !inString; continue; }
-    if (inString)          continue;
-    if (ch === "{")        braces++;
-    else if (ch === "}")   braces--;
-    else if (ch === "[")   brackets++;
-    else if (ch === "]")   brackets--;
+    if (escaped)                   { escaped = false; out += ch; continue; }
+    if (ch === "\\" && inString)   { escaped = true;  out += ch; continue; }
+    if (ch === '"')                { inString = !inString; out += ch; continue; }
+    if (inString) {
+      if      (ch === "\n") { out += "\\n";  continue; }
+      else if (ch === "\r") { out += "\\r";  continue; }
+      else if (ch === "\t") { out += "\\t";  continue; }
+    }
+    out += ch;
+  }
+  return out;
+}
+
+// ── JSON truncation repair ─────────────────────────────────────────────────────
+// When max_tokens cuts the response mid-JSON, close any open string then close
+// open delimiters in the correct reverse-stack order (not just all ] then all }).
+function repairTruncatedJson(s: string): string {
+  const stack: ("{" | "[")[] = [];
+  let inString = false;
+  let escaped  = false;
+
+  for (const ch of s) {
+    if (escaped)                   { escaped = false; continue; }
+    if (ch === "\\" && inString)   { escaped = true;  continue; }
+    if (ch === '"')                { inString = !inString; continue; }
+    if (inString)                  continue;
+    if      (ch === "{") stack.push("{");
+    else if (ch === "[") stack.push("[");
+    else if (ch === "}" || ch === "]") stack.pop();
   }
 
   let out = s;
-  if (inString) out += '"';                        // close open string
-  out += "]".repeat(Math.max(0, brackets));         // close open arrays
-  out += "}".repeat(Math.max(0, braces));           // close open objects
+  if (inString) out += '"';
+  for (let i = stack.length - 1; i >= 0; i--) {
+    out += stack[i] === "{" ? "}" : "]";
+  }
   return out;
 }
 
@@ -220,20 +242,24 @@ ${buildOutputSchema(terrainLabels)}`;
         let parsed: unknown;
         const jsonStart = raw.indexOf("{");
         const jsonEnd   = raw.lastIndexOf("}");
-        const jsonStr   = jsonStart !== -1 && jsonEnd > jsonStart
+        const jsonSlice = jsonStart !== -1 && jsonEnd > jsonStart
           ? raw.slice(jsonStart, jsonEnd + 1)
           : raw;
+
+        // Escape any literal \n / \t inside string values (common LLM output quirk)
+        const jsonStr = escapeJsonStrings(jsonSlice);
 
         const tryParse = (s: string) => {
           try { return JSON.parse(s) as unknown; } catch { return null; }
         };
 
-        // 1. Try clean extract
-        parsed = tryParse(jsonStr) ?? tryParse(raw);
+        // 1. Try clean extract (escaped version first, then raw slice)
+        parsed = tryParse(jsonStr) ?? tryParse(jsonSlice);
 
-        // 2. Truncation repair — if still null, close any open string + braces
+        // 2. Truncation repair — stack-based so closing order is correct
         if (!parsed) {
-          const repaired = repairTruncatedJson(jsonStart !== -1 ? raw.slice(jsonStart) : raw);
+          const base    = jsonStart !== -1 ? raw.slice(jsonStart) : raw;
+          const repaired = repairTruncatedJson(escapeJsonStrings(base));
           parsed = tryParse(repaired);
         }
 
