@@ -44,8 +44,8 @@ function buildOutputSchema(terrainLabels: string[]): string {
       (label, i) => `    {
       "label": "${label}",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "2-3 sentences of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
-      "markers": ["2-3 short phrases naming specific features of this terrain in this person"]
+      "body": "2 sentences of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
+      "markers": ["2 short phrases naming specific features of this terrain in this person"]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
     .join("\n");

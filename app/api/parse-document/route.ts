@@ -50,6 +50,45 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
   return text;
 }
 
+// ── RTF extraction (inline, no dependencies) ──────────────────────────────────
+// Handles the common subset of RTF produced by Word, TextEdit, Google Docs, etc.
+function extractRtfText(buffer: Buffer): string {
+  // Use binary encoding to preserve byte values before decoding escapes
+  let s = buffer.toString("binary");
+
+  // Paragraph / section breaks → newline before stripping control words
+  s = s.replace(/\\(?:par|pard|sect|line)\b */gi, "\n");
+
+  // Unicode escapes: \uN? where N is signed decimal codepoint
+  // The trailing ? (literal "?") is the replacement char to skip
+  s = s.replace(/\\u(-?\d+)\??/g, (_, n) => {
+    const cp = parseInt(n, 10);
+    return String.fromCharCode(cp < 0 ? cp + 65536 : cp);
+  });
+
+  // Hex char escapes \'XX → cp1252 / latin-1 approximation
+  s = s.replace(/\\'([0-9a-fA-F]{2})/g, (_, h) =>
+    String.fromCharCode(parseInt(h, 16))
+  );
+
+  // Discard known non-text destination groups (font/color tables, etc.)
+  // Multiple passes handle one level of nesting per pass
+  for (let pass = 0; pass < 12; pass++) {
+    s = s.replace(/\{[^{}]*\}/g, " ");
+  }
+
+  // Remove all remaining RTF control words and structural characters
+  s = s.replace(/\\[a-zA-Z]+\*?-?\d* */g, " ");
+  s = s.replace(/[\\{}]/g, " ");
+
+  // Collapse runs of spaces (but preserve newlines from paragraph breaks)
+  s = s.replace(/[ \t]+/g, " ");
+  s = s.replace(/\n[ \t]+/g, "\n");
+  s = s.replace(/[ \t]+\n/g, "\n");
+
+  return s.trim();
+}
+
 // ── Route handler ─────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   let formData: FormData;
@@ -92,12 +131,15 @@ export async function POST(req: NextRequest) {
       const result = await mammoth.extractRawText({ buffer });
       text = result.value;
       method = "docx";
+    } else if (ext === "rtf" || mime === "application/rtf" || mime === "text/rtf") {
+      text = extractRtfText(buffer);
+      method = "rtf";
     } else if (ext === "txt" || ext === "md" || mime.startsWith("text/")) {
       text = buffer.toString("utf-8");
       method = "text";
     } else {
       return NextResponse.json(
-        { error: "Unsupported file type. Please upload a PDF, DOCX, TXT, or Markdown file." },
+        { error: "Unsupported file type. Please upload a PDF, DOCX, RTF, TXT, or Markdown file." },
         { status: 415 }
       );
     }

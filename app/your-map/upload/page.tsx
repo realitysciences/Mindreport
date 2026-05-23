@@ -17,14 +17,15 @@ interface ParseResult {
 
 // ── File type info ────────────────────────────────────────────────────────────
 
-const ACCEPTED = '.pdf,.docx,.txt,.md'
-const ACCEPTED_LABELS = ['PDF', 'DOCX', 'TXT', 'Markdown']
+const ACCEPTED = '.pdf,.docx,.rtf,.txt,.md'
+const ACCEPTED_LABELS = ['PDF', 'DOCX', 'RTF', 'TXT', 'Markdown']
 
 function fileIcon(filename: string) {
   const ext = filename.split('.').pop()?.toLowerCase() ?? ''
   const icons: Record<string, string> = {
     pdf: '⬛',
     docx: '📄',
+    rtf: '📄',
     txt: '📝',
     md: '📝',
   }
@@ -35,6 +36,7 @@ function methodLabel(method: string): string {
   const map: Record<string, string> = {
     pdf: 'PDF document',
     docx: 'Word document',
+    rtf: 'RTF document',
     text: 'Text file',
   }
   return map[method] ?? 'Document'
