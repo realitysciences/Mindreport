@@ -45,8 +45,8 @@ function buildOutputSchema(terrainLabels: string[]): string {
       "label": "${label}",
       "prominence": "primary, secondary, or supporting — how central this section is to this person's overall map",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "2 sentences of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
-      "markers": ["2 recognition signals — specific phrases naming exactly how this pattern shows up in this person's real-time behavior or inner experience"]
+      "body": "EXACTLY 2 sentences of specific analysis. Reference the actual texture of what was said. Do NOT exceed 2 sentences. Do NOT use the internal framework labels.",
+      "markers": ["EXACTLY 2 recognition signals — specific short phrases naming how this pattern shows up in this person's real-time behavior or inner experience. Keep each phrase under 15 words."]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
     .join("\n");
@@ -204,6 +204,8 @@ Write with specificity. Reference the actual texture of what was said. Be incisi
 
 Write with the precision of a psychologist and the voice of a great writer. The map should feel like being accurately seen for the first time.
 
+TOKEN BUDGET: You have limited output space. Every field must be completed. Keep each terrain "body" to EXACTLY 2 sentences. Keep each marker under 15 words. Do not expand beyond the stated limits  -  the quality is in the precision, not the length.
+
 ${buildOutputSchema(terrainLabels)}`;
 
   const encoder = new TextEncoder();
@@ -225,7 +227,7 @@ ${buildOutputSchema(terrainLabels)}`;
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 1400,
+          max_tokens: 2000,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
