@@ -3,29 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { LENSES } from '@/lib/lenses'
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-type TerrainSlice = {
-  label: string
-  prominence: 'primary' | 'secondary' | 'supporting'
-  summary: string
-  body: string
-  markers: string[]
-}
-
-type MapResult = {
-  title: string
-  quote: string
-  terrainMap: TerrainSlice[]
-  corePattern: string
-  hiddenCost: string
-  unseen?: string
-  // New tiered next moves (nextMove kept for backward compat)
-  nextMoveNow?: string
-  nextMoveStructural?: string
-  nextMove?: string
-}
+import { saveReport, loadSavedReport, buildShareUrl } from '@/lib/reportStorage'
+import type { MapResult, TerrainSlice } from '@/lib/reportTypes'
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
 
@@ -662,6 +641,11 @@ export default function ReportPage() {
   const [errorMsg, setErrorMsg]                 = useState('')
   const [lensError, setLensError]               = useState('')
   const [copied, setCopied]                     = useState(false)
+  const [linkCopied, setLinkCopied]             = useState(false)
+  const [email, setEmail]                       = useState('')
+  const [emailSent, setEmailSent]               = useState(false)
+  const [emailSending, setEmailSending]         = useState(false)
+  const [emailError, setEmailError]             = useState('')
   const hasFetched    = useRef(false)
   const transcriptRef = useRef('')
   const subjectRef    = useRef('the person')
@@ -679,6 +663,14 @@ export default function ReportPage() {
     subjectRef.current    = subject
 
     if (!transcript) {
+      // No live session — check localStorage for a saved report
+      const saved = loadSavedReport()
+      if (saved) {
+        setMaps(saved.maps)
+        setActiveLensId(saved.activeLensId)
+        setPhase('report')
+        return
+      }
       setErrorMsg('No transcript found. Please complete an interview first.')
       setPhase('error')
       return
@@ -687,7 +679,9 @@ export default function ReportPage() {
     ;(async () => {
       try {
         const data = await fetchMap(transcript, lens, subject)
-        setMaps({ [lens]: data })
+        const newMaps = { [lens]: data }
+        setMaps(newMaps)
+        saveReport(newMaps, lens)
         setPhase('gate')
       } catch (err) {
         setErrorMsg(normalizeError((err as Error).message))
@@ -706,7 +700,11 @@ export default function ReportPage() {
     setGeneratingLensId(targetId)
     try {
       const data = await fetchMap(transcriptRef.current, targetId, subjectRef.current)
-      setMaps(prev => ({ ...prev, [targetId]: data }))
+      setMaps(prev => {
+        const next = { ...prev, [targetId]: data }
+        saveReport(next, targetId)
+        return next
+      })
       setActiveLensId(targetId)
     } catch (err) {
       setLensError(normalizeError((err as Error).message))
@@ -746,6 +744,41 @@ export default function ReportPage() {
     win.document.close()
     setTimeout(() => win.print(), 300)
   }, [maps])
+
+  const handleShare = useCallback(async () => {
+    if (Object.keys(maps).length === 0) return
+    const url = buildShareUrl(maps, activeLensId)
+    await navigator.clipboard.writeText(url)
+    setLinkCopied(true)
+    setTimeout(() => setLinkCopied(false), 2500)
+  }, [maps, activeLensId])
+
+  const handleEmailSend = useCallback(async () => {
+    if (!email || emailSending || Object.keys(maps).length === 0) return
+    setEmailSending(true)
+    setEmailError('')
+    try {
+      const shareUrl  = buildShareUrl(maps, activeLensId)
+      const activeMap = maps[activeLensId]
+      const res = await fetch('/api/reports/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          shareUrl,
+          title: activeMap?.title ?? 'Your Mind Report',
+          lensLabel: LENSES.find(l => l.id === activeLensId)?.label ?? activeLensId,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to send')
+      setEmailSent(true)
+    } catch (err) {
+      setEmailError((err as Error).message)
+    } finally {
+      setEmailSending(false)
+    }
+  }, [email, emailSending, maps, activeLensId])
 
   // ── Loading ────────────────────────────────────────────────────────────────
 
@@ -980,6 +1013,84 @@ export default function ReportPage() {
               <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="self-start text-xs transition-opacity hover:opacity-70" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.08em' }}>
                 Commission a full map at relohu.com →
               </a>
+            </div>
+
+            {/* Share link */}
+            <div className="px-5 py-5 rounded-sm" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+              <p className="text-xs uppercase tracking-widest mb-1" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
+                Share your map
+              </p>
+              <p className="text-xs mb-4" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)', lineHeight: 1.5 }}>
+                Creates a private link. Anyone with the link can read your map — your transcript is never stored on our servers.
+              </p>
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-all hover:opacity-85"
+                style={{
+                  background: linkCopied ? `${accentColor}12` : 'var(--accent-dark)',
+                  color: linkCopied ? accentColor : '#F0ECE4',
+                  border: linkCopied ? `1px solid ${accentColor}35` : 'none',
+                  fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer',
+                }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  {linkCopied
+                    ? <polyline points="20 6 9 17 4 12"/>
+                    : <><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>
+                  }
+                </svg>
+                {linkCopied ? 'LINK COPIED' : 'COPY SHARE LINK'}
+              </button>
+            </div>
+
+            {/* Email delivery */}
+            <div className="px-5 py-5 rounded-sm" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+              <p className="text-xs uppercase tracking-widest mb-1" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
+                Send to email
+              </p>
+              <p className="text-xs mb-4" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)', lineHeight: 1.5 }}>
+                Get a link to your report in your inbox.
+              </p>
+              {emailSent ? (
+                <p className="text-sm flex items-center gap-2" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: accentColor }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Sent. Check your inbox.
+                </p>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleEmailSend()}
+                    className="flex-1 min-w-0 px-4 py-2.5 rounded-sm text-sm"
+                    style={{
+                      background: 'var(--bg)', border: '1px solid var(--border)',
+                      color: 'var(--text-body)', fontFamily: 'var(--font-serif)',
+                      outline: 'none',
+                    }}
+                  />
+                  <button
+                    onClick={handleEmailSend}
+                    disabled={emailSending || !email}
+                    className="flex-shrink-0 px-5 py-2.5 rounded-sm text-xs transition-opacity hover:opacity-85"
+                    style={{
+                      background: 'var(--accent-dark)', color: '#F0ECE4',
+                      fontFamily: 'var(--font-mono)', letterSpacing: '0.08em',
+                      cursor: emailSending || !email ? 'default' : 'pointer',
+                      opacity: emailSending || !email ? 0.5 : 1, border: 'none',
+                    }}
+                  >
+                    {emailSending ? '...' : 'SEND'}
+                  </button>
+                </div>
+              )}
+              {emailError && (
+                <p className="mt-2 text-xs" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#D4537E' }}>
+                  {emailError}
+                </p>
+              )}
             </div>
 
             {/* Export */}
