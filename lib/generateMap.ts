@@ -41,12 +41,13 @@ export async function fetchMap(
     throw new Error(buffer.slice(errorIdx + ERROR_MARKER.length) || 'Generation failed.')
   }
 
-  // No frame marker — log raw bytes to console for debugging, never to the UI.
+  // No frame marker — generation was cut off (likely a timeout).
+  // Log bytes/preview for debugging; surface a helpful message to the user.
   console.error('[generateMap] No result marker in response.', {
     bytes:   buffer.length,
     preview: buffer.slice(0, 120),
   })
-  throw new Error('Map generation failed. Please try again.')
+  throw new Error('The map took too long to generate. Please try again — it usually works on the second attempt.')
 }
 
 export function normalizeError(raw: string): string {

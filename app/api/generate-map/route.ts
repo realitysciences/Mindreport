@@ -261,7 +261,7 @@ ${buildOutputSchema(terrainLabels)}`;
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 3500,
+          max_tokens: 2500,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
