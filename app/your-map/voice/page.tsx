@@ -115,6 +115,11 @@ function VoiceInterviewInner() {
       await navigator.mediaDevices.getUserMedia({ audio: true })
       const trimmedName = name.trim()
       const trimmedAge  = age.trim()
+      // DO NOT add an `overrides` key here, even with a subset of fields.
+      // The SDK's constructOverrides() always emits { tts: {}, conversation: {} }
+      // when any overrides key is set. The ElevenLabs backend reads empty objects
+      // as "reset voice to null" and disconnects the session immediately with 0
+      // responses. dynamicVariables is the only safe customisation path.
       startSession({
         agentId: AGENT_ID,
         connectionType: 'webrtc',

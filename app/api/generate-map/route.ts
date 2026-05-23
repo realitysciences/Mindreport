@@ -5,6 +5,12 @@ import { sanitizeInput, sanitizeLlmOutput, scrubProprietaryTerms } from "@/lib/s
 export const maxDuration = 60;
 
 // ── ReLoHu internal vocabulary (never exposed to client) ──────────────────────
+// These are proprietary pattern names used as the analytical engine behind the
+// lens instructions. The model uses them to recognise what it's looking at, but
+// the instruction block explicitly forbids them from appearing in any output field.
+// They translate into plain, person-specific language in the final report.
+// Never remove the suppression instruction — if these names leak into output,
+// the report reads as jargon and exposes the framework.
 const RELOHU_VOCAB = `
 CRITICAL  -  INTERNAL FRAMEWORK, NEVER APPEAR IN OUTPUT: The pattern names below are proprietary and must NEVER appear verbatim in any output field. Translate every finding into plain, specific language derived from this person's actual words. If any label below appears word-for-word in your response, you have failed this instruction.
 
@@ -341,6 +347,11 @@ ${buildOutputSchema(terrainLabels)}`;
     async start(controller) {
       try {
         const anthropic = new Anthropic();
+        // max_tokens: 2200 is intentional — the Vercel Hobby plan caps route
+        // execution at 60 seconds. Higher token counts push generation past that
+        // limit and return a 504. Upgrading to Vercel Pro allows maxDuration: 300
+        // and max_tokens: 4000+, which would noticeably improve body length.
+        // If you raise this, also raise MAX_TRANSCRIPT proportionally.
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
           max_tokens: 2200,
