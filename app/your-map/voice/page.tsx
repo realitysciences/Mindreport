@@ -112,6 +112,10 @@ function VoiceInterviewInner() {
       await startSession({
         agentId: AGENT_ID,
         connectionType: 'webrtc',
+        dynamicVariables: {
+          name: name.trim(),
+          age:  age.trim() || 'unknown',
+        },
       })
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Microphone access was denied.')
