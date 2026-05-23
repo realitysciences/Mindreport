@@ -44,6 +44,10 @@ function VoiceInterviewInner() {
       setPhase('active')
     } else if (status === 'disconnected' && phase === 'active') {
       setPhase('ended')
+    } else if (status === 'error' && (phase === 'requesting' || phase === 'active')) {
+      // SDK reported an error — surface it through the error phase.
+      // onError callback also fires and sets errorMsg, so we just update phase.
+      setPhase('error')
     }
   }, [status, phase])
 
@@ -109,24 +113,28 @@ function VoiceInterviewInner() {
     setErrorMsg('')
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true })
-      await startSession({
+      const trimmedName = name.trim()
+      const trimmedAge  = age.trim()
+      startSession({
         agentId: AGENT_ID,
         connectionType: 'webrtc',
         dynamicVariables: {
-          name: name.trim(),
-          age:  age.trim() || 'unknown',
+          name: trimmedName,
+          age:  trimmedAge || 'unknown',
         },
-        overrides: {
-          agent: {
-            firstMessage: `Hey ${name.trim()}, good to have you here. What would you say is the central theme of your life right now? Like, what's on your mind when you wake up — a challenge, a goal, a question you keep returning to?`,
+        ...(trimmedName && {
+          overrides: {
+            agent: {
+              firstMessage: `Hey ${trimmedName}, good to have you here. What would you say is the central theme of your life right now? Like, what's on your mind when you wake up — a challenge, a goal, a question you keep returning to?`,
+            },
           },
-        },
+        }),
       })
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Microphone access was denied.')
       setPhase('error')
     }
-  }, [startSession])
+  }, [startSession, name, age])
 
   const endInterview = useCallback(async () => {
     await endSession()
