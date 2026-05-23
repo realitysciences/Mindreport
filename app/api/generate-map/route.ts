@@ -51,18 +51,21 @@ function buildOutputSchema(terrainLabels: string[]): string {
     )
     .join("\n");
 
+  // Meta fields come FIRST so they are always written before the (longer) terrain
+  // sections consume the token budget. terrainMap is last — if tokens run short,
+  // it is better to have a partial terrain than empty synthesis fields.
   return `Return ONLY a valid JSON object  -  no explanation, no markdown, no code fences:
 {
   "title": "4-7 word title capturing the essential structure of this person's map  -  evocative, not clinical",
   "quote": "A crystallizing fragment  -  max 12 words  -  that contains the essential truth of the map. Written as a fragment or observation, NOT copied from the transcript.",
-  "terrainMap": [
-${terrainSchema}
-  ],
   "corePattern": "2-3 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall. Name it precisely, show how it connects the sections, and say what it produces.",
   "hiddenCost": "2-3 sentences naming what this architecture costs in concrete, specific terms. Not abstract. Name the actual losses  -  in relationships, capacity, aliveness, time. What is this person not getting to have because of this structure?",
   "unseen": "2-3 sentences naming something structural this person hasn't seen. Prioritize observations about HOW they speak over WHAT they say — repetitions, word choices, sentence structures, what they always approach the same way, what they never quite say directly. A tell in the linguistic architecture is worth more than a content observation. This should require holding the entire transcript at once to see. If it could be generated from a single exchange, go deeper.",
   "nextMoveNow": "One specific, concrete action this week. Name it with the same precision as the recognition signals — reference actual language, a specific situation, or a named pattern from the transcript. If it could be handed to someone else without changing a word, rewrite it. 1-2 sentences.",
-  "nextMoveStructural": "One structural shift to build toward over the next month. Name the specific architecture it addresses — not just what to do, but what it changes about the underlying structure. Grounded in what was actually said. 1-2 sentences."
+  "nextMoveStructural": "One structural shift to build toward over the next month. Name the specific architecture it addresses — not just what to do, but what it changes about the underlying structure. Grounded in what was actually said. 1-2 sentences.",
+  "terrainMap": [
+${terrainSchema}
+  ]
 }`;
 }
 
