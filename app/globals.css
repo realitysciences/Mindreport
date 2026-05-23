@@ -70,6 +70,7 @@
 html {
   font-size: 18px;
   background: #F4EDE0; /* prevents FOUC on light theme before CSS variables resolve */
+  overflow-x: hidden;  /* prevent horizontal drift on Mac trackpad scroll */
 }
 
 [data-theme="dark"] html,
@@ -82,6 +83,8 @@ body {
   color: var(--text-body);
   font-family: var(--font-sans);
   transition: background 0.2s ease, color 0.2s ease;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* ── Utility animations ───────────────────────────────────────────────────── */
