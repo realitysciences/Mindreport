@@ -111,6 +111,39 @@ function sanitize(s: string, max: number): string {
   return sanitizeInput(s, max);
 }
 
+// ── Voice transcript compaction ───────────────────────────────────────────────
+// Voice interviews include both sides of the conversation. The interviewer's
+// questions can be long and elaborate — good for the conversation, but wasteful
+// as model input since we're only mapping the *subject's* words. This strips
+// "Interviewer: ..." turns, keeping only the subject's responses while
+// preserving a brief [Q] placeholder so Claude has context about what they
+// were responding to (without the full text of each question).
+//
+// A 6,000-char voice transcript typically compacts to ~2,500 chars — cutting
+// generation time roughly in half and making 60s Vercel limits reliable.
+//
+// Only applied when the transcript matches the voice format (contains "Interviewer:").
+function compactVoiceTranscript(transcript: string): string {
+  if (!transcript.includes('Interviewer:')) return transcript;
+
+  const lines = transcript.split(/\n\n+/);
+  const out: string[] = [];
+
+  for (const block of lines) {
+    const trimmed = block.trim();
+    if (!trimmed) continue;
+    if (trimmed.startsWith('Interviewer:')) {
+      // Replace full question text with a short [Q] marker so Claude knows
+      // a question was asked here without having to process the whole thing.
+      out.push('[Q]');
+    } else {
+      out.push(trimmed);
+    }
+  }
+
+  return out.join('\n\n');
+}
+
 // ── Escape literal newlines inside JSON string values ─────────────────────────
 // LLMs sometimes output raw \n / \t inside string values instead of \\n / \\t.
 // JSON.parse rejects these. Walk the string and escape them only while inside a
@@ -177,9 +210,10 @@ export async function POST(req: NextRequest) {
   }
 
   const b = body as Record<string, unknown>;
-  const transcript = sanitize(typeof b.transcript === "string" ? b.transcript : "", MAX_TRANSCRIPT);
-  const lens       = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
-  const subject    = sanitize(typeof b.subject === "string" ? b.subject : "the person", 200);
+  const rawTranscript = sanitize(typeof b.transcript === "string" ? b.transcript : "", MAX_TRANSCRIPT);
+  const transcript    = compactVoiceTranscript(rawTranscript);
+  const lens          = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
+  const subject       = sanitize(typeof b.subject === "string" ? b.subject : "the person", 200);
 
   if (transcript.length < 50) {
     return errorResponse("Transcript too short to map.");
