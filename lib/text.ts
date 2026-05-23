@@ -11,19 +11,21 @@ export function detectSpeakers(text: string): string[] {
     /^\d/.test(s) || /\d{1,2}[/:]\d{1,2}/.test(s) || /^\d{2}:\d{2}/.test(s)
 
   for (const line of lines) {
-    // WhatsApp Android: "12/3/24, 10:00 - Name: message"
+    // WhatsApp Android export: "12/3/24, 10:00 - Name: message"
     const whatsappAndroid = line.match(/^\d[\d/., :-]+ - (.+?):\s/)
     if (whatsappAndroid) { bump(whatsappAndroid[1].trim()); continue }
 
-    // WhatsApp iOS: "[3/12/24, 10:00:00] Name: message"
+    // WhatsApp iOS export: "[3/12/24, 10:00:00] Name: message"
     const whatsappIOS = line.match(/^\[[^\]]+\]\s+(.+?):\s/)
     if (whatsappIOS) { bump(whatsappIOS[1].trim()); continue }
 
-    // ISO date bracket: "[2024-03-12 10:00:00] Name: message"
+    // Telegram / Signal / generic ISO timestamp: "[2024-03-12 10:00:00] Name: message"
     const isoDateBracket = line.match(/^\[\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}[^\]]*\]\s+(.+?):\s/)
     if (isoDateBracket) { bump(isoDateBracket[1].trim()); continue }
 
-    // Simple "Name: message" pattern (1–6 words, capitalised first letter)
+    // Plain "Name: message" — covers iMessage exports, AI-extracted transcripts,
+    // and manual transcript formatting. Guards against sentence openers
+    // ("The problem: ...") via the sentence-starter blocklist.
     const simple = line.match(/^([A-Z][^:\n]{0,35}):\s/)
     if (simple && !isDateLike(simple[1])) {
       const name      = simple[1].trim()
@@ -37,11 +39,11 @@ export function detectSpeakers(text: string): string[] {
       }
     }
 
-    // Phone / email as speaker label
+    // Phone number or email as speaker label (iMessage / SMS exports with no contact name)
     const phoneOrEmail = line.match(/^(\+?[\d(][\d\s().+-]{4,20}|[^\s@:]+@[^\s@:]+):\s/)
     if (phoneOrEmail) { bump(phoneOrEmail[1].trim()); continue }
 
-    // Bracketed speaker: "[Name] message"
+    // Bracketed speaker: "[Name] message" — some Skype / IRC log formats
     const bracket = line.match(/^\[([^\]]{1,30})\]/)
     if (bracket && !isDateLike(bracket[1])) bump(bracket[1].trim())
   }

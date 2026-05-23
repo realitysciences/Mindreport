@@ -4,6 +4,39 @@
 
 Mind Report is a psychological mapping tool. Users bring personal material (voice interview or uploaded document/conversation) and receive a structured psychological report viewed through one or more analytical lenses.
 
+## Design system
+
+**Do not break these conventions.** The visual language is deliberate and consistent across every page.
+
+**Fonts — always use CSS variables, never hardcode a font family:**
+- `var(--font-serif)` — Cormorant Garamond. Body copy, headings, paragraph text, report content. This is the primary reading font.
+- `var(--font-mono)` — System monospace. Labels, metadata, button text, step indicators, anything that reads as a caption or UI chrome.
+- `var(--font-sans)` — Inter. Used only as the base `font-family` on `body`. Do not use it directly in components.
+
+**Colors — always use CSS variables, never hardcode hex:**
+The full token set is in `app/globals.css`. The most-used:
+- `var(--accent)` — gold `#C09230`. Accent marks (✦), active states, highlights. Same in light and dark.
+- `var(--accent-dark)` — deep navy `#1A2B3C`. Primary CTA button background. Same in light and dark.
+- `var(--text-hi)` → `var(--text-faint)` — a scale from highest-contrast heading text down to near-invisible metadata.
+- `var(--surface)` / `var(--surface-deep)` / `var(--surface-raised)` — background layers for cards and panels.
+- `var(--border)` / `var(--border-sub)` / `var(--border-ghost)` — border weight scale.
+
+Both light and dark mode are defined in `globals.css`. The variables automatically flip — never write `dark:` Tailwind classes for color.
+
+**Styling approach — inline styles over Tailwind for anything component-specific:**
+Tailwind utility classes are used for layout (`flex`, `gap-*`, `px-*`, `py-*`, `mb-*`, `grid`, etc.) and a few generic states (`transition-opacity`, `hover:opacity-85`). Component-specific colors, fonts, borders, and backgrounds use inline `style={}` with CSS variables. This keeps dark mode working automatically and avoids Tailwind purging variables.
+
+**Buttons:**
+- Primary CTA: `background: 'var(--accent-dark)'`, `color: '#F0ECE4'`, `fontFamily: 'var(--font-mono)'`, `letterSpacing: '0.1em'`
+- Secondary / ghost: `border: '1px solid var(--border)'`, `background: 'transparent'`, `color: 'var(--text-faint)'`
+- No border-radius beyond `borderRadius: '4px'` (cards) or `'999px'` (pills). Never `rounded-lg` or larger.
+
+**Spacing and layout:**
+- Page wrapper: `px-6 py-14`, content `maxWidth: '640px'` (narrow) or `'720px'` (report) or `'780px'` (lens grid)
+- Section gap rhythm: `mb-8` between major sections, `mb-4`/`mb-5` within sections
+
+---
+
 ## Two input paths
 
 **Voice interview** (`/your-map/voice`)
@@ -71,7 +104,7 @@ For images and PDFs, speaker detection comes from Claude vision (the model extra
 
 ## Report generation flow
 
-1. `/your-map/lens` — user selects a lens, sessionStorage is written
+1. `/your-map/lens` — the junction between both input paths. Reads `mindreport_transcript` from sessionStorage on mount (written by voice or upload). Fires a background suggest-lens call immediately so AI badge recommendations are ready before the user decides. On continue, writes `mindreport_lens` and navigates to report. Does not receive any data via URL or props — sessionStorage is the only handoff.
 2. `/your-map/report` — on mount, reads sessionStorage, calls `/api/generate-map`, streams SSE response
 3. The report page accumulates SSE ticks, parses the final JSON event, and renders the map
 4. Additional lenses can be run from the report page without leaving it

@@ -171,6 +171,19 @@ function LensCard({
 }
 
 // ── Main page ─────────────────────────────────────────────────────────────────
+// This is the junction between both input paths (voice and upload) and report
+// generation. It does not receive the transcript via props or URL params —
+// it reads it from sessionStorage on mount. Both /your-map/voice and
+// /your-map/upload write to sessionStorage before navigating here.
+//
+// On mount it also fires a background request to /api/suggest-lens (non-blocking)
+// which returns 1-2 AI-recommended lenses that appear as "✦ Suggested" badges.
+// The top suggestion auto-selects only if the user hasn't already changed from
+// the default ('pattern'). This fires early so the result usually arrives before
+// the user reads all the lens descriptions.
+//
+// handleContinue writes the selected lens id to sessionStorage ('mindreport_lens')
+// then navigates to /your-map/report, which reads it on mount and calls the API.
 
 export default function LensPage() {
   const router = useRouter()
