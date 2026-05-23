@@ -74,6 +74,7 @@ function VoiceInterviewInner() {
         .join('\n\n')
       sessionStorage.setItem('mindreport_transcript', raw)
       sessionStorage.setItem('mindreport_input_method', 'voice')
+      sessionStorage.setItem('mindreport_subject', 'you')
     }
   }, [phase, transcript])
 

@@ -25,17 +25,16 @@ type MapResult = {
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
 
-// Result markers
 const RESULT_MARKER = "\nMINDREPORT_RESULT:"
 const ERROR_MARKER  = "\nMINDREPORT_ERROR:"
 
-// ── Shared fetch helper (used for initial + subsequent lens generations) ───────
+// ── Shared fetch helper ───────────────────────────────────────────────────────
 
-async function fetchMap(transcript: string, lens: string): Promise<MapResult> {
+async function fetchMap(transcript: string, lens: string, subject: string): Promise<MapResult> {
   const res = await fetch('/api/generate-map', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ transcript, lens }),
+    body: JSON.stringify({ transcript, lens, subject }),
   })
 
   if (!res.body) throw new Error(`Server error (${res.status}). Please try again.`)
@@ -108,9 +107,9 @@ function LensIcon({ id, color, size = 18 }: { id: string; color: string; size?: 
   }
 }
 
-// ── Lens pills ─────────────────────────────────────────────────────────────────
+// ── Lens tabs — only shows completed + currently generating, hidden when <2 ───
 
-function LensPills({
+function LensTabs({
   activeLensId,
   generatingLensId,
   maps,
@@ -121,77 +120,54 @@ function LensPills({
   maps: Record<string, MapResult>
   onSelect: (id: string) => void
 }) {
+  const visible = LENSES.filter(l => maps[l.id] || l.id === generatingLensId)
+  if (visible.length < 2) return null
+
   return (
     <div
       style={{
         display: 'flex',
-        gap: '0.45rem',
+        gap: '0.4rem',
         overflowX: 'auto',
         paddingBottom: '0.25rem',
         marginBottom: '2.5rem',
+        scrollbarWidth: 'none',
       }}
     >
-      {LENSES.map((lens) => {
+      {visible.map(lens => {
         const isActive     = lens.id === activeLensId
         const isGenerating = lens.id === generatingLensId
-        const isDone       = lens.id in maps
-
         const c = lens.badgeColor
-
-        let bg: string, border: string, textColor: string, cursor: string
-        if (isActive) {
-          bg        = lens.iconBg
-          border    = `1.5px solid ${c}55`
-          textColor = c
-          cursor    = 'default'
-        } else if (isGenerating) {
-          bg        = 'transparent'
-          border    = `1px solid ${c}40`
-          textColor = c
-          cursor    = 'default'
-        } else if (isDone) {
-          bg        = `${c}0a`
-          border    = `1px solid ${c}45`
-          textColor = c
-          cursor    = 'pointer'
-        } else {
-          bg        = 'transparent'
-          border    = '1px solid var(--border)'
-          textColor = 'var(--text-faint)'
-          cursor    = 'pointer'
-        }
 
         return (
           <button
             key={lens.id}
-            onClick={() => { if (!isActive && !isGenerating) onSelect(lens.id) }}
+            onClick={() => { if (!isGenerating && maps[lens.id]) onSelect(lens.id) }}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '0.35rem',
               padding: '0.3rem 0.75rem',
               borderRadius: '999px',
-              background: bg,
-              border,
-              color: textColor,
+              background: isActive ? lens.iconBg : 'transparent',
+              border: isActive ? `1.5px solid ${c}55` : `1px solid ${c}40`,
+              color: c,
               fontFamily: 'var(--font-mono)',
               fontSize: '0.68rem',
               letterSpacing: '0.1em',
-              cursor,
+              cursor: isGenerating ? 'default' : 'pointer',
               whiteSpace: 'nowrap',
               flexShrink: 0,
-              opacity: isGenerating ? 0.7 : 1,
-              transition: 'opacity 0.15s ease, background 0.15s ease, border-color 0.15s ease',
+              opacity: isGenerating ? 0.6 : 1,
+              transition: 'opacity 0.15s, background 0.15s',
             }}
           >
-            <LensIcon id={lens.id} color={textColor} size={11} />
+            <LensIcon id={lens.id} color={c} size={11} />
             {lens.label.toUpperCase()}
-            {isGenerating && (
-              <span style={{ marginLeft: '0.15rem', animation: 'pulse 1.4s ease-in-out infinite' }}>···</span>
-            )}
-            {isDone && !isActive && !isGenerating && (
-              <span style={{ marginLeft: '0.1rem', opacity: 0.45, fontSize: '0.6rem' }}>✓</span>
-            )}
+            {isGenerating
+              ? <span style={{ marginLeft: '0.15rem', animation: 'pulse 1.4s ease-in-out infinite' }}>···</span>
+              : !isActive && <span style={{ marginLeft: '0.1rem', opacity: 0.5, fontSize: '0.6rem' }}>✓</span>
+            }
           </button>
         )
       })}
@@ -293,6 +269,17 @@ function buildExportText(result: MapResult, lensLabel: string): string {
   ].join('\n')
 }
 
+// Combines ALL completed lens reports into a single export
+function buildAllExportText(maps: Record<string, MapResult>): string {
+  const heavy = '═'.repeat(56)
+  const completed = LENSES.filter(l => maps[l.id])
+  if (completed.length === 0) return ''
+  if (completed.length === 1) return buildExportText(maps[completed[0].id], completed[0].label)
+  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const header = `MIND REPORT  ·  ${completed.length} LENSES  ·  ${date}\n${heavy}\n`
+  return header + '\n\n' + completed.map(l => buildExportText(maps[l.id], l.label)).join(`\n\n${heavy}\n\n`)
+}
+
 function downloadText(text: string, filename: string) {
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
   const url  = URL.createObjectURL(blob)
@@ -303,29 +290,137 @@ function downloadText(text: string, filename: string) {
   URL.revokeObjectURL(url)
 }
 
+// ── Run another lens ──────────────────────────────────────────────────────────
+
+function RunAnotherLens({
+  maps,
+  generatingLensId,
+  lensError,
+  onRun,
+}: {
+  maps: Record<string, MapResult>
+  generatingLensId: string | null
+  lensError: string
+  onRun: (id: string) => void
+}) {
+  const remaining     = LENSES.filter(l => !maps[l.id] && l.id !== generatingLensId)
+  const generatingLens = generatingLensId ? LENSES.find(l => l.id === generatingLensId) : null
+
+  if (remaining.length === 0 && !generatingLensId) return null
+
+  return (
+    <div className="pt-10" style={{ borderTop: '1px solid var(--border)' }}>
+      <p
+        className="text-xs uppercase tracking-widest mb-6"
+        style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}
+      >
+        Run another lens
+      </p>
+
+      {/* Active generation indicator */}
+      {generatingLens && (
+        <div
+          className="flex items-center gap-4 px-5 py-4 rounded-sm mb-5"
+          style={{ background: generatingLens.iconBg, border: `1px solid ${generatingLens.badgeColor}30` }}
+        >
+          <LensIcon id={generatingLens.id} color={generatingLens.badgeColor} size={15} />
+          <span
+            className="text-xs flex-1"
+            style={{ fontFamily: 'var(--font-mono)', color: generatingLens.badgeColor, letterSpacing: '0.08em' }}
+          >
+            Drawing {generatingLens.label} map
+          </span>
+          <LoadingDots color={generatingLens.badgeColor} />
+        </div>
+      )}
+
+      {/* Remaining lenses grid */}
+      {remaining.length > 0 && (
+        <div className="grid grid-cols-2 gap-3">
+          {remaining.map(lens => (
+            <button
+              key={lens.id}
+              onClick={() => !generatingLensId && onRun(lens.id)}
+              className="text-left"
+              disabled={!!generatingLensId}
+              style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: '4px',
+                padding: '1rem',
+                cursor: generatingLensId ? 'default' : 'pointer',
+                opacity: generatingLensId ? 0.45 : 1,
+                transition: 'opacity 0.15s, border-color 0.15s',
+              }}
+              onMouseEnter={e => { if (!generatingLensId) (e.currentTarget as HTMLElement).style.borderColor = `${lens.badgeColor}60` }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)' }}
+            >
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  background: lens.iconBg,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '0.65rem',
+                }}
+              >
+                <LensIcon id={lens.id} color={lens.iconColor} size={14} />
+              </div>
+              <div
+                className="text-sm font-medium mb-1"
+                style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)' }}
+              >
+                {lens.label}
+              </div>
+              <div
+                className="text-xs leading-relaxed"
+                style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-mid)', lineHeight: 1.5 }}
+              >
+                {lens.description}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {lensError && (
+        <p className="mt-4 text-xs" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#D4537E' }}>
+          {lensError} - tap a lens above to try again.
+        </p>
+      )}
+    </div>
+  )
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function ReportPage() {
-  const [phase, setPhase]                     = useState<Phase>('loading')
-  const [maps, setMaps]                       = useState<Record<string, MapResult>>({})
-  const [activeLensId, setActiveLensId]       = useState('pattern')
+  const [phase, setPhase]                       = useState<Phase>('loading')
+  const [maps, setMaps]                         = useState<Record<string, MapResult>>({})
+  const [activeLensId, setActiveLensId]         = useState('pattern')
   const [generatingLensId, setGeneratingLensId] = useState<string | null>(null)
-  const [errorMsg, setErrorMsg]               = useState('')
-  const [lensError, setLensError]             = useState('')
-  const [copied, setCopied]                   = useState(false)
+  const [errorMsg, setErrorMsg]                 = useState('')
+  const [lensError, setLensError]               = useState('')
+  const [copied, setCopied]                     = useState(false)
   const hasFetched    = useRef(false)
   const transcriptRef = useRef('')
+  const subjectRef    = useRef('the person')
 
-  // Initial load: read transcript + first lens from sessionStorage, kick off first generation
+  // Initial load: read transcript + first lens + subject from sessionStorage
   useEffect(() => {
     if (hasFetched.current) return
     hasFetched.current = true
 
     const transcript = sessionStorage.getItem('mindreport_transcript') ?? ''
     const lens       = sessionStorage.getItem('mindreport_lens') ?? 'pattern'
+    const subject    = sessionStorage.getItem('mindreport_subject') ?? 'the person'
 
     setActiveLensId(lens)
     transcriptRef.current = transcript
+    subjectRef.current    = subject
 
     if (!transcript) {
       setErrorMsg('No transcript found. Please complete an interview first.')
@@ -335,7 +430,7 @@ export default function ReportPage() {
 
     ;(async () => {
       try {
-        const data = await fetchMap(transcript, lens)
+        const data = await fetchMap(transcript, lens, subject)
         setMaps({ [lens]: data })
         setPhase('gate')
       } catch (err) {
@@ -345,24 +440,18 @@ export default function ReportPage() {
     })()
   }, [])
 
-  // Switch to a different lens — instant if already cached, else generate
-  const handleSelectLens = useCallback(async (targetId: string) => {
-    if (targetId === activeLensId) return
+  // Switch to an already-completed lens (from tab click)
+  const handleSelectLens = useCallback((targetId: string) => {
+    if (maps[targetId]) setActiveLensId(targetId)
+  }, [maps])
 
-    // Instant switch if cached — always allowed, even during another generation
-    if (maps[targetId]) {
-      setActiveLensId(targetId)
-      return
-    }
-
-    // Block starting a new generation if one is already in progress
-    if (generatingLensId !== null) return
-
+  // Generate a new lens (from "Run another lens" cards at the bottom)
+  const handleRunLens = useCallback(async (targetId: string) => {
+    if (maps[targetId] || generatingLensId !== null) return
     setLensError('')
     setGeneratingLensId(targetId)
-
     try {
-      const data = await fetchMap(transcriptRef.current, targetId)
+      const data = await fetchMap(transcriptRef.current, targetId, subjectRef.current)
       setMaps(prev => ({ ...prev, [targetId]: data }))
       setActiveLensId(targetId)
     } catch (err) {
@@ -370,29 +459,48 @@ export default function ReportPage() {
     } finally {
       setGeneratingLensId(null)
     }
-  }, [activeLensId, maps, generatingLensId])
+  }, [maps, generatingLensId])
 
   const activeLens  = LENSES.find((l) => l.id === activeLensId) ?? LENSES[0]
   const accentColor = activeLens.badgeColor
   const activeMap   = maps[activeLensId] ?? null
 
   const handleExportText = useCallback(() => {
-    if (!activeMap) return
-    const text = buildExportText(activeMap, activeLens.label)
-    const slug   = activeMap.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 36)
-    const lens   = activeLensId.toLowerCase()
-    const d      = new Date()
-    const stamp  = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
-    downloadText(text, `mind-report-${slug}-${lens}-${stamp}.txt`)
-  }, [activeMap, activeLens.label, activeLensId])
+    const text = buildAllExportText(maps)
+    if (!text) return
+    const firstMap  = maps[Object.keys(maps)[0]]
+    const slug      = firstMap?.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 36) ?? 'report'
+    const d         = new Date()
+    const stamp     = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
+    const lensTag   = Object.keys(maps).length > 1 ? 'all-lenses' : activeLensId
+    downloadText(text, `mind-report-${slug}-${lensTag}-${stamp}.txt`)
+  }, [maps, activeLensId])
 
-  const handleCopyLink = useCallback(async () => {
-    if (!activeMap) return
-    const text = buildExportText(activeMap, activeLens.label)
+  const handleCopyText = useCallback(async () => {
+    const text = buildAllExportText(maps)
+    if (!text) return
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }, [activeMap, activeLens.label])
+  }, [maps])
+
+  const handlePrint = useCallback(() => {
+    const text = buildAllExportText(maps)
+    if (!text) return
+    const win = window.open('', '_blank')
+    if (!win) { window.print(); return }
+    const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    win.document.write(
+      `<!DOCTYPE html><html><head><title>Mind Report</title>` +
+      `<style>body{font-family:Georgia,'Times New Roman',serif;max-width:680px;margin:2.5rem auto;` +
+      `padding:0 1.5rem;color:#1a1a1a;line-height:1.8;font-size:15px}` +
+      `pre{white-space:pre-wrap;font-family:inherit;margin:0}` +
+      `@media print{body{margin:1rem;padding:0}}</style></head>` +
+      `<body><pre>${escaped}</pre></body></html>`
+    )
+    win.document.close()
+    setTimeout(() => { win.print() }, 150)
+  }, [maps])
 
   // ── Loading ────────────────────────────────────────────────────────────────
 
@@ -461,20 +569,13 @@ export default function ReportPage() {
       <div className="px-6 py-14">
         <div className="mx-auto" style={{ maxWidth: '680px' }}>
 
-          {/* Lens pills */}
-          <LensPills
+          {/* Lens tabs - only visible when 2+ lenses are completed/generating */}
+          <LensTabs
             activeLensId={activeLensId}
             generatingLensId={generatingLensId}
             maps={maps}
             onSelect={handleSelectLens}
           />
-
-          {/* Inline lens-generation error */}
-          {lensError && (
-            <p className="mb-6 text-xs text-center" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#D4537E' }}>
-              {lensError} - tap the lens to try again.
-            </p>
-          )}
 
           {/* Lens badge */}
           <div className="flex items-center gap-2 mb-10">
@@ -539,6 +640,16 @@ export default function ReportPage() {
             </div>
           )}
 
+          {/* Run another lens */}
+          <div className="mt-14">
+            <RunAnotherLens
+              maps={maps}
+              generatingLensId={generatingLensId}
+              lensError={lensError}
+              onRun={handleRunLens}
+            />
+          </div>
+
           {/* Footer */}
           <div className="mt-14 pt-10 flex flex-col gap-8" style={{ borderTop: '1px solid var(--border)' }}>
 
@@ -547,7 +658,7 @@ export default function ReportPage() {
               <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.2em' }}>Go deeper</span>
               <p className="font-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: '1.2rem' }}>This is a first reading.</p>
               <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '0.95rem', lineHeight: 1.65 }}>
-                A full cartographic commission from ReLoHu™ goes significantly deeper. A complete map of your psychological terrain, rendered as a document built to last.
+                A full cartographic commission from ReLoHu&trade; goes significantly deeper. A complete map of your psychological terrain, rendered as a document built to last.
               </p>
               <a href="https://www.relohu.com" target="_blank" rel="noopener noreferrer" className="self-start text-xs transition-opacity hover:opacity-70" style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)', letterSpacing: '0.08em' }}>
                 Commission a full map at relohu.com →
@@ -557,7 +668,7 @@ export default function ReportPage() {
             {/* Export / Actions */}
             <div>
               <p className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
-                Export your map
+                Export {Object.keys(maps).length > 1 ? `all ${Object.keys(maps).length} lens reports` : 'your map'}
               </p>
               <div className="flex flex-wrap items-center gap-3">
 
@@ -575,22 +686,22 @@ export default function ReportPage() {
 
                 {/* Copy to clipboard */}
                 <button
-                  onClick={handleCopyLink}
+                  onClick={handleCopyText}
                   className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75"
                   style={{ border: '1px solid var(--border)', background: copied ? `${accentColor}10` : 'var(--surface)', color: copied ? accentColor : 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.2s ease' }}
                 >
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     {copied
-                      ? <><polyline points="20 6 9 17 4 12"/></>
+                      ? <polyline points="20 6 9 17 4 12"/>
                       : <><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>
                     }
                   </svg>
                   {copied ? 'COPIED' : 'COPY TEXT'}
                 </button>
 
-                {/* Print / Save as PDF */}
+                {/* Save as PDF */}
                 <button
-                  onClick={() => window.print()}
+                  onClick={handlePrint}
                   className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75"
                   style={{ border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer' }}
                 >

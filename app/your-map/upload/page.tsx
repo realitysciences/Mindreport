@@ -334,6 +334,8 @@ export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false)
   const [result, setResult] = useState<ParseResult | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
+  const [authorMode, setAuthorMode] = useState<'self' | 'other'>('self')
+  const [authorName, setAuthorName] = useState('')
 
   // ── File handling ────────────────────────────────────────────────────────────
 
@@ -402,10 +404,14 @@ export default function UploadPage() {
 
   const handleContinue = useCallback(() => {
     if (!result) return
+    const subject = authorMode === 'self'
+      ? 'you'
+      : (authorName.trim() || 'the person described in this document')
     sessionStorage.setItem('mindreport_transcript', result.text)
     sessionStorage.setItem('mindreport_input_method', 'upload')
+    sessionStorage.setItem('mindreport_subject', subject)
     router.push('/your-map/lens')
-  }, [result, router])
+  }, [result, router, authorMode, authorName])
 
   // ── Render ───────────────────────────────────────────────────────────────────
 
@@ -584,6 +590,75 @@ export default function UploadPage() {
                 </p>
               </div>
             ) : null}
+          </div>
+        )}
+
+        {/* Author attribution */}
+        {phase === 'ready' && result && (
+          <div className="mb-8 px-5 py-4 rounded-sm" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            <p className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
+              Whose writing is this?
+            </p>
+            <div className="flex flex-col gap-3">
+              {(['self', 'other'] as const).map(mode => (
+                <label
+                  key={mode}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}
+                >
+                  <div
+                    onClick={() => setAuthorMode(mode)}
+                    style={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: '50%',
+                      border: authorMode === mode ? `4px solid var(--accent)` : '1.5px solid var(--border)',
+                      background: 'var(--surface)',
+                      flexShrink: 0,
+                      cursor: 'pointer',
+                      transition: 'border 0.1s',
+                    }}
+                  />
+                  <span
+                    onClick={() => setAuthorMode(mode)}
+                    style={{
+                      fontFamily: 'var(--font-serif)',
+                      color: authorMode === mode ? 'var(--text-hi)' : 'var(--text-body)',
+                      fontSize: '0.95rem',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {mode === 'self' ? 'My own writing' : 'Writing about or from someone else'}
+                  </span>
+                </label>
+              ))}
+            </div>
+            {authorMode === 'other' && (
+              <div className="mt-4">
+                <input
+                  type="text"
+                  placeholder="Who are we mapping? e.g. a client, my partner, my brother"
+                  value={authorName}
+                  onChange={e => setAuthorName(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.65rem 0.9rem',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '4px',
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: '0.9rem',
+                    color: 'var(--text-body)',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
+                  onBlur={e => { e.currentTarget.style.borderColor = 'var(--border)' }}
+                />
+                <p className="mt-2 text-xs" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-faint)' }}>
+                  The map will refer to this person in third person using their name or description.
+                </p>
+              </div>
+            )}
           </div>
         )}
 

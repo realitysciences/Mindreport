@@ -177,6 +177,7 @@ export async function POST(req: NextRequest) {
   const b = body as Record<string, unknown>;
   const transcript = sanitize(typeof b.transcript === "string" ? b.transcript : "", MAX_TRANSCRIPT);
   const lens       = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
+  const subject    = sanitize(typeof b.subject === "string" ? b.subject : "the person", 200);
 
   if (transcript.length < 50) {
     return errorResponse("Transcript too short to map.");
@@ -185,11 +186,17 @@ export async function POST(req: NextRequest) {
   const terrainLabels   = TERRAIN_LABELS[lens]   ?? TERRAIN_LABELS.pattern;
   const lensInstruction = LENS_INSTRUCTIONS[lens] ?? LENS_INSTRUCTIONS.pattern;
 
+  const subjectInstruction = subject === 'you'
+    ? `POINT OF VIEW: Write in second person throughout. Address the subject directly as "you" and "your" in every field. Never write "they", "them", "this person", or "the person" when referring to the subject — it is always "you". Every observation is addressed to them personally.`
+    : `SUBJECT: You are mapping ${subject}. Write in third person throughout — "they", "them", "their". Do not address the subject directly.`;
+
   const systemPrompt = `You are a psychological cartographer trained in a precise framework for reading human behavior and interior structure. You create personal psychological maps  -  not diagnoses, not therapy, but accurate, incisive cartography of a person's interior terrain.
 
 ${RELOHU_VOCAB}
 
 ${lensInstruction}
+
+${subjectInstruction}
 
 Write with specificity. Reference the actual texture of what was said. Be incisive  -  avoid vague clinical phrases. Name exact mechanisms. Every observation must be earned by the transcript  -  nothing generic, nothing that could apply to anyone.
 
