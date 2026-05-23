@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { LENSES } from '@/lib/lenses'
-import { saveReport, loadSavedReport, buildShareUrl } from '@/lib/reportStorage'
+import { buildShareUrl } from '@/lib/reportStorage'
 import type { MapResult, TerrainSlice } from '@/lib/reportTypes'
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
@@ -707,14 +707,6 @@ export default function ReportPage() {
     subjectRef.current    = subject
 
     if (!transcript) {
-      // No live session — check localStorage for a saved report
-      const saved = loadSavedReport()
-      if (saved) {
-        setMaps(saved.maps)
-        setActiveLensId(saved.activeLensId)
-        setPhase('report')
-        return
-      }
       setErrorMsg('No transcript found. Please complete an interview first.')
       setPhase('error')
       return
@@ -723,9 +715,7 @@ export default function ReportPage() {
     ;(async () => {
       try {
         const data = await fetchMap(transcript, lens, subject)
-        const newMaps = { [lens]: data }
-        setMaps(newMaps)
-        saveReport(newMaps, lens)
+        setMaps({ [lens]: data })
         setPhase('gate')
       } catch (err) {
         setErrorMsg(normalizeError((err as Error).message))
@@ -744,11 +734,7 @@ export default function ReportPage() {
     setGeneratingLensId(targetId)
     try {
       const data = await fetchMap(transcriptRef.current, targetId, subjectRef.current)
-      setMaps(prev => {
-        const next = { ...prev, [targetId]: data }
-        saveReport(next, targetId)
-        return next
-      })
+      setMaps(prev => ({ ...prev, [targetId]: data }))
       setActiveLensId(targetId)
     } catch (err) {
       setLensError(normalizeError((err as Error).message))
