@@ -50,43 +50,167 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
   return text;
 }
 
-// ── RTF extraction (inline, no dependencies) ──────────────────────────────────
-// Handles the common subset of RTF produced by Word, TextEdit, Google Docs, etc.
+// ── RTF extraction (inline tokenizer, no dependencies) ────────────────────────
+// Proper tokenizer-based approach: walks the RTF byte stream character by
+// character rather than regex-stripping groups, which avoids the bug where
+// iterative group removal eventually eats the outer document group and all
+// body text with it.  Handles TextEdit, Word, Google Docs RTF exports.
 function extractRtfText(buffer: Buffer): string {
-  // Use binary encoding to preserve byte values before decoding escapes
-  let s = buffer.toString("binary");
+  // latin1 preserves every byte value; we'll decode escapes manually
+  const src = buffer.toString("latin1");
+  const out: string[] = [];
+  let i = 0;
+  const n = src.length;
 
-  // Paragraph / section breaks → newline before stripping control words
-  s = s.replace(/\\(?:par|pard|sect|line)\b */gi, "\n");
+  // Per-depth skip flag.  When we enter a {\* ...} destination group the
+  // content is non-text (font tables, color tables, picture data, etc.) so
+  // we suppress output until the matching closing brace.
+  let depth = 0;
+  const skipAt: boolean[] = [false]; // skipAt[depth]
+  let skipping = false;
 
-  // Unicode escapes: \uN? where N is signed decimal codepoint
-  // The trailing ? (literal "?") is the replacement char to skip
-  s = s.replace(/\\u(-?\d+)\??/g, (_, n) => {
-    const cp = parseInt(n, 10);
-    return String.fromCharCode(cp < 0 ? cp + 65536 : cp);
-  });
+  // \uc N  sets how many replacement bytes follow each \u escape (default 1)
+  let ucBytes = 1;
 
-  // Hex char escapes \'XX → cp1252 / latin-1 approximation
-  s = s.replace(/\\'([0-9a-fA-F]{2})/g, (_, h) =>
-    String.fromCharCode(parseInt(h, 16))
-  );
+  while (i < n) {
+    const ch = src[i];
 
-  // Discard known non-text destination groups (font/color tables, etc.)
-  // Multiple passes handle one level of nesting per pass
-  for (let pass = 0; pass < 12; pass++) {
-    s = s.replace(/\{[^{}]*\}/g, " ");
+    // ── Group open ────────────────────────────────────────────────────────
+    if (ch === "{") {
+      depth++;
+      skipAt[depth] = false;
+      i++;
+      continue;
+    }
+
+    // ── Group close ───────────────────────────────────────────────────────
+    if (ch === "}") {
+      skipAt[depth] = false;
+      depth--;
+      skipping = skipAt[depth] ?? false;
+      i++;
+      continue;
+    }
+
+    // ── Backslash sequences ───────────────────────────────────────────────
+    if (ch === "\\") {
+      i++;
+      if (i >= n) break;
+      const c2 = src[i];
+
+      // \*  — non-text destination marker: skip this whole group
+      if (c2 === "*") {
+        skipAt[depth] = true;
+        skipping = true;
+        i++;
+        continue;
+      }
+
+      // \'XX  — hex-encoded byte (cp1252 / macintosh)
+      if (c2 === "'") {
+        i++;
+        if (i + 2 <= n) {
+          const code = parseInt(src.slice(i, i + 2), 16);
+          if (!skipping) out.push(String.fromCharCode(code));
+          i += 2;
+        }
+        continue;
+      }
+
+      // \\  \{  \}  — literal characters
+      if (c2 === "\\" || c2 === "{" || c2 === "}") {
+        if (!skipping) out.push(c2);
+        i++;
+        continue;
+      }
+
+      // Bare backslash at end of source line — not a paragraph break
+      if (c2 === "\n" || c2 === "\r") {
+        i++;
+        continue;
+      }
+
+      // ── Control word  \[a-z]+[-\d]* ──────────────────────────────────
+      if (c2 >= "a" && c2 <= "z") {
+        let j = i;
+        while (j < n && src[j] >= "a" && src[j] <= "z") j++;
+        const word = src.slice(i, j);
+
+        // Optional signed numeric parameter
+        let num = 0;
+        if (j < n && (src[j] === "-" || (src[j] >= "0" && src[j] <= "9"))) {
+          const neg = src[j] === "-";
+          if (neg) j++;
+          const s0 = j;
+          while (j < n && src[j] >= "0" && src[j] <= "9") j++;
+          num = parseInt(src.slice(s0, j), 10);
+          if (neg) num = -num;
+        }
+
+        // Consume optional trailing space delimiter
+        if (j < n && src[j] === " ") j++;
+
+        i = j;
+        if (skipping) continue;
+
+        switch (word) {
+          case "par":
+          case "pard":
+          case "sect":
+          case "page":
+          case "column":
+          case "line":
+            out.push("\n");
+            break;
+          case "tab":
+            out.push("\t");
+            break;
+          case "uc":
+            ucBytes = num;
+            break;
+          case "u": {
+            // Unicode char: \uN followed by ucBytes replacement bytes
+            const cp = num < 0 ? num + 65536 : num;
+            out.push(String.fromCodePoint(cp));
+            // Skip replacement bytes (usually 0 or 1 ASCII chars)
+            let skip = ucBytes;
+            while (skip > 0 && i < n) {
+              if (src[i] === "\\") {
+                // replacement encoded as \'XX counts as 1 byte
+                if (src[i + 1] === "'") { i += 4; } else { i += 2; }
+              } else {
+                i++;
+              }
+              skip--;
+            }
+            break;
+          }
+          // All other control words: ignore (formatting, metadata, etc.)
+        }
+        continue;
+      }
+
+      // Control symbol (single non-alpha char) — skip
+      i++;
+      continue;
+    }
+
+    // ── Plain text ────────────────────────────────────────────────────────
+    if (!skipping) {
+      // Literal CR/LF in RTF source are line-continuation noise, not content
+      if (ch !== "\r" && ch !== "\n") out.push(ch);
+    }
+    i++;
   }
 
-  // Remove all remaining RTF control words and structural characters
-  s = s.replace(/\\[a-zA-Z]+\*?-?\d* */g, " ");
-  s = s.replace(/[\\{}]/g, " ");
+  let text = out.join("");
 
-  // Collapse runs of spaces (but preserve newlines from paragraph breaks)
-  s = s.replace(/[ \t]+/g, " ");
-  s = s.replace(/\n[ \t]+/g, "\n");
-  s = s.replace(/[ \t]+\n/g, "\n");
+  // Collapse runs of spaces while preserving newlines
+  text = text.replace(/[ \t]+/g, " ");
+  text = text.replace(/\n[ \t]+/g, "\n");
+  text = text.replace(/[ \t]+\n/g, "\n");
 
-  return s.trim();
+  return text.trim();
 }
 
 // ── Route handler ─────────────────────────────────────────────────────────────
