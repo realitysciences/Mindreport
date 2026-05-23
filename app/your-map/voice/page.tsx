@@ -66,7 +66,7 @@ function VoiceInterviewInner() {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [transcript])
 
-  // Save transcript to sessionStorage on end
+  // Save transcript + stats to sessionStorage on end
   useEffect(() => {
     if (phase === 'ended' && transcript.length > 0) {
       const raw = transcript
@@ -75,8 +75,13 @@ function VoiceInterviewInner() {
       sessionStorage.setItem('mindreport_transcript', raw)
       sessionStorage.setItem('mindreport_input_method', 'voice')
       sessionStorage.setItem('mindreport_subject', 'you')
+      sessionStorage.setItem('mindreport_voice_stats', JSON.stringify({
+        userWords: userWordCount,
+        responses: userMessages.length,
+        duration:  elapsed,
+      }))
     }
-  }, [phase, transcript])
+  }, [phase, transcript, userWordCount, elapsed])
 
   const startInterview = useCallback(async () => {
     setPhase('requesting')
@@ -366,7 +371,7 @@ function VoiceInterviewInner() {
                     DO ANOTHER INTERVIEW
                   </button>
                   <Link
-                    href="/your-map/lens"
+                    href="/your-map/voice/review"
                     className="px-5 py-2.5 rounded-sm text-xs transition-opacity hover:opacity-70"
                     style={{
                       border: '1px solid var(--border)',
@@ -433,7 +438,7 @@ function VoiceInterviewInner() {
                   {userMessages.length} responses &middot; ~{userWordCount} words &middot; {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
                 </p>
                 <Link
-                  href="/your-map/lens"
+                  href="/your-map/voice/review"
                   className="flex items-center gap-2 px-6 py-3 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
                   style={{
                     background: 'var(--accent-dark)',
