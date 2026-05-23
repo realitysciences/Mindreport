@@ -267,8 +267,11 @@ export default function ReportPage() {
         <div className="flex items-center justify-center rounded-full mb-8" style={{ width: 64, height: 64, background: activeLens.iconBg, border: `1px solid ${accentColor}35` }}>
           <LensIcon id={activeLensId} color={accentColor} size={24} />
         </div>
-        <p className="mb-8" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.1rem' }}>
+        <p className="mb-2" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.1rem' }}>
           Drawing your map&hellip;
+        </p>
+        <p className="mb-8" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-faint)', fontSize: '0.88rem' }}>
+          This usually takes 1–2 minutes. Stay on this page.
         </p>
         {/* Progress bar */}
         <div style={{ width: '100%', maxWidth: '320px' }}>
