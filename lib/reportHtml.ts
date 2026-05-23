@@ -67,7 +67,7 @@ export function buildPrintHtml(maps: Record<string, MapResult>): string {
     .terrain-chip-num { font-size: 7.5px; color: ${C.faint}; letter-spacing: .06em; margin-right: 3px; }
     .terrain-sep { color: ${C.border}; margin: 0 7px; }
     /* ─ Terrain sections ─ */
-    .terrain-section { border-top: 1px solid ${C.border}; padding: 2rem 0 1.75rem; display: flex; gap: 1.25rem; align-items: flex-start; page-break-inside: avoid; }
+    .terrain-section { border-top: 1px solid ${C.border}; padding: 2rem 0 1.75rem; display: flex; gap: 1.25rem; align-items: flex-start; }
     .chap-num { flex-shrink: 0; width: 2.75rem; text-align: right; font-family: Georgia, serif; font-size: 34px; font-weight: 800; line-height: 1; letter-spacing: -.04em; }
     .terrain-content { flex: 1; padding-top: 3px; }
     .terrain-label-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: .55rem; }
@@ -96,7 +96,7 @@ export function buildPrintHtml(maps: Record<string, MapResult>): string {
       html { font-size: 13px; }
       body { background: white; }
       .card { box-shadow: none; border-color: #d8d4ce; }
-      .terrain-section { page-break-inside: avoid; }
+      .signal-pill { page-break-inside: avoid; }
       .lens-report:not(:last-child) { page-break-after: always; }
     }
   `
