@@ -14,6 +14,8 @@ type VoiceStats = {
   userWords: number
   responses: number
   duration:  number  // seconds
+  name:      string | null
+  age:       string | null
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -146,10 +148,12 @@ export default function VoiceReviewPage() {
               <span style={{ fontSize: '1.1rem' }}>🎙</span>
               <div style={{ minWidth: 0 }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--text-body)', letterSpacing: '0.02em' }}>
-                  Voice interview
+                  {stats?.name
+                    ? `${stats.name}${stats.age ? `, age ${stats.age}` : ''}`
+                    : 'Voice interview'}
                 </p>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-faint)', letterSpacing: '0.04em', marginTop: '0.15rem' }}>
-                  ~{wordCount.toLocaleString()} words you spoke
+                  ~{wordCount.toLocaleString()} words spoken
                   {stats?.responses ? ` · ${stats.responses} responses` : ''}
                   {stats?.duration   ? ` · ${formatDuration(stats.duration)}` : ''}
                 </p>

@@ -19,6 +19,8 @@ function VoiceInterviewInner() {
   const [transcript, setTranscript] = useState<Message[]>([])
   const [errorMsg, setErrorMsg] = useState('')
   const [elapsed, setElapsed] = useState(0)
+  const [name, setName] = useState('')
+  const [age,  setAge]  = useState('')
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const transcriptEndRef = useRef<HTMLDivElement>(null)
 
@@ -81,19 +83,26 @@ function VoiceInterviewInner() {
   // Save transcript + stats to sessionStorage on end
   useEffect(() => {
     if (phase === 'ended' && transcript.length > 0) {
-      const raw = transcript
+      const lines = transcript
         .map((m) => `${m.role === 'agent' ? 'Interviewer' : 'You'}: ${m.text}`)
         .join('\n\n')
-      sessionStorage.setItem('mindreport_transcript', raw)
+      // Prepend name/age so Claude has subject context without it counting against
+      // the user-words cap or requiring a separate API field.
+      const nameTag = name.trim()
+        ? `[Subject: ${name.trim()}${age.trim() ? `, age ${age.trim()}` : ''}]\n\n`
+        : ''
+      sessionStorage.setItem('mindreport_transcript', nameTag + lines)
       sessionStorage.setItem('mindreport_input_method', 'voice')
       sessionStorage.setItem('mindreport_subject', 'you')
       sessionStorage.setItem('mindreport_voice_stats', JSON.stringify({
         userWords: userWordCount,
         responses: userMessages.length,
         duration:  elapsed,
+        name:      name.trim() || null,
+        age:       age.trim()  || null,
       }))
     }
-  }, [phase, transcript, userWordCount, elapsed])
+  }, [phase, transcript, userWordCount, elapsed, name, age])
 
   const startInterview = useCallback(async () => {
     setPhase('requesting')
@@ -175,39 +184,120 @@ function VoiceInterviewInner() {
 
         {/* ── Idle ── */}
         {phase === 'idle' && (
-          <div className="flex flex-col items-center gap-8 py-12">
+          <div className="flex flex-col gap-8">
+
+            {/* Name + age inputs */}
             <div
-              className="flex items-center justify-center rounded-full"
-              style={{
-                width: '96px',
-                height: '96px',
-                background: 'var(--surface)',
-                border: '1px solid var(--border)',
-                color: 'var(--accent)',
-              }}
+              className="px-5 py-5 rounded-sm flex flex-col gap-4"
+              style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
             >
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
+              <p className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
+                Before we begin
+              </p>
+              <div className="flex gap-3">
+                {/* Name */}
+                <div style={{ flex: '1 1 0', minWidth: 0 }}>
+                  <label
+                    className="block text-xs mb-1.5"
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.08em' }}
+                  >
+                    Name <span style={{ color: 'var(--accent)' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your first name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.9rem',
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: '1rem',
+                      color: 'var(--text-body)',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
+                    onBlur={e  => { e.currentTarget.style.borderColor = 'var(--border)' }}
+                  />
+                </div>
+                {/* Age */}
+                <div style={{ flex: '0 0 100px' }}>
+                  <label
+                    className="block text-xs mb-1.5"
+                    style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.08em' }}
+                  >
+                    Age
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="—"
+                    min={1}
+                    max={120}
+                    value={age}
+                    onChange={e => setAge(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.65rem 0.9rem',
+                      background: 'var(--bg)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: '1rem',
+                      color: 'var(--text-body)',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                    onFocus={e => { e.currentTarget.style.borderColor = 'var(--accent)' }}
+                    onBlur={e  => { e.currentTarget.style.borderColor = 'var(--border)' }}
+                  />
+                </div>
+              </div>
             </div>
-            <button
-              onClick={startInterview}
-              className="px-8 py-4 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
-              style={{
-                background: 'var(--accent-dark)',
-                color: '#F0ECE4',
-                fontFamily: 'var(--font-mono)',
-                letterSpacing: '0.08em',
-              }}
-            >
-              START INTERVIEW
-            </button>
-            <p className="text-xs text-center" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
-              Your browser will ask for microphone permission.
-            </p>
+
+            {/* Mic + start */}
+            <div className="flex flex-col items-center gap-6">
+              <div
+                className="flex items-center justify-center rounded-full"
+                style={{
+                  width: '96px',
+                  height: '96px',
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border)',
+                  color: name.trim() ? 'var(--accent)' : 'var(--text-faint)',
+                  transition: 'color 0.2s',
+                }}
+              >
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </div>
+              <button
+                onClick={startInterview}
+                disabled={!name.trim()}
+                className="px-8 py-4 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
+                style={{
+                  background: 'var(--accent-dark)',
+                  color: '#F0ECE4',
+                  fontFamily: 'var(--font-mono)',
+                  letterSpacing: '0.08em',
+                  opacity: name.trim() ? 1 : 0.4,
+                  cursor: name.trim() ? 'pointer' : 'default',
+                }}
+              >
+                START INTERVIEW
+              </button>
+              <p className="text-xs text-center" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>
+                Your browser will ask for microphone permission.
+              </p>
+            </div>
+
           </div>
         )}
 
