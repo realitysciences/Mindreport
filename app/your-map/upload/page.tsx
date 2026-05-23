@@ -80,6 +80,13 @@ export default function UploadPage() {
         return
       }
 
+      // Basic field validation before trusting the cast
+      if (typeof data.text !== 'string' || typeof data.wordCount !== 'number') {
+        setErrorMsg('The file could not be read correctly. Please try another format.')
+        setPhase('error')
+        return
+      }
+
       setResult(data as unknown as ParseResult)
       setPhase('ready')
     } catch {
@@ -102,6 +109,7 @@ export default function UploadPage() {
     setResult(null)
     setErrorMsg('')
     setSelectedSpeaker(null)
+    setViewerSpeaker(null)
     setSpeakerAliases({})
   }, [])
 

@@ -130,7 +130,9 @@ function VoiceInterviewInner() {
   }, [startSession, name, age])
 
   const endInterview = useCallback(async () => {
-    await endSession()
+    try {
+      await endSession()
+    } catch { /* SDK cleanup failed — proceed anyway so the transcript isn't lost */ }
     setPhase('ended')
   }, [endSession])
 

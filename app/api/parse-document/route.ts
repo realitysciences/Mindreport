@@ -537,7 +537,10 @@ export async function POST(req: NextRequest) {
     if (!isTranscript) text = reflowText(text);
   }
 
-  const words = wordCount(text);
+  // Trim BEFORE computing wordCount so the displayed count matches what Claude receives
+  const trimmed = trimText(text);
+  const words   = wordCount(trimmed);
+
   if (words < 20) {
     return NextResponse.json(
       { error: "The document appears to be empty or contains too little text." },
@@ -548,10 +551,10 @@ export async function POST(req: NextRequest) {
   // ── Speaker detection ──────────────────────────────────────────────────────
   const speakers: string[] = aiSpeakers?.length
     ? aiSpeakers
-    : detectSpeakers(text);
+    : detectSpeakers(trimmed);
 
   return NextResponse.json({
-    text:     trimText(text),
+    text:      trimmed,
     wordCount: words,
     filename,
     method,

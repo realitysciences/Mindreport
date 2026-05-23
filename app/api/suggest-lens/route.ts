@@ -6,6 +6,7 @@ export const maxDuration = 30;
 
 // Lens menu  -  descriptions used only for the suggestion prompt, never exposed to client
 const LENS_MENU = [
+  { id: "foundational", description: "The deepest map  -  the core architecture of who this person is, how it was built, what it costs, and what it produced. Best when the material is rich and wide-ranging." },
   { id: "pattern",    description: "The recurring behavioral and emotional loops  -  the default architecture running across all contexts." },
   { id: "shadow",     description: "What is disowned, resisted, or projected outward  -  what is hidden from the self but visible in reactions." },
   { id: "desire",     description: "What the person is actually moving toward beneath their stated wants  -  the real driver underneath the goals." },

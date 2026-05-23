@@ -637,5 +637,29 @@ export default function ReportPage() {
     )
   }
 
+  // phase === 'report' but activeMap is null — should never happen in normal flow,
+  // but guard against a blank screen by forcing an error state with a recovery path.
+  if (phase === 'report') {
+    return (
+      <div className="px-6 py-14">
+        <div className="mx-auto flex flex-col items-center gap-6 py-16" style={{ maxWidth: '640px' }}>
+          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)', textAlign: 'center' }}>
+            Something went wrong loading your map.
+          </p>
+          <Link
+            href="/your-map/lens"
+            style={{
+              fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.08em',
+              color: 'var(--text-faint)', border: '1px solid var(--border)',
+              borderRadius: '4px', padding: '0.65rem 1.25rem',
+            }}
+          >
+            ← Back to lens
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return null
 }
