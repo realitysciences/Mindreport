@@ -43,9 +43,10 @@ function buildOutputSchema(terrainLabels: string[]): string {
     .map(
       (label, i) => `    {
       "label": "${label}",
+      "prominence": "primary, secondary, or supporting — how central this section is to this person's overall map",
       "summary": "one sentence characterizing this terrain for this specific person",
       "body": "2 sentences of specific analysis. Reference the actual texture of what was said. Do NOT use the internal framework labels.",
-      "markers": ["2 short phrases naming specific features of this terrain in this person"]
+      "markers": ["2 recognition signals — specific phrases naming exactly how this pattern shows up in this person's real-time behavior or inner experience"]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
     .join("\n");
@@ -60,7 +61,8 @@ ${terrainSchema}
   "corePattern": "1-2 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall.",
   "hiddenCost": "1-2 sentences naming what this architecture costs in concrete terms  -  not abstract, not generic.",
   "unseen": "One thing this person is probably not conscious of  -  a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would land if they noticed it. 1-2 sentences. This must feel like a genuine insight, not a restatement of the pattern.",
-  "nextMove": "One specific, concrete action this particular person could actually take based on what you saw. 1-2 sentences. Never generic advice. Never empty."
+  "nextMoveNow": "One specific, concrete action this person could take this week. 1 sentence. Earned by the transcript. Not generic.",
+  "nextMoveStructural": "One structural change to build toward over the next month. 1 sentence. Something that addresses the architecture, not just the symptom."
 }`;
 }
 

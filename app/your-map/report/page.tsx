@@ -8,6 +8,7 @@ import { LENSES } from '@/lib/lenses'
 
 type TerrainSlice = {
   label: string
+  prominence: 'primary' | 'secondary' | 'supporting'
   summary: string
   body: string
   markers: string[]
@@ -20,7 +21,10 @@ type MapResult = {
   corePattern: string
   hiddenCost: string
   unseen?: string
-  nextMove: string
+  // New tiered next moves (nextMove kept for backward compat)
+  nextMoveNow?: string
+  nextMoveStructural?: string
+  nextMove?: string
 }
 
 type Phase = 'loading' | 'gate' | 'report' | 'error'
@@ -53,8 +57,7 @@ async function fetchMap(transcript: string, lens: string, subject: string): Prom
   const errorIdx  = buffer.indexOf(ERROR_MARKER)
 
   if (resultIdx !== -1) {
-    const jsonStr = buffer.slice(resultIdx + RESULT_MARKER.length)
-    return JSON.parse(jsonStr) as MapResult
+    return JSON.parse(buffer.slice(resultIdx + RESULT_MARKER.length)) as MapResult
   } else if (errorIdx !== -1) {
     throw new Error(buffer.slice(errorIdx + ERROR_MARKER.length) || 'Generation failed.')
   } else {
@@ -70,23 +73,13 @@ function normalizeError(raw: string): string {
     : raw
 }
 
-// ── Loading animation ─────────────────────────────────────────────────────────
+// ── Loading dots ──────────────────────────────────────────────────────────────
 
 function LoadingDots({ color }: { color: string }) {
   return (
     <div className="flex items-center gap-2">
       {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          style={{
-            width: 7,
-            height: 7,
-            borderRadius: '50%',
-            background: color,
-            opacity: 0.4,
-            animation: `pulse 1.4s ease-in-out ${i * 0.22}s infinite`,
-          }}
-        />
+        <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', background: color, opacity: 0.4, animation: `pulse 1.4s ease-in-out ${i * 0.22}s infinite` }} />
       ))}
     </div>
   )
@@ -107,59 +100,35 @@ function LensIcon({ id, color, size = 18 }: { id: string; color: string; size?: 
   }
 }
 
-// ── Lens tabs — only shows completed + currently generating, hidden when <2 ───
+// ── Lens tabs — only shows completed + generating, hidden when <2 ─────────────
 
 function LensTabs({
-  activeLensId,
-  generatingLensId,
-  maps,
-  onSelect,
+  activeLensId, generatingLensId, maps, onSelect,
 }: {
-  activeLensId: string
-  generatingLensId: string | null
-  maps: Record<string, MapResult>
-  onSelect: (id: string) => void
+  activeLensId: string; generatingLensId: string | null
+  maps: Record<string, MapResult>; onSelect: (id: string) => void
 }) {
   const visible = LENSES.filter(l => maps[l.id] || l.id === generatingLensId)
   if (visible.length < 2) return null
-
   return (
-    <div
-      style={{
-        display: 'flex',
-        gap: '0.4rem',
-        overflowX: 'auto',
-        paddingBottom: '0.25rem',
-        marginBottom: '2.5rem',
-        scrollbarWidth: 'none',
-      }}
-    >
+    <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', paddingBottom: '0.25rem', marginBottom: '2rem', scrollbarWidth: 'none' }}>
       {visible.map(lens => {
         const isActive     = lens.id === activeLensId
         const isGenerating = lens.id === generatingLensId
         const c = lens.badgeColor
-
         return (
           <button
             key={lens.id}
             onClick={() => { if (!isGenerating && maps[lens.id]) onSelect(lens.id) }}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '999px',
+              display: 'flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.3rem 0.75rem', borderRadius: '999px',
               background: isActive ? lens.iconBg : 'transparent',
               border: isActive ? `1.5px solid ${c}55` : `1px solid ${c}40`,
-              color: c,
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.68rem',
-              letterSpacing: '0.1em',
-              cursor: isGenerating ? 'default' : 'pointer',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-              opacity: isGenerating ? 0.6 : 1,
-              transition: 'opacity 0.15s, background 0.15s',
+              color: c, fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
+              letterSpacing: '0.1em', cursor: isGenerating ? 'default' : 'pointer',
+              whiteSpace: 'nowrap', flexShrink: 0,
+              opacity: isGenerating ? 0.6 : 1, transition: 'opacity 0.15s, background 0.15s',
             }}
           >
             <LensIcon id={lens.id} color={c} size={11} />
@@ -175,40 +144,130 @@ function LensTabs({
   )
 }
 
+// ── Terrain overview (map legend) ─────────────────────────────────────────────
+
+function TerrainOverview({ terrainMap, accentColor }: { terrainMap: TerrainSlice[]; accentColor: string }) {
+  return (
+    <div
+      style={{
+        marginBottom: '2.5rem',
+        padding: '1.1rem 1.4rem',
+        background: `${accentColor}05`,
+        border: `1px solid ${accentColor}18`,
+        borderRadius: '3px',
+      }}
+    >
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--text-faint)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+        Terrain Map
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', rowGap: '0.45rem', columnGap: '0' }}>
+        {terrainMap.map((slice, i) => {
+          const isPrimary = slice.prominence === 'primary'
+          return (
+            <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.57rem', color: 'var(--text-faint)', letterSpacing: '0.06em' }}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.1em',
+                textTransform: 'uppercase', fontWeight: isPrimary ? 700 : 400,
+                color: isPrimary ? accentColor : 'var(--text-mid)',
+              }}>
+                {slice.label}
+              </span>
+              {i < terrainMap.length - 1 && (
+                <span style={{ color: 'var(--border)', margin: '0 0.3rem', fontSize: '0.65rem' }}>·</span>
+              )}
+            </span>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ── Terrain section ───────────────────────────────────────────────────────────
 
 function TerrainSection({ slice, index, accentColor }: { slice: TerrainSlice; index: number; accentColor: string }) {
-  const paragraphs = slice.body.split(/\n+/).map((p) => p.trim()).filter(Boolean)
+  const paragraphs = slice.body.split(/\n+/).map(p => p.trim()).filter(Boolean)
+  const isPrimary  = slice.prominence === 'primary'
+
   return (
-    <div className="py-10" style={{ borderTop: '1px solid var(--border)' }}>
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <div style={{ height: '1px', width: 24, background: 'var(--border)' }} />
-        <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.16em' }}>
-          {slice.label}
-        </span>
-      </div>
-      <p className="mb-6" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.15rem', lineHeight: 1.6 }}>
-        {slice.summary}
-      </p>
-      <div className="flex flex-col gap-4 mb-6">
-        {paragraphs.map((para, i) => (
-          <p key={i} style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1.05rem', lineHeight: 1.75 }}>
-            {para}
-          </p>
-        ))}
-      </div>
-      {slice.markers?.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {slice.markers.map((marker, i) => (
-            <span key={i} className="text-xs" style={{ fontFamily: 'var(--font-mono)', color: accentColor, background: `${accentColor}12`, border: `1px solid ${accentColor}28`, borderRadius: '999px', padding: '0.2rem 0.65rem', letterSpacing: '0.04em' }}>
-              {marker}
-            </span>
-          ))}
+    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2.5rem', paddingBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+
+        {/* Decorative chapter number */}
+        <div style={{ flexShrink: 0, width: '3.25rem', textAlign: 'right' }}>
+          <span style={{
+            fontFamily: 'var(--font-serif)', fontSize: '2.75rem', fontWeight: 800,
+            lineHeight: 1, letterSpacing: '-0.04em', userSelect: 'none',
+            color: isPrimary ? `${accentColor}28` : `${accentColor}14`,
+          }}>
+            {String(index + 1).padStart(2, '0')}
+          </span>
         </div>
-      )}
+
+        {/* Content */}
+        <div style={{ flex: 1, paddingTop: '0.25rem' }}>
+
+          {/* Label row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', flexWrap: 'wrap', marginBottom: '0.65rem' }}>
+            <span style={{
+              fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: accentColor,
+              letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 600,
+            }}>
+              {slice.label}
+            </span>
+            {isPrimary && (
+              <span style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em',
+                color: accentColor, background: `${accentColor}18`,
+                border: `1px solid ${accentColor}35`,
+                borderRadius: '999px', padding: '0.08rem 0.45rem', fontWeight: 700,
+              }}>
+                PRIMARY
+              </span>
+            )}
+          </div>
+
+          {/* Summary */}
+          <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.05rem', lineHeight: 1.65, marginBottom: '1.1rem' }}>
+            {slice.summary}
+          </p>
+
+          {/* Body */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.25rem' }}>
+            {paragraphs.map((para, i) => (
+              <p key={i} style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.78 }}>
+                {para}
+              </p>
+            ))}
+          </div>
+
+          {/* Recognition signals */}
+          {slice.markers?.length > 0 && (
+            <div>
+              <p style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.14em',
+                textTransform: 'uppercase', color: 'var(--text-faint)', marginBottom: '0.5rem',
+              }}>
+                Recognition signals
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                {slice.markers.map((m, i) => (
+                  <span key={i} style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: accentColor,
+                    background: `${accentColor}10`, border: `1px solid ${accentColor}22`,
+                    borderRadius: '999px', padding: '0.22rem 0.7rem', letterSpacing: '0.03em',
+                  }}>
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -217,22 +276,26 @@ function TerrainSection({ slice, index, accentColor }: { slice: TerrainSlice; in
 
 function buildExportText(result: MapResult, lensLabel: string): string {
   const divider = '─'.repeat(56)
-  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const date    = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
   const sections = result.terrainMap
     .map((slice, i) => {
-      const num = String(i + 1).padStart(2, '0')
-      const paras = slice.body.split(/\n+/).map((p) => p.trim()).filter(Boolean)
-      const markers = slice.markers?.length ? `\nMarkers: ${slice.markers.join('  ·  ')}` : ''
+      const num     = String(i + 1).padStart(2, '0')
+      const paras   = slice.body.split(/\n+/).map(p => p.trim()).filter(Boolean)
+      const markers = slice.markers?.length ? `\nRecognition signals: ${slice.markers.join('  ·  ')}` : ''
+      const prom    = slice.prominence === 'primary' ? ' [PRIMARY]' : ''
       return [
-        `${num}. ${slice.label.toUpperCase()}`,
+        `${num}. ${slice.label.toUpperCase()}${prom}`,
         `${slice.summary}`,
         '',
         paras.join('\n\n'),
         markers,
-      ].filter((s) => s !== undefined).join('\n')
+      ].filter(s => s !== undefined).join('\n')
     })
     .join(`\n\n${divider}\n\n`)
+
+  const nowText        = result.nextMoveNow || result.nextMove || ''
+  const structuralText = result.nextMoveStructural || ''
 
   return [
     'MIND REPORT',
@@ -258,9 +321,8 @@ function buildExportText(result: MapResult, lensLabel: string): string {
     result.hiddenCost,
     '',
     ...(result.unseen ? ['WHAT YOU MAY NOT HAVE NOTICED', result.unseen, ''] : []),
-    'NEXT MOVE',
-    result.nextMove,
-    '',
+    ...(nowText ? ['NEXT MOVE — THIS WEEK', nowText, ''] : []),
+    ...(structuralText ? ['NEXT MOVE — BUILD TOWARD', structuralText, ''] : []),
     divider,
     '',
     'Generated by Mind Report  ·  mindreport.com',
@@ -269,13 +331,12 @@ function buildExportText(result: MapResult, lensLabel: string): string {
   ].join('\n')
 }
 
-// Combines ALL completed lens reports into a single export
 function buildAllExportText(maps: Record<string, MapResult>): string {
-  const heavy = '═'.repeat(56)
+  const heavy    = '═'.repeat(56)
   const completed = LENSES.filter(l => maps[l.id])
   if (completed.length === 0) return ''
   if (completed.length === 1) return buildExportText(maps[completed[0].id], completed[0].label)
-  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const date   = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   const header = `MIND REPORT  ·  ${completed.length} LENSES  ·  ${date}\n${heavy}\n`
   return header + '\n\n' + completed.map(l => buildExportText(maps[l.id], l.label)).join(`\n\n${heavy}\n\n`)
 }
@@ -284,70 +345,50 @@ function downloadText(text: string, filename: string) {
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
   const url  = URL.createObjectURL(blob)
   const a    = document.createElement('a')
-  a.href     = url
-  a.download = filename
-  a.click()
+  a.href = url; a.download = filename; a.click()
   URL.revokeObjectURL(url)
 }
 
 // ── Run another lens ──────────────────────────────────────────────────────────
 
 function RunAnotherLens({
-  maps,
-  generatingLensId,
-  lensError,
-  onRun,
+  maps, generatingLensId, lensError, onRun,
 }: {
-  maps: Record<string, MapResult>
-  generatingLensId: string | null
-  lensError: string
-  onRun: (id: string) => void
+  maps: Record<string, MapResult>; generatingLensId: string | null
+  lensError: string; onRun: (id: string) => void
 }) {
-  const remaining     = LENSES.filter(l => !maps[l.id] && l.id !== generatingLensId)
+  const remaining      = LENSES.filter(l => !maps[l.id] && l.id !== generatingLensId)
   const generatingLens = generatingLensId ? LENSES.find(l => l.id === generatingLensId) : null
 
   if (remaining.length === 0 && !generatingLensId) return null
 
   return (
     <div className="pt-10" style={{ borderTop: '1px solid var(--border)' }}>
-      <p
-        className="text-xs uppercase tracking-widest mb-6"
-        style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}
-      >
+      <p className="text-xs uppercase tracking-widest mb-6" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
         Run another lens
       </p>
 
-      {/* Active generation indicator */}
       {generatingLens && (
-        <div
-          className="flex items-center gap-4 px-5 py-4 rounded-sm mb-5"
-          style={{ background: generatingLens.iconBg, border: `1px solid ${generatingLens.badgeColor}30` }}
-        >
+        <div className="flex items-center gap-4 px-5 py-4 rounded-sm mb-5" style={{ background: generatingLens.iconBg, border: `1px solid ${generatingLens.badgeColor}30` }}>
           <LensIcon id={generatingLens.id} color={generatingLens.badgeColor} size={15} />
-          <span
-            className="text-xs flex-1"
-            style={{ fontFamily: 'var(--font-mono)', color: generatingLens.badgeColor, letterSpacing: '0.08em' }}
-          >
+          <span className="text-xs flex-1" style={{ fontFamily: 'var(--font-mono)', color: generatingLens.badgeColor, letterSpacing: '0.08em' }}>
             Drawing {generatingLens.label} map
           </span>
           <LoadingDots color={generatingLens.badgeColor} />
         </div>
       )}
 
-      {/* Remaining lenses grid */}
       {remaining.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           {remaining.map(lens => (
             <button
               key={lens.id}
               onClick={() => !generatingLensId && onRun(lens.id)}
-              className="text-left"
               disabled={!!generatingLensId}
+              className="text-left"
               style={{
-                background: 'var(--surface)',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                padding: '1rem',
+                background: 'var(--surface)', border: '1px solid var(--border)',
+                borderRadius: '4px', padding: '1rem',
                 cursor: generatingLensId ? 'default' : 'pointer',
                 opacity: generatingLensId ? 0.45 : 1,
                 transition: 'opacity 0.15s, border-color 0.15s',
@@ -355,32 +396,11 @@ function RunAnotherLens({
               onMouseEnter={e => { if (!generatingLensId) (e.currentTarget as HTMLElement).style.borderColor = `${lens.badgeColor}60` }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)' }}
             >
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  background: lens.iconBg,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '0.65rem',
-                }}
-              >
+              <div style={{ width: 32, height: 32, borderRadius: '50%', background: lens.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.65rem' }}>
                 <LensIcon id={lens.id} color={lens.iconColor} size={14} />
               </div>
-              <div
-                className="text-sm font-medium mb-1"
-                style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)' }}
-              >
-                {lens.label}
-              </div>
-              <div
-                className="text-xs leading-relaxed"
-                style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-mid)', lineHeight: 1.5 }}
-              >
-                {lens.description}
-              </div>
+              <div className="text-sm font-medium mb-1" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)' }}>{lens.label}</div>
+              <div className="text-xs leading-relaxed" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-mid)', lineHeight: 1.5 }}>{lens.description}</div>
             </button>
           ))}
         </div>
@@ -409,7 +429,6 @@ export default function ReportPage() {
   const transcriptRef = useRef('')
   const subjectRef    = useRef('the person')
 
-  // Initial load: read transcript + first lens + subject from sessionStorage
   useEffect(() => {
     if (hasFetched.current) return
     hasFetched.current = true
@@ -440,12 +459,10 @@ export default function ReportPage() {
     })()
   }, [])
 
-  // Switch to an already-completed lens (from tab click)
   const handleSelectLens = useCallback((targetId: string) => {
     if (maps[targetId]) setActiveLensId(targetId)
   }, [maps])
 
-  // Generate a new lens (from "Run another lens" cards at the bottom)
   const handleRunLens = useCallback(async (targetId: string) => {
     if (maps[targetId] || generatingLensId !== null) return
     setLensError('')
@@ -461,19 +478,19 @@ export default function ReportPage() {
     }
   }, [maps, generatingLensId])
 
-  const activeLens  = LENSES.find((l) => l.id === activeLensId) ?? LENSES[0]
+  const activeLens  = LENSES.find(l => l.id === activeLensId) ?? LENSES[0]
   const accentColor = activeLens.badgeColor
   const activeMap   = maps[activeLensId] ?? null
 
   const handleExportText = useCallback(() => {
     const text = buildAllExportText(maps)
     if (!text) return
-    const firstMap  = maps[Object.keys(maps)[0]]
-    const slug      = firstMap?.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 36) ?? 'report'
-    const d         = new Date()
-    const stamp     = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
-    const lensTag   = Object.keys(maps).length > 1 ? 'all-lenses' : activeLensId
-    downloadText(text, `mind-report-${slug}-${lensTag}-${stamp}.txt`)
+    const first  = maps[Object.keys(maps)[0]]
+    const slug   = first?.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 36) ?? 'report'
+    const d      = new Date()
+    const stamp  = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`
+    const tag    = Object.keys(maps).length > 1 ? 'all-lenses' : activeLensId
+    downloadText(text, `mind-report-${slug}-${tag}-${stamp}.txt`)
   }, [maps, activeLensId])
 
   const handleCopyText = useCallback(async () => {
@@ -489,7 +506,7 @@ export default function ReportPage() {
     if (!text) return
     const win = window.open('', '_blank')
     if (!win) { window.print(); return }
-    const escaped = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     win.document.write(
       `<!DOCTYPE html><html><head><title>Mind Report</title>` +
       `<style>body{font-family:Georgia,'Times New Roman',serif;max-width:680px;margin:2.5rem auto;` +
@@ -499,7 +516,7 @@ export default function ReportPage() {
       `<body><pre>${escaped}</pre></body></html>`
     )
     win.document.close()
-    setTimeout(() => { win.print() }, 150)
+    setTimeout(() => win.print(), 150)
   }, [maps])
 
   // ── Loading ────────────────────────────────────────────────────────────────
@@ -565,93 +582,165 @@ export default function ReportPage() {
   // ── Report ────────────────────────────────────────────────────────────────
 
   if (phase === 'report' && activeMap) {
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    const nowText        = activeMap.nextMoveNow || activeMap.nextMove || ''
+    const structuralText = activeMap.nextMoveStructural || ''
+
     return (
-      <div className="px-6 py-14">
-        <div className="mx-auto" style={{ maxWidth: '680px' }}>
+      <div className="px-4 sm:px-6 py-12">
+        <div className="mx-auto" style={{ maxWidth: '720px' }}>
 
-          {/* Lens tabs - only visible when 2+ lenses are completed/generating */}
-          <LensTabs
-            activeLensId={activeLensId}
-            generatingLensId={generatingLensId}
-            maps={maps}
-            onSelect={handleSelectLens}
-          />
+          {/* Lens tabs */}
+          <LensTabs activeLensId={activeLensId} generatingLensId={generatingLensId} maps={maps} onSelect={handleSelectLens} />
 
-          {/* Lens badge */}
-          <div className="flex items-center gap-2 mb-10">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: activeLens.iconBg, border: `1px solid ${accentColor}35` }}>
-              <LensIcon id={activeLensId} color={accentColor} size={13} />
-              <span className="text-xs uppercase tracking-widest" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.14em', fontWeight: 600 }}>
-                {activeLens.label} Lens
-              </span>
-            </div>
-          </div>
-
-          {/* Title */}
-          <h1 className="font-bold mb-6" style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: 'clamp(2rem, 4vw, 2.75rem)', letterSpacing: '-0.025em', lineHeight: 1.15 }}>
-            {activeMap.title}
-          </h1>
-
-          {/* Quote */}
-          <div className="mb-8 pl-5 py-1" style={{ borderLeft: `3px solid ${accentColor}` }}>
-            <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-hi)', fontSize: 'clamp(1.3rem, 3vw, 1.65rem)', lineHeight: 1.4 }}>
-              &ldquo;{activeMap.quote}&rdquo;
-            </p>
-          </div>
-
-          {/* Core Pattern */}
-          <div className="mb-12 px-5 py-4 rounded-sm" style={{ background: `${accentColor}08`, border: `1px solid ${accentColor}22` }}>
-            <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.16em' }}>
-              Core Pattern
-            </p>
-            <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.65 }}>
-              {activeMap.corePattern}
-            </p>
-          </div>
-
-          {/* Terrain sections */}
-          <div>
-            {activeMap.terrainMap?.map((slice, i) => (
-              <TerrainSection key={`${activeLensId}-${i}`} slice={slice} index={i} accentColor={accentColor} />
-            ))}
-          </div>
-
-          {/* Hidden Cost + Next Move */}
-          <div className="mt-2 pt-10 grid gap-6 sm:grid-cols-2" style={{ borderTop: '1px solid var(--border)' }}>
-            <div>
-              <p className="text-xs uppercase tracking-widest mb-3" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.16em' }}>Hidden Cost</p>
-              <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.7 }}>{activeMap.hiddenCost}</p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-widest mb-3" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.16em' }}>Next Move</p>
-              <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.7 }}>{activeMap.nextMove}</p>
-            </div>
-          </div>
-
-          {/* Unseen */}
-          {activeMap.unseen && (
-            <div className="mt-8 px-5 py-5 rounded-sm" style={{ background: 'var(--surface-deep, var(--surface))', border: `1px solid ${accentColor}20`, borderLeft: `3px solid ${accentColor}60` }}>
-              <p className="text-xs uppercase tracking-widest mb-3" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.16em', opacity: 0.8 }}>
-                What You May Not Have Noticed
-              </p>
-              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.7 }}>
-                {activeMap.unseen}
+          {/* ── Document card ────────────────────────────────────────────── */}
+          <div
+            style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderTop: `3px solid ${accentColor}`,
+              borderRadius: '3px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.04)',
+              padding: 'clamp(1.5rem, 5vw, 3.5rem)',
+              marginBottom: '2.5rem',
+            }}
+          >
+            {/* Document header */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                marginBottom: '2.5rem',
+                paddingBottom: '1.25rem',
+                borderBottom: '1px solid var(--border)',
+              }}
+            >
+              <div>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                  Mind Report
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <LensIcon id={activeLensId} color={accentColor} size={11} />
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: accentColor, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600 }}>
+                    {activeLens.label} Lens
+                  </span>
+                </div>
+              </div>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.06em', textAlign: 'right' }}>
+                {date}
               </p>
             </div>
-          )}
+
+            {/* Title */}
+            <h1
+              className="font-bold mb-5"
+              style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-hi)', fontSize: 'clamp(1.9rem, 4vw, 2.75rem)', letterSpacing: '-0.025em', lineHeight: 1.12 }}
+            >
+              {activeMap.title}
+            </h1>
+
+            {/* Quote */}
+            <div className="mb-10 pl-5 py-1" style={{ borderLeft: `3px solid ${accentColor}` }}>
+              <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-hi)', fontSize: 'clamp(1.2rem, 3vw, 1.55rem)', lineHeight: 1.45 }}>
+                &ldquo;{activeMap.quote}&rdquo;
+              </p>
+            </div>
+
+            {/* Core Pattern */}
+            <div className="mb-12 px-5 py-4 rounded-sm" style={{ background: `${accentColor}08`, border: `1px solid ${accentColor}22` }}>
+              <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.16em' }}>
+                Core Pattern
+              </p>
+              <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.7 }}>
+                {activeMap.corePattern}
+              </p>
+            </div>
+
+            {/* Terrain overview legend */}
+            {activeMap.terrainMap?.length > 0 && (
+              <TerrainOverview terrainMap={activeMap.terrainMap} accentColor={accentColor} />
+            )}
+
+            {/* Terrain sections */}
+            <div>
+              {activeMap.terrainMap?.map((slice, i) => (
+                <TerrainSection key={`${activeLensId}-${i}`} slice={slice} index={i} accentColor={accentColor} />
+              ))}
+            </div>
+
+            {/* Hidden Cost */}
+            <div className="pt-10 pb-8" style={{ borderTop: '1px solid var(--border)' }}>
+              <p className="text-xs uppercase tracking-widest mb-3" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.16em' }}>
+                Hidden Cost
+              </p>
+              <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.75 }}>
+                {activeMap.hiddenCost}
+              </p>
+            </div>
+
+            {/* Unseen */}
+            {activeMap.unseen && (
+              <div
+                className="mb-8 px-5 py-5 rounded-sm"
+                style={{ background: 'var(--surface-deep, var(--surface))', border: `1px solid ${accentColor}20`, borderLeft: `3px solid ${accentColor}60` }}
+              >
+                <p className="text-xs uppercase tracking-widest mb-3" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.16em', opacity: 0.85 }}>
+                  What You May Not Have Noticed
+                </p>
+                <p style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-body)', fontSize: '1rem', lineHeight: 1.75 }}>
+                  {activeMap.unseen}
+                </p>
+              </div>
+            )}
+
+            {/* Next Moves — tiered */}
+            {(nowText || structuralText) && (
+              <div className="pt-8" style={{ borderTop: '1px solid var(--border)' }}>
+                <p className="text-xs uppercase tracking-widest mb-5" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.16em' }}>
+                  Next Move
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {nowText && (
+                    <div
+                      className="px-5 py-4 rounded-sm"
+                      style={{ background: `${accentColor}08`, border: `1px solid ${accentColor}22` }}
+                    >
+                      <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.12em', fontSize: '0.58rem' }}>
+                        This week
+                      </p>
+                      <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                        {nowText}
+                      </p>
+                    </div>
+                  )}
+                  {structuralText && (
+                    <div
+                      className="px-5 py-4 rounded-sm"
+                      style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+                    >
+                      <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.12em', fontSize: '0.58rem' }}>
+                        Build toward
+                      </p>
+                      <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '0.95rem', lineHeight: 1.7 }}>
+                        {structuralText}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+          </div>
+          {/* ── End document card ────────────────────────────────────────── */}
 
           {/* Run another lens */}
-          <div className="mt-14">
-            <RunAnotherLens
-              maps={maps}
-              generatingLensId={generatingLensId}
-              lensError={lensError}
-              onRun={handleRunLens}
-            />
+          <div className="mb-14">
+            <RunAnotherLens maps={maps} generatingLensId={generatingLensId} lensError={lensError} onRun={handleRunLens} />
           </div>
 
           {/* Footer */}
-          <div className="mt-14 pt-10 flex flex-col gap-8" style={{ borderTop: '1px solid var(--border)' }}>
+          <div className="flex flex-col gap-8">
 
             {/* ReLoHu CTA */}
             <div className="px-6 py-6 rounded-sm flex flex-col gap-3" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
@@ -665,52 +754,30 @@ export default function ReportPage() {
               </a>
             </div>
 
-            {/* Export / Actions */}
+            {/* Export */}
             <div>
               <p className="text-xs uppercase tracking-widest mb-4" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.14em' }}>
                 Export {Object.keys(maps).length > 1 ? `all ${Object.keys(maps).length} lens reports` : 'your map'}
               </p>
               <div className="flex flex-wrap items-center gap-3">
-
-                {/* Download .txt */}
-                <button
-                  onClick={handleExportText}
-                  className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75"
-                  style={{ border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer' }}
-                >
+                <button onClick={handleExportText} className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75" style={{ border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer' }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
                   </svg>
                   DOWNLOAD .TXT
                 </button>
-
-                {/* Copy to clipboard */}
-                <button
-                  onClick={handleCopyText}
-                  className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75"
-                  style={{ border: '1px solid var(--border)', background: copied ? `${accentColor}10` : 'var(--surface)', color: copied ? accentColor : 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.2s ease' }}
-                >
+                <button onClick={handleCopyText} className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75" style={{ border: '1px solid var(--border)', background: copied ? `${accentColor}10` : 'var(--surface)', color: copied ? accentColor : 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer', transition: 'all 0.2s ease' }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    {copied
-                      ? <polyline points="20 6 9 17 4 12"/>
-                      : <><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>
-                    }
+                    {copied ? <polyline points="20 6 9 17 4 12"/> : <><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>}
                   </svg>
                   {copied ? 'COPIED' : 'COPY TEXT'}
                 </button>
-
-                {/* Save as PDF */}
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75"
-                  style={{ border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer' }}
-                >
+                <button onClick={handlePrint} className="flex items-center gap-2 px-5 py-3 rounded-sm text-xs transition-opacity hover:opacity-75" style={{ border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-body)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', cursor: 'pointer' }}>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
                   </svg>
                   SAVE AS PDF
                 </button>
-
               </div>
             </div>
 
