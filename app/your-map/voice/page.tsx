@@ -66,6 +66,18 @@ function VoiceInterviewInner() {
     transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [transcript])
 
+  // ── Minimum content thresholds ─────────────────────────────────────────────
+  const MIN_USER_WORDS     = 120
+  const MIN_USER_EXCHANGES = 5
+
+  const userMessages   = transcript.filter((m) => m.role === 'user')
+  const userWordCount  = userMessages.reduce(
+    (acc, m) => acc + m.text.trim().split(/\s+/).filter(Boolean).length,
+    0
+  )
+  const hasEnoughContent =
+    userMessages.length >= MIN_USER_EXCHANGES && userWordCount >= MIN_USER_WORDS
+
   // Save transcript + stats to sessionStorage on end
   useEffect(() => {
     if (phase === 'ended' && transcript.length > 0) {
@@ -103,17 +115,6 @@ function VoiceInterviewInner() {
     setPhase('ended')
   }, [endSession])
 
-  // ── Minimum content thresholds ─────────────────────────────────────────────
-  const MIN_USER_WORDS     = 120   // words the user personally spoke
-  const MIN_USER_EXCHANGES = 5     // number of user turns
-
-  const userMessages   = transcript.filter((m) => m.role === 'user')
-  const userWordCount  = userMessages.reduce(
-    (acc, m) => acc + m.text.trim().split(/\s+/).filter(Boolean).length,
-    0
-  )
-  const hasEnoughContent =
-    userMessages.length >= MIN_USER_EXCHANGES && userWordCount >= MIN_USER_WORDS
 
   return (
     <div className="px-6 py-14">
