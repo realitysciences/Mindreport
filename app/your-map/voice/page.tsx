@@ -122,13 +122,6 @@ function VoiceInterviewInner() {
           name: trimmedName,
           age:  trimmedAge || 'unknown',
         },
-        ...(trimmedName && {
-          overrides: {
-            agent: {
-              firstMessage: `Hey ${trimmedName}, good to have you here. What would you say is the central theme of your life right now? Like, what's on your mind when you wake up — a challenge, a goal, a question you keep returning to?`,
-            },
-          },
-        }),
       })
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Microphone access was denied.')
