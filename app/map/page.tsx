@@ -96,15 +96,15 @@ export default function ShareMapPage() {
           {/* Card header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem', paddingBottom: '1.25rem', borderBottom: '1px solid var(--border)' }}>
             <div>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>Mind Report</p>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>Mind Report</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                 <LensIcon id={activeLensId} color={accentColor} size={11} />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: accentColor, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: accentColor, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600 }}>
                   {activeLens.label} Lens
                 </span>
               </div>
             </div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.06em', textAlign: 'right' }}>{date}</p>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.06em', textAlign: 'right' }}>{date}</p>
           </div>
 
           {/* Title */}
@@ -160,13 +160,13 @@ export default function ShareMapPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 {nowText && (
                   <div className="px-5 py-4 rounded-sm" style={{ background: `${accentColor}08`, border: `1px solid ${accentColor}22` }}>
-                    <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.12em', fontSize: '0.58rem' }}>This week</p>
+                    <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.12em', fontSize: '0.72rem' }}>This week</p>
                     <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '0.95rem', lineHeight: 1.7 }}>{nowText}</p>
                   </div>
                 )}
                 {structuralText && (
                   <div className="px-5 py-4 rounded-sm" style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
-                    <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.12em', fontSize: '0.58rem' }}>Build toward</p>
+                    <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.12em', fontSize: '0.72rem' }}>Build toward</p>
                     <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '0.95rem', lineHeight: 1.7 }}>{structuralText}</p>
                   </div>
                 )}

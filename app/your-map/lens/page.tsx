@@ -385,7 +385,7 @@ export default function LensPage() {
               border: '1px solid var(--border)',
               borderRadius: '4px',
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.85rem',
+              fontSize: '1rem',
               color: 'var(--text-body)',
               outline: 'none',
               boxSizing: 'border-box',

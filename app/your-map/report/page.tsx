@@ -42,7 +42,7 @@ function RunAnotherLens({
             <span className="text-xs flex-1" style={{ fontFamily: 'var(--font-mono)', color: generatingLens.badgeColor, letterSpacing: '0.08em' }}>
               Drawing {generatingLens.label} map
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: generatingLens.badgeColor, fontWeight: 600, letterSpacing: '0.08em' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: generatingLens.badgeColor, fontWeight: 600, letterSpacing: '0.08em' }}>
               {lensPct}%
             </span>
           </div>
@@ -273,10 +273,10 @@ export default function ReportPage() {
         {/* Progress bar */}
         <div style={{ width: '100%', maxWidth: '320px' }}>
           <div className="flex justify-between mb-2">
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               {activeLens.label} lens
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: accentColor, letterSpacing: '0.08em', fontWeight: 600 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: accentColor, letterSpacing: '0.08em', fontWeight: 600 }}>
               {loadPct}%
             </span>
           </div>
@@ -373,17 +373,17 @@ export default function ReportPage() {
               }}
             >
               <div>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
                   Mind Report
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                   <LensIcon id={activeLensId} color={accentColor} size={11} />
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: accentColor, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600 }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: accentColor, letterSpacing: '0.14em', textTransform: 'uppercase', fontWeight: 600 }}>
                     {activeLens.label} Lens
                   </span>
                 </div>
               </div>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.06em', textAlign: 'right' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.06em', textAlign: 'right' }}>
                 {date}
               </p>
             </div>
@@ -462,7 +462,7 @@ export default function ReportPage() {
                       className="px-5 py-4 rounded-sm"
                       style={{ background: `${accentColor}08`, border: `1px solid ${accentColor}22` }}
                     >
-                      <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.12em', fontSize: '0.58rem' }}>
+                      <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: accentColor, letterSpacing: '0.12em', fontSize: '0.72rem' }}>
                         This week
                       </p>
                       <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '0.95rem', lineHeight: 1.7 }}>
@@ -475,7 +475,7 @@ export default function ReportPage() {
                       className="px-5 py-4 rounded-sm"
                       style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
                     >
-                      <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.12em', fontSize: '0.58rem' }}>
+                      <p className="text-xs uppercase tracking-widest mb-2" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', letterSpacing: '0.12em', fontSize: '0.72rem' }}>
                         Build toward
                       </p>
                       <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--text-body)', fontSize: '0.95rem', lineHeight: 1.7 }}>
@@ -563,6 +563,7 @@ export default function ReportPage() {
                     style={{
                       background: 'var(--bg)', border: '1px solid var(--border)',
                       color: 'var(--text-body)', fontFamily: 'var(--font-serif)',
+                      fontSize: '1rem',
                       outline: 'none',
                     }}
                   />

@@ -20,7 +20,7 @@ export function TerrainOverview({
         borderRadius: '3px',
       }}
     >
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--text-faint)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
         Terrain Map
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', rowGap: '0.45rem', columnGap: '0' }}>
@@ -28,18 +28,18 @@ export function TerrainOverview({
           const isPrimary = slice.prominence === 'primary'
           return (
             <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.57rem', color: 'var(--text-faint)', letterSpacing: '0.06em' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-faint)', letterSpacing: '0.06em' }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.1em',
+                fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.1em',
                 textTransform: 'uppercase', fontWeight: isPrimary ? 700 : 400,
                 color: isPrimary ? accentColor : 'var(--text-mid)',
               }}>
                 {slice.label}
               </span>
               {i < terrainMap.length - 1 && (
-                <span style={{ color: 'var(--border)', margin: '0 0.3rem', fontSize: '0.65rem' }}>·</span>
+                <span style={{ color: 'var(--border)', margin: '0 0.3rem', fontSize: '0.72rem' }}>·</span>
               )}
             </span>
           )

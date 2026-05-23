@@ -52,7 +52,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:opacity-70"
-            style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--text-faint)', letterSpacing: '0.08em', marginTop: '2px' }}
+            style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-faint)', letterSpacing: '0.08em', marginTop: '2px' }}
           >
             by ReLoHu™
           </a>

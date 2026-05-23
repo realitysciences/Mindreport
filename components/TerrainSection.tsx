@@ -43,7 +43,7 @@ export function TerrainSection({
             </span>
             {isPrimary && (
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em',
+                fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.12em',
                 color: accentColor, background: `${accentColor}18`,
                 border: `1px solid ${accentColor}35`,
                 borderRadius: '999px', padding: '0.08rem 0.45rem', fontWeight: 700,
@@ -71,7 +71,7 @@ export function TerrainSection({
           {(slice.markers?.length ?? 0) > 0 && (
             <div>
               <p style={{
-                fontFamily: 'var(--font-mono)', fontSize: '0.57rem', letterSpacing: '0.14em',
+                fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.14em',
                 textTransform: 'uppercase', color: 'var(--text-faint)', marginBottom: '0.5rem',
               }}>
                 Recognition signals
