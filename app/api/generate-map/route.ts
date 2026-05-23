@@ -45,8 +45,8 @@ function buildOutputSchema(terrainLabels: string[]): string {
       "label": "${label}",
       "prominence": "primary, secondary, or supporting — how central this section is to this person's overall map",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "3-5 sentences. This is an excavation, not a summary. Reference exact phrases, specific moments, and concrete textures from what was said. Draw non-obvious connections. Name the mechanism with precision. Write with the weight of someone who genuinely sees this person. Do NOT use internal framework labels.",
-      "markers": ["2 recognition signals — each a vivid, specific phrase (12-20 words) naming exactly how this pattern lives in this person's real-time behavior, speech patterns, or internal logic. Make them feel like being seen."]
+      "body": "2-4 sentences. This is an excavation, not a summary. Reference exact phrases, specific moments, and concrete textures from what was said. Draw non-obvious connections. Name the mechanism with precision. Write with the weight of someone who genuinely sees this person. Density over length — one precise sentence is worth more than three vague ones. Do NOT use internal framework labels.",
+      "markers": ["2 recognition signals — each a vivid, specific phrase (10-18 words) naming exactly how this pattern lives in this person's real-time behavior, speech patterns, or internal logic. Make them feel like being seen."]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
     .join("\n");
@@ -59,7 +59,7 @@ function buildOutputSchema(terrainLabels: string[]): string {
 ${terrainSchema}
   ],
   "corePattern": "2-3 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall. Name it precisely, show how it connects the sections, and say what it produces.",
-  "hiddenCost": "2-4 sentences naming what this architecture costs in concrete, specific terms. Not abstract. Name the actual losses  -  in relationships, capacity, aliveness, time. What is this person not getting to have because of this structure?",
+  "hiddenCost": "2-3 sentences naming what this architecture costs in concrete, specific terms. Not abstract. Name the actual losses  -  in relationships, capacity, aliveness, time. What is this person not getting to have because of this structure?",
   "unseen": "2-3 sentences on something this person is probably not conscious of  -  a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would genuinely land if they noticed it. Not a restatement of what they already know about themselves.",
   "nextMoveNow": "One specific, concrete action this person could take this week. 1-2 sentences. Earned by the transcript, not generic advice.",
   "nextMoveStructural": "One structural change to build toward over the next month. 1-2 sentences. Something that addresses the architecture itself, not just one symptom of it."
@@ -268,7 +268,7 @@ ${buildOutputSchema(terrainLabels)}`;
         const anthropic = new Anthropic();
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 2000,
+          max_tokens: 2200,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
