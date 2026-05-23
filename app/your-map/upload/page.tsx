@@ -261,7 +261,14 @@ export default function UploadPage() {
           <>
             {/* File preview card */}
             <div className="mb-5">
-              <PreviewCard result={result} onReplace={handleReplace} />
+              <PreviewCard
+                result={
+                  isConversation
+                    ? { ...result, text: applyAliases(result.text, speakerAliases) }
+                    : result
+                }
+                onReplace={handleReplace}
+              />
             </div>
 
             {/* Word count guidance */}
