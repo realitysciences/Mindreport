@@ -23,6 +23,25 @@ function cleanText(text: string): string {
     .trim();
 }
 
+// ── Reflow ────────────────────────────────────────────────────────────────────
+// PDFs with narrow columns (cards, brochures, design exports) preserve every
+// visual line-wrap as a hard \n.  Join consecutive non-empty lines within a
+// block so the text reads as prose.  Blank lines remain paragraph separators.
+function reflowText(text: string): string {
+  const blocks = text.split(/\n[ \t]*\n/)
+  return blocks
+    .map((block) =>
+      block
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean)
+        .join(" ")
+    )
+    .filter(Boolean)
+    .join("\n\n")
+    .trim()
+}
+
 // ── PDF extraction via pdf-parse (pure Node.js, no API call) ─────────────────
 async function extractPdfText(buffer: Buffer): Promise<string> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,6 +109,7 @@ export async function POST(req: NextRequest) {
   }
 
   text = cleanText(text);
+  text = reflowText(text);
   const words = wordCount(text);
 
   if (words < 20) {
