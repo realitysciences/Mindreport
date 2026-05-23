@@ -105,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="flex flex-wrap items-center gap-5">
               <a href="/methodology" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>Methodology</a>
               <a href="/about" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>About</a>
+              <a href="/contact" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>Contact</a>
               <a href="/legal" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>Editorial Standards</a>
               <a href="/legal" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>Privacy</a>
               <a href="/legal" className="transition-colors hover:opacity-70" style={{ color: 'var(--text-faint)' }}>Terms</a>

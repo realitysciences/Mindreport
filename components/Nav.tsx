@@ -152,6 +152,14 @@ export default function Nav() {
               </Link>
             )
           })}
+          <Link
+            href="/contact"
+            className="text-sm py-2"
+            style={{ color: pathname === '/contact' ? 'var(--text-hi)' : 'var(--text-nav)' }}
+            onClick={() => setOpen(false)}
+          >
+            Contact
+          </Link>
         </div>
       )}
     </nav>
