@@ -24,13 +24,13 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
         style={{ borderBottom: '1px solid var(--border)' }}
       >
         <span
-          className="text-[0.6rem] uppercase tracking-widest"
+          className="text-xs uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}
         >
           Terrain Topology
         </span>
         <span
-          className="text-[0.6rem] uppercase tracking-widest"
+          className="text-xs uppercase tracking-widest"
           style={{ fontFamily: 'var(--font-mono)', color: color, opacity: 0.7 }}
         >
           {subject}
@@ -114,7 +114,7 @@ export function TerrainDiagram({ terrain, color, subject }: Props) {
             {terrain.markers.map((m) => (
               <span
                 key={m}
-                className="px-3 py-1 rounded-full text-[0.6rem] tracking-wide"
+                className="px-3 py-1 rounded-full text-xs tracking-wide"
                 style={{
                   background: color + '14',
                   border: `1px solid ${color}33`,

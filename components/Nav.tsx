@@ -10,7 +10,6 @@ const navLinks = [
   { label: 'Relationships', href: '/relationships' },
   { label: 'Works', href: '/works' },
   { label: 'Archetypes', href: '/archetypes' },
-  { label: 'Maps', href: '/search' },
 ]
 
 export default function Nav() {
@@ -19,7 +18,7 @@ export default function Nav() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
   useEffect(() => {
-    const saved = localStorage.getItem('mr-theme')
+    const saved = localStorage.getItem('mr-theme-v2')
     if (saved === 'dark') setTheme('dark')
   }, [])
 
@@ -28,10 +27,10 @@ export default function Nav() {
     setTheme(next)
     if (next === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark')
-      localStorage.setItem('mr-theme', 'dark')
+      localStorage.setItem('mr-theme-v2', 'dark')
     } else {
       document.documentElement.removeAttribute('data-theme')
-      localStorage.setItem('mr-theme', 'light')
+      localStorage.setItem('mr-theme-v2', 'light')
     }
   }
 
@@ -153,6 +152,14 @@ export default function Nav() {
               </Link>
             )
           })}
+          <Link
+            href="/contact"
+            className="text-sm py-2"
+            style={{ color: pathname === '/contact' ? 'var(--text-hi)' : 'var(--text-nav)' }}
+            onClick={() => setOpen(false)}
+          >
+            Contact
+          </Link>
         </div>
       )}
     </nav>

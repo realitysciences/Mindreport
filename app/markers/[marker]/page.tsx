@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getAllMarkers, getMapsByMarker } from '@/lib/content'
 import { getCategoryColor, categoryLabels } from '@/lib/categoryUtils'
@@ -32,7 +33,7 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
       <div className="mx-auto" style={{ maxWidth: '1200px' }}>
         <div className="mb-10">
           <span
-            className="text-[0.65rem] uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
             style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
           >
             Terrain Marker
@@ -62,13 +63,14 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                 className="flex flex-col justify-between overflow-hidden rounded-sm group transition-opacity hover:opacity-90"
                 style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
               >
-                <div style={{ height: '140px', overflow: 'hidden', flexShrink: 0 }}>
+                <div style={{ aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
                   {map.image ? (
-                    <img
+                    <Image
                       src={map.image.url}
                       alt={map.title}
-                      loading="lazy"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 15%', display: 'block' }}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                      style={{ objectFit: 'cover', objectPosition: 'center' }}
                     />
                   ) : (
                     <div style={{ width: '100%', height: '100%', background: `linear-gradient(135deg, ${color}33 0%, ${color}11 100%)` }} />
@@ -76,7 +78,7 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                 </div>
                 <div className="p-5 flex flex-col gap-2 flex-1">
                   <span
-                    className="text-[0.6rem] uppercase tracking-widest"
+                    className="text-xs uppercase tracking-widest"
                     style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
                   >
                     {label}
@@ -87,11 +89,11 @@ export default async function MarkerPage(props: PageProps<'/markers/[marker]'>) 
                   >
                     {map.title}
                   </h2>
-                  <p className="text-xs leading-relaxed line-clamp-2" style={{ color: 'var(--text-mid)' }}>
+                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: 'var(--text-body)' }}>
                     {map.deck}
                   </p>
                   <span
-                    className="text-[0.6rem] uppercase tracking-widest mt-auto pt-3"
+                    className="text-xs uppercase tracking-widest mt-auto pt-3"
                     style={{ borderTop: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
                   >
                     Read map →
