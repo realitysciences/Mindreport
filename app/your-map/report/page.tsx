@@ -568,10 +568,10 @@ function buildPrintHtml(maps: Record<string, MapResult>): string {
 // ── Run another lens ──────────────────────────────────────────────────────────
 
 function RunAnotherLens({
-  maps, generatingLensId, lensError, onRun,
+  maps, generatingLensId, lensError, lensPct, onRun,
 }: {
   maps: Record<string, MapResult>; generatingLensId: string | null
-  lensError: string; onRun: (id: string) => void
+  lensError: string; lensPct: number; onRun: (id: string) => void
 }) {
   const remaining      = LENSES.filter(l => !maps[l.id] && l.id !== generatingLensId)
   const generatingLens = generatingLensId ? LENSES.find(l => l.id === generatingLensId) : null
@@ -585,12 +585,25 @@ function RunAnotherLens({
       </p>
 
       {generatingLens && (
-        <div className="flex items-center gap-4 px-5 py-4 rounded-sm mb-5" style={{ background: generatingLens.iconBg, border: `1px solid ${generatingLens.badgeColor}30` }}>
-          <LensIcon id={generatingLens.id} color={generatingLens.badgeColor} size={15} />
-          <span className="text-xs flex-1" style={{ fontFamily: 'var(--font-mono)', color: generatingLens.badgeColor, letterSpacing: '0.08em' }}>
-            Drawing {generatingLens.label} map
-          </span>
-          <LoadingDots color={generatingLens.badgeColor} />
+        <div className="px-5 py-4 rounded-sm mb-5" style={{ background: generatingLens.iconBg, border: `1px solid ${generatingLens.badgeColor}30` }}>
+          <div className="flex items-center gap-3 mb-3">
+            <LensIcon id={generatingLens.id} color={generatingLens.badgeColor} size={15} />
+            <span className="text-xs flex-1" style={{ fontFamily: 'var(--font-mono)', color: generatingLens.badgeColor, letterSpacing: '0.08em' }}>
+              Drawing {generatingLens.label} map
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: generatingLens.badgeColor, fontWeight: 600, letterSpacing: '0.08em' }}>
+              {lensPct}%
+            </span>
+          </div>
+          <div style={{ height: '2px', background: `${generatingLens.badgeColor}25`, borderRadius: '999px', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%',
+              width: `${lensPct}%`,
+              background: generatingLens.badgeColor,
+              borderRadius: '999px',
+              transition: 'width 0.25s ease',
+            }} />
+          </div>
         </div>
       )}
 
@@ -646,9 +659,40 @@ export default function ReportPage() {
   const [emailSent, setEmailSent]               = useState(false)
   const [emailSending, setEmailSending]         = useState(false)
   const [emailError, setEmailError]             = useState('')
+  const [loadPct, setLoadPct]                   = useState(0)
+  const [lensPct, setLensPct]                   = useState(0)
   const hasFetched    = useRef(false)
   const transcriptRef = useRef('')
   const subjectRef    = useRef('the person')
+
+  // ── Progress bar animation ─────────────────────────────────────────────────
+  // Time-based ease-out: fast start, slows near 90%, snaps to 100% on completion.
+  // Expected generation time ~30s with max_tokens:3500.
+  const calcPct = (startMs: number) => {
+    const t = Math.min((Date.now() - startMs) / 30_000, 1)
+    return Math.min(89, Math.round(100 * (1 - Math.pow(1 - t, 2.4))))
+  }
+
+  // Initial load progress
+  useEffect(() => {
+    if (phase !== 'loading') {
+      if (phase === 'gate' || phase === 'report') setLoadPct(100)
+      return
+    }
+    setLoadPct(0)
+    const start = Date.now()
+    const id = setInterval(() => setLoadPct(calcPct(start)), 200)
+    return () => clearInterval(id)
+  }, [phase])
+
+  // Additional-lens progress
+  useEffect(() => {
+    if (!generatingLensId) { setLensPct(0); return }
+    setLensPct(0)
+    const start = Date.now()
+    const id = setInterval(() => setLensPct(calcPct(start)), 200)
+    return () => clearInterval(id)
+  }, [generatingLensId])
 
   useEffect(() => {
     if (hasFetched.current) return
@@ -785,16 +829,32 @@ export default function ReportPage() {
   if (phase === 'loading') {
     return (
       <div className="flex flex-col items-center justify-center px-6" style={{ minHeight: '70vh' }}>
-        <div className="flex items-center justify-center rounded-full mb-6" style={{ width: 64, height: 64, background: activeLens.iconBg, border: `1px solid ${accentColor}35` }}>
+        <div className="flex items-center justify-center rounded-full mb-8" style={{ width: 64, height: 64, background: activeLens.iconBg, border: `1px solid ${accentColor}35` }}>
           <LensIcon id={activeLensId} color={accentColor} size={24} />
         </div>
-        <p className="mb-5" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.1rem' }}>
+        <p className="mb-8" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-deck)', fontSize: '1.1rem' }}>
           Drawing your map&hellip;
         </p>
-        <LoadingDots color={accentColor} />
-        <p className="mt-8 text-xs text-center" style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)', maxWidth: 280, lineHeight: 1.6 }}>
-          {activeLens.label} lens · This takes about 30 seconds
-        </p>
+        {/* Progress bar */}
+        <div style={{ width: '100%', maxWidth: '320px' }}>
+          <div className="flex justify-between mb-2">
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-faint)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              {activeLens.label} lens
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: accentColor, letterSpacing: '0.08em', fontWeight: 600 }}>
+              {loadPct}%
+            </span>
+          </div>
+          <div style={{ height: '2px', background: 'var(--border)', borderRadius: '999px', overflow: 'hidden' }}>
+            <div style={{
+              height: '100%',
+              width: `${loadPct}%`,
+              background: accentColor,
+              borderRadius: '999px',
+              transition: 'width 0.25s ease',
+            }} />
+          </div>
+        </div>
       </div>
     )
   }
@@ -997,7 +1057,7 @@ export default function ReportPage() {
 
           {/* Run another lens */}
           <div className="mb-14">
-            <RunAnotherLens maps={maps} generatingLensId={generatingLensId} lensError={lensError} onRun={handleRunLens} />
+            <RunAnotherLens maps={maps} generatingLensId={generatingLensId} lensError={lensError} lensPct={lensPct} onRun={handleRunLens} />
           </div>
 
           {/* Footer */}
