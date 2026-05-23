@@ -42,13 +42,12 @@ function reflowText(text: string): string {
     .trim()
 }
 
-// ── PDF extraction via pdf-parse (pure Node.js, no API call) ─────────────────
+// ── PDF extraction via unpdf (serverless-safe, no browser APIs) ──────────────
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pdfParse = (await import("pdf-parse")) as any;
-  const fn = pdfParse.default ?? pdfParse;
-  const result = await fn(buffer);
-  return result.text as string;
+  const { extractText, getDocumentProxy } = await import("unpdf");
+  const pdf = await getDocumentProxy(new Uint8Array(buffer));
+  const { text } = await extractText(pdf, { mergePages: true });
+  return text;
 }
 
 // ── Route handler ─────────────────────────────────────────────────────────────
