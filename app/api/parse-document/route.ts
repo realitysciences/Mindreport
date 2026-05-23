@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
 
   try {
     if (ext === "pdf" || mime === "application/pdf") {
-      // Use Claude Haiku's native PDF understanding — no browser APIs needed
+      // unpdf: serverless-safe PDF.js wrapper, no browser APIs needed
       text = await extractPdfText(buffer);
       method = "pdf";
     } else if (
