@@ -45,7 +45,7 @@ function buildOutputSchema(terrainLabels: string[]): string {
       "label": "${label}",
       "prominence": "primary, secondary, or supporting — how central this section is to this person's overall map",
       "summary": "one sentence characterizing this terrain for this specific person",
-      "body": "2-4 sentences. This is an excavation, not a summary. Reference exact phrases, specific moments, and concrete textures from what was said. Draw non-obvious connections. Name the mechanism with precision. Write with the weight of someone who genuinely sees this person. Density over length — one precise sentence is worth more than three vague ones. Do NOT use internal framework labels.",
+      "body": "2-4 sentences. This is an excavation, not a summary. Reference exact phrases, specific moments, and concrete textures from what was said. Draw non-obvious connections. Name the mechanism with precision. Write with the weight of someone who genuinely sees this person. Density over length — one precise sentence is worth more than three vague ones. Do NOT use internal framework labels. Do not open this section the same way you opened the previous one — each section must feel like a distinct landing, not an installment of the same template.",
       "markers": ["2 recognition signals — each a vivid, specific phrase (10-18 words) naming exactly how this pattern lives in this person's real-time behavior, speech patterns, or internal logic. Make them feel like being seen."]
     }${i < terrainLabels.length - 1 ? "," : ""}`
     )
@@ -60,9 +60,9 @@ ${terrainSchema}
   ],
   "corePattern": "2-3 sentences naming the central organizing structure that runs across all terrain. The load-bearing wall. Name it precisely, show how it connects the sections, and say what it produces.",
   "hiddenCost": "2-3 sentences naming what this architecture costs in concrete, specific terms. Not abstract. Name the actual losses  -  in relationships, capacity, aliveness, time. What is this person not getting to have because of this structure?",
-  "unseen": "2-3 sentences on something this person is probably not conscious of  -  a contradiction in what they shared, a tell, a pattern-within-the-pattern. Something that would genuinely land if they noticed it. Not a restatement of what they already know about themselves.",
-  "nextMoveNow": "One specific, concrete action this person could take this week. 1-2 sentences. Earned by the transcript, not generic advice.",
-  "nextMoveStructural": "One structural change to build toward over the next month. 1-2 sentences. Something that addresses the architecture itself, not just one symptom of it."
+  "unseen": "2-3 sentences naming something structural this person hasn't seen. Prioritize observations about HOW they speak over WHAT they say — repetitions, word choices, sentence structures, what they always approach the same way, what they never quite say directly. A tell in the linguistic architecture is worth more than a content observation. This should require holding the entire transcript at once to see. If it could be generated from a single exchange, go deeper.",
+  "nextMoveNow": "One specific, concrete action this week. Name it with the same precision as the recognition signals — reference actual language, a specific situation, or a named pattern from the transcript. If it could be handed to someone else without changing a word, rewrite it. 1-2 sentences.",
+  "nextMoveStructural": "One structural shift to build toward over the next month. Name the specific architecture it addresses — not just what to do, but what it changes about the underlying structure. Grounded in what was actually said. 1-2 sentences."
 }`;
 }
 
@@ -246,6 +246,8 @@ Write with specificity. Reference the actual texture of what was said. Be incisi
 Write with the precision of a psychologist and the voice of a great writer. The map should feel like being accurately seen for the first time.
 
 Every field must be completed. Write with density and weight  -  every sentence should earn its place. The goal is depth, not length: be specific and incisive rather than comprehensive and vague.
+
+The terrain sections must not feel like installments of the same template. By the final section the reader should not be able to see the structure — only the person.
 
 ${buildOutputSchema(terrainLabels)}`;
 
