@@ -313,22 +313,46 @@ export default function HomePage() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4 mt-2">
-                <Link
-                  href="/your-map"
-                  className="flex items-center gap-2.5 px-6 py-3.5 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
-                  style={{
-                    background: 'var(--accent-dark)',
-                    color: '#F0ECE4',
-                    fontFamily: 'var(--font-sans)',
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                  </svg>
-                  Get your own map
-                </Link>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/your-map"
+                    className="flex items-center gap-2.5 px-6 py-3.5 rounded-sm text-sm font-medium transition-opacity hover:opacity-85"
+                    style={{
+                      background: 'var(--accent-dark)',
+                      color: '#F0ECE4',
+                      fontFamily: 'var(--font-sans)',
+                      letterSpacing: '0.01em',
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Get your own map
+                  </Link>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.65rem',
+                      letterSpacing: '0.08em',
+                      color: 'var(--text-faint)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    <span style={{
+                      display: 'inline-block',
+                      width: 6,
+                      height: 6,
+                      borderRadius: '50%',
+                      background: 'var(--accent)',
+                      opacity: 0.7,
+                      flexShrink: 0,
+                    }} />
+                    CLOSED BETA — INVITE ONLY
+                  </p>
+                </div>
                 <Link
                   href="/search"
                   className="text-sm transition-opacity hover:opacity-70"

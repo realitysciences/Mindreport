@@ -78,8 +78,22 @@ function GateInner() {
 
         {/* Heading */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <span style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.65rem',
+              letterSpacing: '0.12em',
+              color: 'var(--accent)',
+              background: 'rgba(192,146,48,0.08)',
+              border: '1px solid rgba(192,146,48,0.25)',
+              borderRadius: '999px',
+              padding: '0.25rem 0.75rem',
+            }}>
+              CLOSED BETA
+            </span>
+          </div>
           <h1
-            className="font-bold mb-2"
+            className="font-bold mb-3"
             style={{
               fontFamily: 'var(--font-serif)',
               color: 'var(--text-hi)',
@@ -87,7 +101,7 @@ function GateInner() {
               letterSpacing: '-0.01em',
             }}
           >
-            Early access
+            This feature isn&apos;t public yet.
           </h1>
           <p
             style={{
@@ -98,7 +112,7 @@ function GateInner() {
               lineHeight: 1.6,
             }}
           >
-            Enter the password to continue.
+            Making your own map is currently available to beta testers only. If you have an access code, enter it below.
           </p>
         </div>
 
