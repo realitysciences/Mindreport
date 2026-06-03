@@ -67,12 +67,22 @@ export default async function ArticlePage(props: PageProps<'/[category]/[slug]'>
   }
 
   return (
-    <div className="px-6 py-12">
+    <div className="px-4 sm:px-8 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ReadingProgress color={color} />
-      <div className="mx-auto" style={{ maxWidth: '1080px' }}>
+      <div className="mx-auto" style={{ maxWidth: '1100px' }}>
       <div className="flex gap-10 items-start">
-      <div style={{ flex: 1, minWidth: 0, maxWidth: '780px' }}>
+      <div
+        style={{
+          flex: 1,
+          minWidth: 0,
+          maxWidth: '780px',
+          background: 'var(--surface)',
+          borderRadius: '2px',
+          border: '1px solid var(--border-sub)',
+          padding: 'clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3rem)',
+        }}
+      >
 
         {/* Disclaimer strip */}
         <div
