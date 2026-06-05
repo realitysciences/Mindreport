@@ -184,9 +184,13 @@ THE UNRESOLVED QUESTION: Name the core question about their own identity that re
 
 // ── Input limits ───────────────────────────────────────────────────────────────
 // MAX_TRANSCRIPT applies to the *compacted* transcript (user words only for
-// voice, raw text for uploads). 12,000 chars ≈ 1,800 tokens of input — enough
-// to represent a 60-minute interview without blowing the generation budget.
-const MAX_TRANSCRIPT = 12_000;
+// voice, raw text for uploads). 8,000 chars ≈ 1,200 tokens of input.
+// Previously 12,000 — reduced to give more headroom within Vercel's 60s limit.
+// The Foundational lens system prompt alone is ~3,000 tokens; combined with a
+// large transcript it was pushing total generation time past 60s on loaded nodes.
+// 8,000 chars is still ample for a detailed map from any interview length.
+// Raise this (and maxDuration) together if moving to Vercel Pro.
+const MAX_TRANSCRIPT = 8_000;
 const MAX_LENS       = 50;
 
 function sanitize(s: string, max: number): string {

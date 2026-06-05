@@ -112,13 +112,14 @@ export default function ReportPage() {
   const [emailError, setEmailError]             = useState('')
   const [loadPct, setLoadPct]                   = useState(0)
   const [lensPct, setLensPct]                   = useState(0)
+  const [retryCount, setRetryCount]             = useState(0)
   const hasFetched    = useRef(false)
   const transcriptRef = useRef('')
   const subjectRef    = useRef('the person')
+  const lensIdRef     = useRef('pattern')
 
   // ── Progress bar animation ─────────────────────────────────────────────────
   // Time-based ease-out: fast start, slows near 90%, snaps to 100% on completion.
-  // Expected generation time ~30s with max_tokens:3500.
   const calcPct = (startMs: number) => {
     const t = Math.min((Date.now() - startMs) / 30_000, 1)
     return Math.min(89, Math.round(100 * (1 - Math.pow(1 - t, 2.4))))
@@ -145,33 +146,42 @@ export default function ReportPage() {
     return () => clearInterval(id)
   }, [generatingLensId])
 
+  // Re-runs on mount and on every retry
   useEffect(() => {
-    if (hasFetched.current) return
+    if (retryCount === 0 && hasFetched.current) return
     hasFetched.current = true
 
-    const { transcript, lens, subject } = getReportSession()
+    // On retry, session refs are already populated — no need to re-read storage
+    if (retryCount === 0) {
+      const { transcript, lens, subject } = getReportSession()
+      setActiveLensId(lens)
+      transcriptRef.current = transcript
+      subjectRef.current    = subject
+      lensIdRef.current     = lens
 
-    setActiveLensId(lens)
-    transcriptRef.current = transcript
-    subjectRef.current    = subject
-
-    if (!transcript) {
-      setErrorMsg('No transcript found. Please complete an interview first.')
-      setPhase('error')
-      return
+      if (!transcript) {
+        setErrorMsg('No transcript found. Please complete an interview first.')
+        setPhase('error')
+        return
+      }
     }
+
+    setPhase('loading')
+    setErrorMsg('')
 
     ;(async () => {
       try {
-        const data = await fetchMap(transcript, lens, subject)
-        setMaps({ [lens]: data })
+        const data = await fetchMap(transcriptRef.current, lensIdRef.current, subjectRef.current)
+        setMaps(prev => ({ ...prev, [lensIdRef.current]: data }))
+        setActiveLensId(lensIdRef.current)
         setPhase('gate')
       } catch (err) {
         setErrorMsg(normalizeError((err as Error).message))
         setPhase('error')
       }
     })()
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [retryCount])
 
   const handleSelectLens = useCallback((targetId: string) => {
     if (maps[targetId]) setActiveLensId(targetId)
@@ -300,14 +310,32 @@ export default function ReportPage() {
   // ── Error ─────────────────────────────────────────────────────────────────
 
   if (phase === 'error') {
+    const isTimeout = errorMsg.includes('too long') || errorMsg.includes('try again')
     return (
-      <div className="flex flex-col items-center justify-center gap-6 px-6" style={{ minHeight: '70vh' }}>
-        <p className="text-sm text-center" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)', maxWidth: 400 }}>
-          {errorMsg || 'Something went wrong generating your map.'}
+      <div className="flex flex-col items-center justify-center gap-5 px-6" style={{ minHeight: '70vh' }}>
+        <p className="text-sm text-center" style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: 'var(--text-mid)', maxWidth: 400, lineHeight: 1.65 }}>
+          {isTimeout
+            ? 'Generation timed out — the server was under load. Your transcript is still here. Try again and it should go through.'
+            : (errorMsg || 'Something went wrong generating your map.')}
         </p>
-        <Link href="/your-map/lens" className="px-6 py-3 rounded-sm text-xs transition-opacity hover:opacity-70" style={{ border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-mid)', letterSpacing: '0.08em' }}>
-          ← BACK
-        </Link>
+        <div className="flex items-center gap-3">
+          {isTimeout && (
+            <button
+              onClick={() => setRetryCount(c => c + 1)}
+              className="px-6 py-3 rounded-sm text-xs transition-opacity hover:opacity-85"
+              style={{ background: 'var(--accent-dark)', color: '#F0ECE4', fontFamily: 'var(--font-mono)', letterSpacing: '0.1em', border: 'none', cursor: 'pointer' }}
+            >
+              TRY AGAIN →
+            </button>
+          )}
+          <Link
+            href="/your-map/lens"
+            className="px-6 py-3 rounded-sm text-xs transition-opacity hover:opacity-70"
+            style={{ border: '1px solid var(--border)', fontFamily: 'var(--font-mono)', color: 'var(--text-mid)', letterSpacing: '0.08em' }}
+          >
+            ← CHANGE LENS
+          </Link>
+        </div>
       </div>
     )
   }
