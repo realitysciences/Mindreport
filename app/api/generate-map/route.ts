@@ -198,36 +198,93 @@ function sanitize(s: string, max: number): string {
 }
 
 // ── Voice transcript compaction ───────────────────────────────────────────────
-// Voice interviews include both sides of the conversation. The interviewer's
-// questions can be long and elaborate — good for the conversation, but wasteful
-// as model input since we're only mapping the *subject's* words.
+// Two formats are handled:
 //
-// This runs BEFORE the length cap so that the cap applies to the subject's
-// actual words, not the combined raw conversation. For a 60-minute interview
-// the raw transcript might be 80,000+ chars; after compaction the subject's
-// responses are typically 15,000-25,000 chars, which then get capped cleanly.
+// 1. ElevenLabs (mindreport voice interview):
+//    "Interviewer: ..." / "User: ..." blocks separated by blank lines.
+//    Interviewer turns are replaced with [Q] — we only map the subject.
 //
-// Interviewer turns are replaced with a short [Q] placeholder so Claude knows
-// a question was asked without having to process the full text.
+// 2. Google Recorder / phone recording exports:
+//    "Speaker N MM:SS\ntext" blocks with optional bare "MM:SS" separators.
+//    Timestamps are stripped; speaker labels simplified to "S1:" etc.
+//    This reduces a 90k-char recording to ~60k before the distillation step.
 //
-// Only applied when the transcript matches the voice format ("Interviewer:").
+// Both run BEFORE the length cap so the cap applies to subject words, not
+// raw conversation. If the result is still over MAX_TRANSCRIPT, a distillation
+// pre-pass (distillTranscript) extracts the psychological core.
 function compactVoiceTranscript(transcript: string): string {
-  if (!transcript.includes('Interviewer:')) return transcript;
-
-  const blocks = transcript.split(/\n\n+/);
-  const out: string[] = [];
-
-  for (const block of blocks) {
-    const trimmed = block.trim();
-    if (!trimmed) continue;
-    if (trimmed.startsWith('Interviewer:')) {
-      out.push('[Q]');
-    } else {
-      out.push(trimmed);
+  // ── ElevenLabs format ──────────────────────────────────────────────────────
+  if (transcript.includes('Interviewer:')) {
+    const blocks = transcript.split(/\n\n+/);
+    const out: string[] = [];
+    for (const block of blocks) {
+      const trimmed = block.trim();
+      if (!trimmed) continue;
+      out.push(trimmed.startsWith('Interviewer:') ? '[Q]' : trimmed);
     }
+    return out.join('\n\n');
   }
 
-  return out.join('\n\n');
+  // ── Google Recorder / generic "Speaker N HH:MM" format ────────────────────
+  // Detects the pattern: lines like "Speaker 2 01:28" or bare "00:18"
+  const hasGoogleFormat =
+    /^Speaker \d+ \d{1,2}:\d{2}/m.test(transcript) ||
+    /^\d{1,2}:\d{2}\s*$/m.test(transcript);
+
+  if (hasGoogleFormat) {
+    return transcript
+      // Simplify "Speaker 2 01:28" → "S2:" (keeps attribution, loses timestamp noise)
+      .replace(/^Speaker (\d+) \d{1,2}:\d{2}(:\d{2})?\s*$/gm, 'S$1:')
+      // Remove standalone timestamp lines ("00:18", "1:32:06")
+      .replace(/^\d{1,2}:\d{2}(:\d{2})?\s*$/gm, '')
+      // Collapse runs of blank lines created by the removals
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  return transcript;
+}
+
+// ── Distillation pre-pass ─────────────────────────────────────────────────────
+// When the transcript is still over MAX_TRANSCRIPT after compaction (e.g. a
+// 1-hour phone recording), run a fast haiku call that reads the whole thing and
+// returns only the psychologically rich content in ~5,000-6,000 chars.
+//
+// Uses claude-haiku for speed (~5-10s) so the total route time stays under 60s.
+// The distilled text then goes through the normal map generation pass.
+// Falls back to hard truncation if the distillation call fails.
+async function distillTranscript(raw: string): Promise<string> {
+  const anthropic = new Anthropic();
+
+  const result = await anthropic.messages.create({
+    model:      "claude-3-5-haiku-20241022",
+    max_tokens: 1800,
+    messages: [{
+      role:    "user",
+      content: `You are reading a transcript of a psychological interview or conversation.
+Your job: extract only the content that reveals the SUBJECT's psychology.
+
+The subject is the person being interviewed — the one being asked questions and sharing personal material. Ignore the interviewer, therapist, or anyone else in a questioning role.
+
+Extract and preserve the subject's exact words covering:
+- Their past: family, childhood, formative events, significant relationships
+- How they describe and explain themselves
+- Emotionally charged moments, contradictions, recurring themes
+- Specific language and phrases that feel most diagnostic
+
+Strip everything else: interviewer questions, logistics, pleasantries, filler, repetition.
+
+Return ONLY the extracted content — no commentary, no analysis, no headers.
+Target: 4,500–5,500 characters of concentrated subject material.
+
+<transcript>
+${raw.slice(0, 100_000)}
+</transcript>`,
+    }],
+  });
+
+  const text = result.content[0].type === "text" ? result.content[0].text.trim() : "";
+  return text || raw.slice(0, MAX_TRANSCRIPT);
 }
 
 // ── Escape literal newlines inside JSON string values ─────────────────────────
@@ -296,14 +353,29 @@ export async function POST(req: NextRequest) {
   }
 
   const b = body as Record<string, unknown>;
-  // Compact first so the length cap applies to the subject's words, not the
-  // combined raw conversation. For a 60-min voice interview this turns ~80,000
-  // chars of raw transcript into ~20,000 chars of user responses, then caps
-  // cleanly at MAX_TRANSCRIPT. For uploaded documents nothing changes.
+  const lens    = sanitize(typeof b.lens    === "string" ? b.lens    : "pattern",    MAX_LENS);
+  const subject = sanitize(typeof b.subject === "string" ? b.subject : "the person", 200);
+
+  // Step 1: compact (strips interviewer turns / timestamps by format)
   const rawTranscript = sanitize(typeof b.transcript === "string" ? b.transcript : "", 200_000);
-  const transcript    = sanitize(compactVoiceTranscript(rawTranscript), MAX_TRANSCRIPT);
-  const lens          = sanitize(typeof b.lens === "string" ? b.lens : "pattern", MAX_LENS);
-  const subject       = sanitize(typeof b.subject === "string" ? b.subject : "the person", 200);
+  const compacted     = compactVoiceTranscript(rawTranscript);
+
+  // Step 2: if still over the cap, run a fast distillation pre-pass.
+  // Haiku reads the full transcript and returns only the psychologically
+  // significant content (~5k chars). This handles 1-hour phone recordings
+  // that compaction alone can't reduce enough.
+  let transcript: string;
+  if (compacted.length > MAX_TRANSCRIPT) {
+    try {
+      const distilled = await distillTranscript(compacted);
+      transcript = sanitize(distilled, MAX_TRANSCRIPT);
+    } catch (err) {
+      console.error("[generate-map] distillation failed, falling back to truncation:", err);
+      transcript = sanitize(compacted, MAX_TRANSCRIPT);
+    }
+  } else {
+    transcript = sanitize(compacted, MAX_TRANSCRIPT);
+  }
 
   if (transcript.length < 50) {
     return errorResponse("Transcript too short to map.");
