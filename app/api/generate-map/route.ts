@@ -429,14 +429,15 @@ ${buildOutputSchema(terrainLabels)}`;
     async start(controller) {
       try {
         const anthropic = new Anthropic();
-        // max_tokens: 2200 is intentional — the Vercel Hobby plan caps route
-        // execution at 60 seconds. Higher token counts push generation past that
-        // limit and return a 504. Upgrading to Vercel Pro allows maxDuration: 300
-        // and max_tokens: 4000+, which would noticeably improve body length.
-        // If you raise this, also raise MAX_TRANSCRIPT proportionally.
+        // max_tokens: 1600 — tuned for Vercel Hobby's 60s hard limit.
+        // Sonnet generates ~40 tok/s; 1600 tokens ≈ 40s output + ~5s overhead = 45s.
+        // That leaves 15s of buffer for server load variance, distillation pre-pass,
+        // and the Foundational lens (longest system prompt). Previously 2200, which
+        // was completing in 50-58s and timing out under any load.
+        // Upgrading to Vercel Pro (maxDuration: 300) lets you raise this to 4000+.
         const aiStream = await anthropic.messages.create({
           model: "claude-sonnet-4-5",
-          max_tokens: 2200,
+          max_tokens: 1600,
           stream: true,
           system: systemPrompt,
           messages: [{ role: "user", content: `<transcript>\n${transcript}\n</transcript>` }],
