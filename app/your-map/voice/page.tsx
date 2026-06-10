@@ -51,6 +51,13 @@ function VoiceInterviewInner() {
     }
   }, [status, phase])
 
+  // Scroll to top on mobile when interview starts so the active UI is visible
+  useEffect(() => {
+    if (phase === 'requesting') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [phase])
+
   // Start/stop elapsed timer based on phase
   useEffect(() => {
     if (phase === 'active') {
